@@ -7,14 +7,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\Ico\mzd.ico</ApplicationIcon>
-    <FileVersion>0.0.3.0</FileVersion>
-    <AssemblyVersion>0.0.3.0</AssemblyVersion>
+    <AssemblyVersion>0.0.4.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup>
     <!-- This overrides the default Program.Main that WPF creates for you, and allows you to add VelopackApp -->
     <StartupObject>马自达MC同步器.Program</StartupObject>
-    <FileVersion>1.0.0.0</FileVersion>
+    <FileVersion>0.0.4.0</FileVersion>
   </PropertyGroup>
   
   <ItemGroup>
