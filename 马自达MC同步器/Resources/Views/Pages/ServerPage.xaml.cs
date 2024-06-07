@@ -59,7 +59,10 @@ namespace 马自达MC同步器.Resources.Pages
     private async void ClickSynchronizationServer(object sender, RoutedEventArgs e)
     {
       if (string.IsNullOrEmpty(Settings.Default.GamePath))
+      {
         MessageBox.Show("请先选择游戏文件夹");
+        return;
+      }
       SyServerButton.IsEnabled = false;
       string jsonStr = await App.webHelper.GetRemoteServerList();
       SyServerButton.IsEnabled = true;
