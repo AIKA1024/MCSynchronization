@@ -1,0 +1,63 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:control="clr-namespace:马自达MC同步器.Resources.Views.Controls"
+                    xmlns:converter="clr-namespace:马自达MC同步器.Resources.Converters">
+  <Style TargetType="control:Card">
+    <Setter Property="Padding" Value="4"/>
+    <Setter Property="CornerRadius" Value="5"/>
+    <Setter Property="BorderBrush" Value="#eaeaea"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="MinHeight" Value="50"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="control:Card">
+          <Border BorderThickness="{TemplateBinding BorderThickness}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  Background="{TemplateBinding Background}">
+            <Grid>
+              <Grid.Resources>
+                <BooleanToVisibilityConverter x:Key="bvConverter"/>
+              </Grid.Resources>
+              <Border x:Name="BG" Background="Black" Opacity="0" CornerRadius="{TemplateBinding CornerRadius}"/>
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition MinHeight="48"/>
+                  <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+
+                <Grid Grid.Row="0" Margin="{TemplateBinding Padding}">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                  </Grid.ColumnDefinitions>
+
+                  <TextBlock Grid.Column="0" Margin="0 0 12 0"
+                             FontSize="18" IsHitTestVisible="False"
+                             Text="{TemplateBinding MDL2IconStr}" VerticalAlignment="Center"
+                             FontFamily="Segoe MDL2 Assets" Visibility="{Binding MDL2IconStr, Converter={converter:NullToVisiblityConverter},RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
+                  <!--<TextBlock Grid.Column="1" Text="{TemplateBinding Text}" IsHitTestVisible="False" VerticalAlignment="Center" HorizontalAlignment="Left"/>-->
+                  <ContentPresenter Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Content="{TemplateBinding HeaderControl}"/>
+                  <ToggleButton x:Name="ToggleBT" Grid.Column="2" VerticalAlignment="Center" Visibility="{Binding Content, Converter={converter:NullToVisiblityConverter},RelativeSource={RelativeSource Mode=TemplatedParent}}" IsChecked="{Binding IsExpress,RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource ExpressToggleButton}"/>
+                </Grid>
+
+                <StackPanel Grid.Row="1" Visibility="{Binding IsExpress,RelativeSource={RelativeSource Mode=TemplatedParent},Converter={StaticResource bvConverter}}">
+                  <Rectangle Fill="#eaeaea" Height="1"/>
+                  <ContentPresenter/>
+                </StackPanel>
+              </Grid>
+            </Grid>
+          </Border>
+
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="BG" Property="Opacity" Value=".02"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</ResourceDictionary>

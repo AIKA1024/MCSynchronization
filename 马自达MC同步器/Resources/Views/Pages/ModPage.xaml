@@ -7,7 +7,7 @@
       mc:Ignorable="d" 
       xmlns:cv="clr-namespace:马自达MC同步器.Resources.Converters"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="ModPage" Margin="8" Initialized="Page_Initialized">
+      Title="ModPage" Margin="12" Initialized="Page_Initialized">
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="50"/>

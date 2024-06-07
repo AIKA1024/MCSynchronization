@@ -11,6 +11,8 @@
         <ResourceDictionary Source="pack://application:,,,/Resources/Styles/ListBox.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Resources/Styles/ListBoxItem.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Resources/Styles/TextBox.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Resources/Styles/ToggleButton.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Resources/Styles/Card.xaml"/>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>

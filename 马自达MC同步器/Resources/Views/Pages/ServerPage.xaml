@@ -7,7 +7,7 @@
       xmlns:local="clr-namespace:马自达MC同步器.Resources.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800" Initialized="Page_Initialized"
-      Title="ServerPage" Margin="8">
+      Title="ServerPage" Margin="12">
 
   <Grid>
     <Grid.RowDefinitions>
@@ -58,7 +58,7 @@
       <Button Content="确认更改" DockPanel.Dock="Right" Click="ClickSaveNBT"/>
     </DockPanel>
 
-    <ListBox x:Name="ServerListBox" Grid.Row="1" ItemsSource="{Binding ServerUrl}" Margin="8 0">
+    <ListBox x:Name="ServerListBox" Grid.Row="1" ItemsSource="{Binding ServerUrl}">
       <ListBox.ItemTemplate>
         <DataTemplate DataType="ServerPageViewModel.ServerInfo">
           <Grid Margin="5 0" Height="30">

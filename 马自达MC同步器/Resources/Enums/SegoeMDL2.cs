@@ -14,5 +14,8 @@ namespace 马自达MC同步器.Resources.Enums
     public const string 三角黑框感叹号 = "\uE814";
     public const string 下载 = "\uE896";
     public const string 列表 = "\uEA42";
+    public const string 感叹号 = "\uE783";
+    public const string 朝上箭头 = "\uE971";
+    public const string 朝下箭头 = "\uE972";
   }
 }
