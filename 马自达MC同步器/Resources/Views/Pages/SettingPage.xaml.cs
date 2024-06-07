@@ -87,5 +87,11 @@ namespace 马自达MC同步器.Resources.Pages
         MessageBox.Show(ex.Message,"更新失败");
       }
     }
+
+    private void Hyperlink_Click(object sender, RoutedEventArgs e)
+    {
+      Hyperlink hyperlink = (Hyperlink)sender;
+      System.Diagnostics.Process.Start("explorer.exe", "https://github.com/AIKA1024");
+    }
   }
 }

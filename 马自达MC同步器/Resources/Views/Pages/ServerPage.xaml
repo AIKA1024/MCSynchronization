@@ -21,7 +21,7 @@
         <DockPanel.Clip>
           <EllipseGeometry RadiusX="248" RadiusY="248" Center="200,150"/>
         </DockPanel.Clip>
-          <StackPanel DockPanel.Dock="Top" Margin="24">
+        <StackPanel DockPanel.Dock="Top" Margin="24">
 
             <TextBlock Text="添加新条目" FontWeight="Black" FontSize="18"/>
 
@@ -32,7 +32,7 @@
             <TextBox Height="28"/>
           </StackPanel>
 
-          <Grid DockPanel.Dock="Bottom" Height="60" Background="#f3f3f3" VerticalAlignment="Bottom">
+        <Grid DockPanel.Dock="Bottom"  Height="50" Background="#f3f3f3" VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
               <ColumnDefinition/>
               <ColumnDefinition/>
@@ -46,7 +46,7 @@
 
     </Grid>
 
-    <DockPanel Grid.Row="0" LastChildFill="False">
+    <DockPanel Grid.Row="0" LastChildFill="False" Margin="0 8">
       <Button Click="ClickNewServer">
         <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
           <TextBlock Text="&#xF8AA;" Foreground="#7094b0" FontWeight="Black" VerticalAlignment="Center" TextElement.FontFamily="Segoe MDL2 Assets"/>
@@ -55,7 +55,7 @@
       </Button>
 
       <Button x:Name="SyServerButton" Content="同步服务器列表" DockPanel.Dock="Right" Click="ClickSynchronizationServer"/>
-      <Button Content="确认更改" DockPanel.Dock="Right" Click="ClickSaveNBT"/>
+      <Button Content="确认更改" Margin="0 0 8 0" DockPanel.Dock="Right" Click="ClickSaveNBT"/>
     </DockPanel>
 
     <ListBox x:Name="ServerListBox" Grid.Row="1" ItemsSource="{Binding ServerUrl}">

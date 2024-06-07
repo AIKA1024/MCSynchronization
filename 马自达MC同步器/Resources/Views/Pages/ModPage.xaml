@@ -15,10 +15,10 @@
       <RowDefinition Height="20"/>
     </Grid.RowDefinitions>
 
-    <DockPanel Background="White" LastChildFill="False">
+    <DockPanel Margin="0 8" Background="White" LastChildFill="False">
       <TextBlock Text="{Binding GamePath}" TextAlignment="Center" Margin="0 0 0 8" VerticalAlignment="Bottom"/>
       <Button x:Name="SyButton"  Content="同步云端mod" DockPanel.Dock="Right" Click="Synchronization"/>
-      <Button x:Name="SFButton" Content="选择游戏文件夹" DockPanel.Dock="Right" Click="Button_Click"/>
+      <Button x:Name="SFButton" Content="选择游戏文件夹" Margin="0 0 8 0" DockPanel.Dock="Right" Click="Button_Click"/>
     </DockPanel>
 
     <DataGrid x:Name="ModDataGrid"

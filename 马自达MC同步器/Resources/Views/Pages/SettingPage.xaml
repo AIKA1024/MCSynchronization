@@ -10,28 +10,66 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SettingPage" Margin="12">
+  <ScrollViewer VerticalScrollBarVisibility="Hidden">
+    <StackPanel>
+      <StackPanel.Resources>
+        <Style BasedOn="{StaticResource {x:Type control:Card}}" TargetType="control:Card">
+          <Setter Property="Margin" Value="0 0 0 8"/>
+        </Style>
+      </StackPanel.Resources>
 
-  <StackPanel>
+      <TextBlock Text="群友mod映射源:" Margin="0 0 0 6"/>
+      <TextBox x:Name="AddressTextBox" Text="{Binding Address}" Height="30" Margin="0 0 0 6" FontSize="16"/>
 
-    <TextBlock Text="群友mod映射源:" Margin="0 0 0 6"/>
-    <TextBox x:Name="AddressTextBox" Text="{Binding Address}" Height="30" Margin="0 0 0 6" FontSize="16"/>
+      <!--<TextBlock Text="最大下载线程数:" Margin="0 0 0 6"/>
+  <TextBox x:Name="MaxDounloadTextBox" Text="{Binding MaxDownloadCount,FallbackValue=1}" IsEnabled="False" Height="30" Margin="0 0 0 6" FontSize="16"/>-->
 
-    <!--<TextBlock Text="最大下载线程数:" Margin="0 0 0 6"/>
-    <TextBox x:Name="MaxDounloadTextBox" Text="{Binding MaxDownloadCount,FallbackValue=1}" IsEnabled="False" Height="30" Margin="0 0 0 6" FontSize="16"/>-->
+      <Button Content="确认修改" HorizontalAlignment="Right" Click="Button_Click"/>
+      <TextBlock Text="关于" Margin="0 8"/>
+      <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static Enum:SegoeMDL2.猫}">
+        <control:Card.HeaderControl>
+          <TextBlock Text="开源项目引用" VerticalAlignment="Center"/>
+        </control:Card.HeaderControl>
 
-    <Button Content="确认修改" HorizontalAlignment="Right" Padding="8 12" Click="Button_Click"/>
-    <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static Enum:SegoeMDL2.感叹号}">
-      <control:Card.HeaderControl>
-        <DockPanel LastChildFill="False">
-          <TextBlock Text="详细信息" VerticalAlignment="Center"/>
-        </DockPanel>
-      </control:Card.HeaderControl>
-      <StackPanel Margin="46 8">
-        <StackPanel Orientation="Horizontal">
-          <TextBlock Text="{Binding Version,StringFormat=版本：{0}}" VerticalAlignment="Center"/>
-          <Button x:Name="UpdateBT" Content="更新" Click="UpdateBT_Click"/>
+        <StackPanel Margin="46 0 0 16">
+          <StackPanel.Resources>
+            <Style TargetType="TextBlock">
+              <Setter Property="FontSize" Value="13"/>
+              <Setter Property="Margin" Value="0 16 0 0"/>
+            </Style>
+          </StackPanel.Resources>
+          <TextBlock>
+            <Hyperlink>https://github.com/windows-toolkit/WindowsCommunityToolkit</Hyperlink>
+          </TextBlock>
+
+          <TextBlock>
+            <Hyperlink>https://github.com/velopack/velopack</Hyperlink>
+          </TextBlock>
+
+          <TextBlock>
+            <Hyperlink>https://github.com/NiclasOlofsson/fNbt</Hyperlink>
+          </TextBlock>
         </StackPanel>
-      </StackPanel>
-    </control:Card>
-  </StackPanel>
+      </control:Card>
+
+      <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static Enum:SegoeMDL2.感叹号}">
+        <control:Card.HeaderControl>
+          <TextBlock Text="详细信息" VerticalAlignment="Center"/>
+        </control:Card.HeaderControl>
+
+        <!--呃 不知道用什么布局好-->
+        <StackPanel Margin="46 16">
+          <TextBlock Text="MAZDA MC同步器       Dedicated to group friends."/>
+          <StackPanel Orientation="Horizontal" Margin="0 10">
+            <TextBlock Text="{Binding Version,StringFormat=版本：{0}}" VerticalAlignment="Center"/>
+            <Button x:Name="UpdateBT" Content="软件更新" Margin="57 0 0 0" Click="UpdateBT_Click"/>
+          </StackPanel>
+          <TextBlock>
+        <Run Text="开发者:                         "/>
+        <Hyperlink Click="Hyperlink_Click">https://github.com/AIKA1024</Hyperlink>
+          </TextBlock>
+        </StackPanel>
+      </control:Card>
+    </StackPanel>
+  </ScrollViewer>
 </Page>
