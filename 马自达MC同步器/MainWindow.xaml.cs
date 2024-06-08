@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WebSDK;
 using 马自达MC同步器.Resources.Pages;
+using 马自达MC同步器.Resources.Views.Pages;
 
 namespace 马自达MC同步器
 {

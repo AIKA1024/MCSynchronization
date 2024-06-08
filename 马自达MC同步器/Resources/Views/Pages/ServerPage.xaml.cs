@@ -1,25 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
+﻿using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using fNbt;
-using WebSDK;
 using 马自达MC同步器.Resources.Models;
 using 马自达MC同步器.Resources.ViewModels;
 
-namespace 马自达MC同步器.Resources.Pages
+namespace 马自达MC同步器.Resources.Views.Pages
 {
   /// <summary>
   /// ServerAddressPage.xaml 的交互逻辑
