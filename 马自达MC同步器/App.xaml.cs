@@ -16,7 +16,7 @@ namespace 马自达MC同步器
     public App()
     {
       if (Settings.Default.MaxDownloadCount < 1)
-        Settings.Default.MaxDownloadCount = 16;
+        Settings.Default.MaxDownloadCount = 1;
       Settings.Default.Save();
     }
   }

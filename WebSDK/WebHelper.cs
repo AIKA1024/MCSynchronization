@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Diagnostics;
 
 namespace WebSDK
 {
@@ -23,6 +24,11 @@ namespace WebSDK
       {
         BaseAddress = uri
       };
+    }
+
+    public void ChangeBaseAddress(Uri uri)
+    {
+      httpClient.BaseAddress = uri;
     }
 
     public async Task<string> GetRemoteModList()
@@ -46,7 +52,7 @@ namespace WebSDK
       }
       catch (HttpRequestException ex)
       {
-        Console.WriteLine(ex.Message);
+        Debug.WriteLine(ex.Message);
         return "";
       }
     }

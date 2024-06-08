@@ -49,5 +49,10 @@ namespace 马自达MC同步器
     {
       MainFrame.Navigate(serverPage);
     }
+
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      settingPage.SaveSettingToFile();
+    }
   }
 }

@@ -11,20 +11,54 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SettingPage" Margin="12">
   <ScrollViewer VerticalScrollBarVisibility="Hidden">
-    <StackPanel>
+    <StackPanel Hyperlink.RequestNavigate="Hyperlink_RequestNavigate">
       <StackPanel.Resources>
         <Style BasedOn="{StaticResource {x:Type control:Card}}" TargetType="control:Card">
           <Setter Property="Margin" Value="0 0 0 8"/>
         </Style>
       </StackPanel.Resources>
 
-      <TextBlock Text="群友mod映射源:" Margin="0 0 0 6"/>
-      <TextBox x:Name="AddressTextBox" Text="{Binding Address}" Height="30" Margin="0 0 0 6" FontSize="16"/>
+      <!--<TextBlock Text="群友mod映射源:" Margin="0 0 0 6"/>-->
+      <!--<TextBox x:Name="AddressTextBox" Text="{Binding Address}" Height="30" Margin="0 0 0 6" FontSize="16"/>-->
 
       <!--<TextBlock Text="最大下载线程数:" Margin="0 0 0 6"/>
   <TextBox x:Name="MaxDounloadTextBox" Text="{Binding MaxDownloadCount,FallbackValue=1}" IsEnabled="False" Height="30" Margin="0 0 0 6" FontSize="16"/>-->
 
-      <Button Content="确认修改" HorizontalAlignment="Right" Click="Button_Click"/>
+      <!--#region 卡片-->
+      <TextBlock Text="服务器" Margin="0 8"/>
+      <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static Enum:SegoeMDL2.服务器}">
+        <control:Card.HeaderControl>
+          <TextBlock Text="同步服务器地址" VerticalAlignment="Center"/>
+        </control:Card.HeaderControl>
+
+        <DockPanel HorizontalAlignment="Stretch" Margin="46 16">
+          <TextBox x:Name="AddressTextBox"
+                   HorizontalAlignment="Stretch"
+                   DockPanel.Dock="Left"
+                   Text="{Binding Address}"
+                   VerticalAlignment="Center"
+                   FontSize="16"
+                   LostFocus="AddressTextBox_LostFocus"/>
+          <!--<Button DockPanel.Dock="Right" Height="32" Content="确认修改" Click="Button_Click"/>-->
+        </DockPanel>
+      </control:Card>
+      
+      <!--#region 库-->
+      <TextBlock Text="库" Margin="0 8"/>
+      <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static Enum:SegoeMDL2.文件夹}">
+        <control:Card.HeaderControl>
+          <DockPanel LastChildFill="False">
+            <TextBlock DockPanel.Dock="Left" Text="游戏路径" VerticalAlignment="Center"/>
+            <Button DockPanel.Dock="Right" Content="选择文件夹" Margin="0 0 16 0"/>
+          </DockPanel>
+        </control:Card.HeaderControl>
+
+        <TextBlock Margin="46 16 0 16" Text="{Binding GamePath}"/>
+      </control:Card>
+
+      <!--#endregion-->
+
+      <!--#region 关于-->
       <TextBlock Text="关于" Margin="0 8"/>
       <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static Enum:SegoeMDL2.猫}">
         <control:Card.HeaderControl>
@@ -39,15 +73,15 @@
             </Style>
           </StackPanel.Resources>
           <TextBlock>
-            <Hyperlink>https://github.com/windows-toolkit/WindowsCommunityToolkit</Hyperlink>
+            <Hyperlink NavigateUri="https://github.com/windows-toolkit/WindowsCommunityToolkit" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/windows-toolkit/WindowsCommunityToolkit</Hyperlink>
           </TextBlock>
 
           <TextBlock>
-            <Hyperlink>https://github.com/velopack/velopack</Hyperlink>
+            <Hyperlink NavigateUri="https://github.com/velopack/velopack">https://github.com/velopack/velopack</Hyperlink>
           </TextBlock>
 
           <TextBlock>
-            <Hyperlink>https://github.com/NiclasOlofsson/fNbt</Hyperlink>
+            <Hyperlink NavigateUri="https://github.com/NiclasOlofsson/fNbt">https://github.com/NiclasOlofsson/fNbt</Hyperlink>
           </TextBlock>
         </StackPanel>
       </control:Card>
@@ -66,10 +100,13 @@
           </StackPanel>
           <TextBlock>
         <Run Text="开发者:                         "/>
-        <Hyperlink Click="Hyperlink_Click">https://github.com/AIKA1024</Hyperlink>
+        <Hyperlink>https://github.com/AIKA1024</Hyperlink>
           </TextBlock>
         </StackPanel>
       </control:Card>
+      <!--#endregion-->
+      
+      <!--#endregion-->
     </StackPanel>
   </ScrollViewer>
 </Page>

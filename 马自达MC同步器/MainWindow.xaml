@@ -6,7 +6,8 @@
         xmlns:widget="clr-namespace:马自达MC同步器.Resources.Views.Widgets"
         xmlns:local="clr-namespace:马自达MC同步器"
         mc:Ignorable="d"
-        Title="马自达MC同步器" Height="450" Width="800">
+        Title="马自达MC同步器" Height="450" Width="800"
+        Closing="Window_Closing">
 
 
   <Grid Grid.Row="0">

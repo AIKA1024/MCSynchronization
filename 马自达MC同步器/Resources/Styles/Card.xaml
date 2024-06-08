@@ -26,8 +26,8 @@
                   <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
-
-                <Grid Grid.Row="0" Margin="{TemplateBinding Padding}">
+                <!--#region 面板-->
+                <Grid x:Name="panel" Grid.Row="0" Margin="{TemplateBinding Padding}">
                   <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
@@ -42,11 +42,15 @@
                   <ContentPresenter Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Content="{TemplateBinding HeaderControl}"/>
                   <ToggleButton x:Name="ToggleBT" Grid.Column="2" VerticalAlignment="Center" Visibility="{Binding Content, Converter={converter:NullToVisiblityConverter},RelativeSource={RelativeSource Mode=TemplatedParent}}" IsChecked="{Binding IsExpress,RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource ExpressToggleButton}"/>
                 </Grid>
-
+                <!--#endregion-->
+                
+                
+                <!--#region 内容-->
                 <StackPanel Grid.Row="1" Visibility="{Binding IsExpress,RelativeSource={RelativeSource Mode=TemplatedParent},Converter={StaticResource bvConverter}}">
                   <Rectangle Fill="#eaeaea" Height="1"/>
                   <ContentPresenter/>
                 </StackPanel>
+                <!--#endregion-->
               </Grid>
             </Grid>
           </Border>

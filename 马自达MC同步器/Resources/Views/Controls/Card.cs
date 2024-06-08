@@ -60,11 +60,21 @@ namespace 马自达MC同步器.Resources.Views.Controls
     public static readonly DependencyProperty CornerRadiusProperty =
         DependencyProperty.Register("CornerRadius", typeof(CornerRadius), typeof(Card), new PropertyMetadata(new CornerRadius()));
 
+    //private void ResponsivePanelClicks(object sender, RoutedEventArgs e)
+    //{
+    //  Control control = (Control)e.OriginalSource;
+    //  if (Content != null && control.Name == "panel")
+    //  {
+    //    IsExpress = !IsExpress;
+    //    e.Handled = true;
+    //  }
+    //}
+
 
     protected override void OnClick()
     {
       base.OnClick();
-      if (Content!=null)
+      if (Content != null)
         IsExpress = !IsExpress;
       //创建事件携带信息（RoutedEventArgs类实例）,并和路由事件关联
       RoutedEventArgs args = new RoutedEventArgs(ClickEvent, this);

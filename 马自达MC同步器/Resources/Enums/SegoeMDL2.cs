@@ -20,5 +20,6 @@ namespace 马自达MC同步器.Resources.Enums
     public const string 扳手 = "\ue90f";
     public const string 服务器 = "\ue968";
     public const string 猫 = "\uf1ad";
+    public const string 文件夹 = "\ue838";
   }
 }

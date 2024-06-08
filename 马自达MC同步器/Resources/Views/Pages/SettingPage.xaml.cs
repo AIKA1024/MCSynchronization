@@ -18,6 +18,7 @@ using Velopack.Sources;
 using Velopack;
 using 马自达MC同步器.Resources.ViewModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using 马自达MC同步器.Resources.Enums;
 
 namespace 马自达MC同步器.Resources.Pages
 {
@@ -43,6 +44,13 @@ namespace 马自达MC同步器.Resources.Pages
       return Uri.TryCreate(urlString, UriKind.Absolute, out Uri uriResult)
           && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
     }
+
+    public void SaveSettingToFile()
+    {
+      Settings.Default.Address = settingPageViewModel.Address;
+      Settings.Default.MaxDownloadCount = settingPageViewModel.MaxDownloadCount;
+      Settings.Default.Save();
+    }
     private void Button_Click(object sender, RoutedEventArgs e)
     {
       if (!IsValidUrl(AddressTextBox.Text))
@@ -57,9 +65,7 @@ namespace 马自达MC同步器.Resources.Pages
       //  return;
       //}
 
-      Settings.Default.Address = settingPageViewModel.Address;
-      Settings.Default.MaxDownloadCount = settingPageViewModel.MaxDownloadCount;
-      Settings.Default.Save();
+      SaveSettingToFile();
     }
 
     private async void UpdateBT_Click(object sender, RoutedEventArgs e)
@@ -88,10 +94,25 @@ namespace 马自达MC同步器.Resources.Pages
       }
     }
 
-    private void Hyperlink_Click(object sender, RoutedEventArgs e)
+    private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
     {
-      Hyperlink hyperlink = (Hyperlink)sender;
-      System.Diagnostics.Process.Start("explorer.exe", "https://github.com/AIKA1024");
+      System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("explorer.exe", e.Uri.AbsoluteUri));
+      e.Handled = true;
+    }
+
+
+    private void AddressTextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+      
+      TextBox textBox = (TextBox)sender;
+      if (!IsValidUrl(AddressTextBox.Text))
+      {
+        MessageBox.Show("无效的URL");
+        AddressTextBox.Text = settingPageViewModel.Address;
+        return;
+      }
+      Settings.Default.Address = textBox.Text;//绑定的更新比这个慢
+      App.webHelper.ChangeBaseAddress(new Uri(Settings.Default.Address));
     }
   }
 }
