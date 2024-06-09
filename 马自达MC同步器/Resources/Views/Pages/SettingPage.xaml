@@ -31,16 +31,15 @@
           <TextBlock Text="同步服务器地址" VerticalAlignment="Center"/>
         </control:Card.HeaderControl>
 
-        <DockPanel HorizontalAlignment="Stretch" Margin="46 16">
+        <StackPanel HorizontalAlignment="Stretch" Margin="46 16">
           <TextBox x:Name="AddressTextBox"
                    HorizontalAlignment="Stretch"
-                   DockPanel.Dock="Left"
                    Text="{Binding Address}"
                    VerticalAlignment="Center"
                    FontSize="16"
                    LostFocus="AddressTextBox_LostFocus"/>
-          <!--<Button DockPanel.Dock="Right" Height="32" Content="确认修改" Click="Button_Click"/>-->
-        </DockPanel>
+          <TextBlock x:Name="WarningTextBlock" Text="重启后生效" Visibility="Collapsed" Foreground="Red" Margin="0 8 0 0"/>
+        </StackPanel>
       </control:Card>
       
       <!--#region 库-->

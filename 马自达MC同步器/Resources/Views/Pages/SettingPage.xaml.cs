@@ -103,7 +103,9 @@ namespace 马自达MC同步器.Resources.Pages
 
     private void AddressTextBox_LostFocus(object sender, RoutedEventArgs e)
     {
-      
+      if (AddressTextBox.Text == settingPageViewModel.Address)
+        return;
+
       TextBox textBox = (TextBox)sender;
       if (!IsValidUrl(AddressTextBox.Text))
       {
@@ -112,7 +114,9 @@ namespace 马自达MC同步器.Resources.Pages
         return;
       }
       Settings.Default.Address = textBox.Text;//绑定的更新比这个慢
-      App.webHelper.ChangeBaseAddress(new Uri(Settings.Default.Address));
+      //App.webHelper.ChangeBaseAddress(new Uri(Settings.Default.Address));
+      WarningTextBlock.Visibility = Visibility.Visible;
+      MessageBox.Show("重启后生效");
     }
   }
 }

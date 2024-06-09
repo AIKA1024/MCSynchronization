@@ -22,7 +22,7 @@ namespace WebSDK
       };
       httpClient = new HttpClient(handler)
       {
-        BaseAddress = uri
+        BaseAddress = uri,
       };
     }
 
