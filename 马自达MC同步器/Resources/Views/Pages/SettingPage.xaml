@@ -1,20 +1,18 @@
 ﻿<Page x:Class="马自达MC同步器.Resources.Pages.SettingPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:Enum="clr-namespace:马自达MC同步器.Resources.Enums"
-      xmlns:local="clr-namespace:马自达MC同步器.Resources.Pages"
       xmlns:control="clr-namespace:马自达MC同步器.Resources.Views.Controls"
-      xmlns:widget="clr-namespace:马自达MC同步器.Resources.Views.Widgets"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SettingPage" Margin="12">
   <ScrollViewer VerticalScrollBarVisibility="Hidden">
     <StackPanel Hyperlink.RequestNavigate="Hyperlink_RequestNavigate">
       <StackPanel.Resources>
         <Style BasedOn="{StaticResource {x:Type control:Card}}" TargetType="control:Card">
-          <Setter Property="Margin" Value="0 0 0 8"/>
+          <Setter Property="Margin" Value="0 0 0 8" />
         </Style>
       </StackPanel.Resources>
 
@@ -25,10 +23,10 @@
   <TextBox x:Name="MaxDounloadTextBox" Text="{Binding MaxDownloadCount,FallbackValue=1}" IsEnabled="False" Height="30" Margin="0 0 0 6" FontSize="16"/>-->
 
       <!--#region 卡片-->
-      <TextBlock Text="服务器" Margin="0 8"/>
+      <TextBlock Text="服务器" Margin="0 8" />
       <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static Enum:SegoeMDL2.服务器}">
         <control:Card.HeaderControl>
-          <TextBlock Text="同步服务器地址" VerticalAlignment="Center"/>
+          <TextBlock Text="同步服务器地址" VerticalAlignment="Center" />
         </control:Card.HeaderControl>
 
         <StackPanel HorizontalAlignment="Stretch" Margin="46 16">
@@ -37,42 +35,46 @@
                    Text="{Binding Address}"
                    VerticalAlignment="Center"
                    FontSize="16"
-                   LostFocus="AddressTextBox_LostFocus"/>
-          <TextBlock x:Name="WarningTextBlock" Text="重启后生效" Visibility="Collapsed" Foreground="Red" Margin="0 8 0 0"/>
+                   LostFocus="AddressTextBox_LostFocus" />
+          <TextBlock x:Name="WarningTextBlock" Text="重启后生效" Visibility="Collapsed" Foreground="Red"
+                     Margin="0 8 0 0" />
         </StackPanel>
       </control:Card>
-      
+
       <!--#region 库-->
-      <TextBlock Text="库" Margin="0 8"/>
+      <TextBlock Text="库" Margin="0 8" />
       <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static Enum:SegoeMDL2.文件夹}">
         <control:Card.HeaderControl>
           <DockPanel LastChildFill="False">
-            <TextBlock DockPanel.Dock="Left" Text="游戏路径" VerticalAlignment="Center"/>
-            <Button DockPanel.Dock="Right" Content="选择文件夹" Margin="0 0 16 0"/>
+            <TextBlock DockPanel.Dock="Left" Text="游戏路径" VerticalAlignment="Center" />
+            <Button DockPanel.Dock="Right" Content="选择文件夹" Margin="0 0 16 0" />
           </DockPanel>
         </control:Card.HeaderControl>
 
-        <TextBlock Margin="46 16 0 16" Text="{Binding GamePath}"/>
+        <TextBlock Margin="46 16 0 16" Text="{Binding GamePath}" />
       </control:Card>
 
       <!--#endregion-->
 
       <!--#region 关于-->
-      <TextBlock Text="关于" Margin="0 8"/>
+      <TextBlock Text="关于" Margin="0 8" />
       <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static Enum:SegoeMDL2.猫}">
         <control:Card.HeaderControl>
-          <TextBlock Text="开源项目引用" VerticalAlignment="Center"/>
+          <TextBlock Text="开源项目引用" VerticalAlignment="Center" />
         </control:Card.HeaderControl>
 
         <StackPanel Margin="46 0 0 16">
           <StackPanel.Resources>
             <Style TargetType="TextBlock">
-              <Setter Property="FontSize" Value="13"/>
-              <Setter Property="Margin" Value="0 16 0 0"/>
+              <Setter Property="FontSize" Value="13" />
+              <Setter Property="Margin" Value="0 16 0 0" />
             </Style>
           </StackPanel.Resources>
           <TextBlock>
-            <Hyperlink NavigateUri="https://github.com/windows-toolkit/WindowsCommunityToolkit" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/windows-toolkit/WindowsCommunityToolkit</Hyperlink>
+            <Hyperlink NavigateUri="https://github.com/windows-toolkit/WindowsCommunityToolkit"
+                       RequestNavigate="Hyperlink_RequestNavigate">
+              https://github.com/windows-toolkit/WindowsCommunityToolkit
+            </Hyperlink>
           </TextBlock>
 
           <TextBlock>
@@ -87,24 +89,24 @@
 
       <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static Enum:SegoeMDL2.感叹号}">
         <control:Card.HeaderControl>
-          <TextBlock Text="详细信息" VerticalAlignment="Center"/>
+          <TextBlock Text="详细信息" VerticalAlignment="Center" />
         </control:Card.HeaderControl>
 
         <!--呃 不知道用什么布局好-->
         <StackPanel Margin="46 16">
-          <TextBlock Text="MAZDA MC同步器       Dedicated to group friends."/>
+          <TextBlock Text="MAZDA MC同步器       Dedicated to group friends." />
           <StackPanel Orientation="Horizontal" Margin="0 10">
-            <TextBlock Text="{Binding Version,StringFormat=版本：{0}}" VerticalAlignment="Center"/>
-            <Button x:Name="UpdateBT" Content="软件更新" Margin="57 0 0 0" Click="UpdateBT_Click"/>
+            <TextBlock Text="{Binding Version,StringFormat=版本：{0}}" VerticalAlignment="Center" />
+            <Button x:Name="UpdateBT" Content="软件更新" Margin="57 0 0 0" Click="UpdateBT_Click" />
           </StackPanel>
           <TextBlock>
-        <Run Text="开发者:                         "/>
-        <Hyperlink>https://github.com/AIKA1024</Hyperlink>
+            <Run Text="开发者:                         " />
+            <Hyperlink>https://github.com/AIKA1024</Hyperlink>
           </TextBlock>
         </StackPanel>
       </control:Card>
       <!--#endregion-->
-      
+
       <!--#endregion-->
     </StackPanel>
   </ScrollViewer>

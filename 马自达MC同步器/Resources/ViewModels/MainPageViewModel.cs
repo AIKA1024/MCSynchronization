@@ -9,16 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using 马自达MC同步器.Resources.Models;
 
-namespace 马自达MC同步器.Resources.ViewModels
-{
-  public partial class MainPageViewModel : ObservableObject
-  {
-    [ObservableProperty]
-    private string gamePath = "";
-    [ObservableProperty]
-    private string tip = "";
+namespace 马自达MC同步器.Resources.ViewModels;
 
-    public ObservableCollection<ModInfo>? ModInfos { get; set; } = [];
-    public OpenFolderDialog FolderBrowserDialog = new OpenFolderDialog();
-  }
+public partial class MainPageViewModel : ObservableObject
+{
+  [ObservableProperty] private string gamePath = "";
+  [ObservableProperty] private string tip = "";
+
+  public ObservableCollection<ModInfo>? ModInfos { get; set; } = [];
+  public OpenFolderDialog FolderBrowserDialog = new();
 }

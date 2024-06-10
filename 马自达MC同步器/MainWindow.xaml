@@ -3,27 +3,28 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:widget="clr-namespace:马自达MC同步器.Resources.Views.Widgets"
-        xmlns:local="clr-namespace:马自达MC同步器"
         mc:Ignorable="d"
         Title="马自达MC同步器" Height="450" Width="800"
         Closing="Window_Closing">
 
 
-  <Grid Grid.Row="0">
+  <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="60"/>
-      <ColumnDefinition/>
+      <ColumnDefinition Width="60" />
+      <ColumnDefinition />
     </Grid.ColumnDefinitions>
     <Border Grid.Column="0" Padding="5 10" BorderBrush="#e5e5e5" Background="#f3f3f3" BorderThickness="0 0 1 0">
-      <DockPanel TextElement.FontFamily="Segoe MDL2 Assets" LastChildFill="False" >
-        <RadioButton Content="&#xeA86;" Tag="Mod" Height="42" DockPanel.Dock="Top" Margin="0 0 0 10" Focusable="False" Checked="ModPageCheck"/>
-        <RadioButton Content="&#xe774;" Tag="服务器" Height="42" DockPanel.Dock="Top" Focusable="False" Checked="ServerPageCheck"/>
-        <RadioButton Content="&#xe713;" Tag="设置" Height="42" DockPanel.Dock="Bottom" Focusable="False" Checked="SettingPageCheck"/>
+      <DockPanel TextElement.FontFamily="Segoe MDL2 Assets" LastChildFill="False">
+        <RadioButton Content="&#xeA86;" Tag="Mod" Height="42" DockPanel.Dock="Top" Margin="0 0 0 10"
+                     Focusable="False" Checked="ModPageCheck" />
+        <RadioButton Content="&#xe774;" Tag="服务器" Height="42" DockPanel.Dock="Top" Focusable="False"
+                     Checked="ServerPageCheck" />
+        <RadioButton Content="&#xe713;" Tag="设置" Height="42" DockPanel.Dock="Bottom" Focusable="False"
+                     Checked="SettingPageCheck" />
       </DockPanel>
     </Border>
 
-    <Frame x:Name="MainFrame" Grid.Column="1" NavigationUIVisibility="Hidden"/>
+    <Frame x:Name="MainFrame" Grid.Column="1" NavigationUIVisibility="Hidden" />
 
   </Grid>
 </Window>

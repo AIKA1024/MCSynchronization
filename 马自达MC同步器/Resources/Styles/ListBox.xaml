@@ -1,11 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <Style TargetType="ListBox">
-    <Setter Property="Padding" Value="2"/>
-    <Setter Property="BorderBrush" Value="#e5e5e5"/>
-    <Setter Property="Background" Value="#f3f3f3"/>
-    <Setter Property="BorderThickness" Value="1"/>
-    <Setter Property="Border.CornerRadius" Value="4"/>
+    <Setter Property="Padding" Value="2" />
+    <Setter Property="BorderBrush" Value="#e5e5e5" />
+    <Setter Property="Background" Value="#f3f3f3" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Border.CornerRadius" Value="4" />
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate>
@@ -13,7 +13,7 @@
                   BorderThickness="{TemplateBinding BorderThickness}"
                   CornerRadius="{TemplateBinding Border.CornerRadius}">
             <ScrollViewer>
-              <ItemsPresenter/>
+              <ItemsPresenter />
             </ScrollViewer>
           </Border>
         </ControlTemplate>

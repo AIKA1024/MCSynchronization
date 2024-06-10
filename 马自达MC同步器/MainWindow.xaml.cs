@@ -17,43 +17,43 @@ using WebSDK;
 using 马自达MC同步器.Resources.Pages;
 using 马自达MC同步器.Resources.Views.Pages;
 
-namespace 马自达MC同步器
+namespace 马自达MC同步器;
+
+/// <summary>
+/// MainWindow.xaml 的交互逻辑
+/// </summary>
+public partial class MainWindow : Window
 {
-  /// <summary>
-  /// MainWindow.xaml 的交互逻辑
-  /// </summary>
-  public partial class MainWindow : Window
+  public ModPage modPage;
+  public SettingPage settingPage;
+  public ServerPage serverPage;
+
+  public MainWindow()
   {
-    public ModPage modPage;
-    public SettingPage settingPage;
-    public ServerPage serverPage;
-    public MainWindow()
-    {
-      InitializeComponent();
-      modPage = new ModPage();
-      settingPage = new SettingPage();
-      serverPage = new ServerPage();
-      MainFrame.Navigate(modPage);
-    }
+    InitializeComponent();
+    modPage = new ModPage();
+    settingPage = new SettingPage();
+    serverPage = new ServerPage();
+    MainFrame.Navigate(modPage);
+  }
 
-    private void ModPageCheck(object sender, RoutedEventArgs e)
-    {
-      MainFrame.Navigate(modPage);
-    }
+  private void ModPageCheck(object sender, RoutedEventArgs e)
+  {
+    MainFrame.Navigate(modPage);
+  }
 
-    private void SettingPageCheck(object sender, RoutedEventArgs e)
-    {
-      MainFrame.Navigate(settingPage);
-    }
+  private void SettingPageCheck(object sender, RoutedEventArgs e)
+  {
+    MainFrame.Navigate(settingPage);
+  }
 
-    private void ServerPageCheck(object sender, RoutedEventArgs e)
-    {
-      MainFrame.Navigate(serverPage);
-    }
+  private void ServerPageCheck(object sender, RoutedEventArgs e)
+  {
+    MainFrame.Navigate(serverPage);
+  }
 
-    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-    {
-      settingPage.SaveSettingToFile();
-    }
+  private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+  {
+    settingPage.SaveSettingToFile();
   }
 }

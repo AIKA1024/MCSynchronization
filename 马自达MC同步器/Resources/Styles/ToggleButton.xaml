@@ -6,12 +6,12 @@
       <Setter.Value>
         <ControlTemplate TargetType="ToggleButton">
           <Border CornerRadius="5">
-            <TextBlock x:Name="IconTB" Text="{x:Static enum:SegoeMDL2.朝下箭头}" FontFamily="Segoe MDL2 Assets"/>
+            <TextBlock x:Name="IconTB" Text="{x:Static enum:SegoeMDL2.朝下箭头}" FontFamily="Segoe MDL2 Assets" />
           </Border>
 
           <ControlTemplate.Triggers>
             <Trigger Property="IsChecked" Value="True">
-              <Setter TargetName="IconTB" Property="Text" Value="{x:Static enum:SegoeMDL2.朝上箭头}"/>
+              <Setter TargetName="IconTB" Property="Text" Value="{x:Static enum:SegoeMDL2.朝上箭头}" />
             </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>

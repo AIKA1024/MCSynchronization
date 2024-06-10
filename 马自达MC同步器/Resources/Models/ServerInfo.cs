@@ -6,41 +6,41 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace 马自达MC同步器.Resources.Models
+namespace 马自达MC同步器.Resources.Models;
+
+public class ServerInfo(NbtCompound compound) : INotifyPropertyChanged
 {
-  public class ServerInfo(NbtCompound compound) : INotifyPropertyChanged
+  private NbtCompound compound = compound;
+
+  public string ip
   {
-    private NbtCompound compound = compound;
-    public string ip
+    get => compound["ip"].StringValue;
+    set
     {
-      get { return compound["ip"].StringValue; }
-      set
-      {
-        compound["ip"] = new NbtString("ip", value);
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ip"));
-      }
+      compound["ip"] = new NbtString("ip", value);
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ip"));
     }
-
-    public string name
-    {
-      get { return compound["name"].StringValue; }
-      set
-      {
-        compound["name"] = new NbtString("name", value);
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("name"));
-      }
-    }
-
-    public byte hidden
-    {
-      get { return compound["hidden"].ByteValue; }
-      set
-      {
-        compound["hidden"] = new NbtByte("hidden", value);
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("hidden"));
-      }
-    }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
   }
+
+  public string name
+  {
+    get => compound["name"].StringValue;
+    set
+    {
+      compound["name"] = new NbtString("name", value);
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("name"));
+    }
+  }
+
+  public byte hidden
+  {
+    get => compound["hidden"].ByteValue;
+    set
+    {
+      compound["hidden"] = new NbtByte("hidden", value);
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("hidden"));
+    }
+  }
+
+  public event PropertyChangedEventHandler? PropertyChanged;
 }

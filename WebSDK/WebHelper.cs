@@ -14,15 +14,16 @@ namespace WebSDK
   public class WebHelper
   {
     private HttpClient httpClient;
+
     public WebHelper(Uri uri)
     {
-      HttpClientHandler handler = new HttpClientHandler
+      var handler = new HttpClientHandler
       {
         ServerCertificateCustomValidationCallback = (sender, cert, chain, SslPolicyErrors) => true
       };
       httpClient = new HttpClient(handler)
       {
-        BaseAddress = uri,
+        BaseAddress = uri
       };
     }
 
@@ -36,13 +37,13 @@ namespace WebSDK
       try
       {
         // 发送 GET 请求
-        HttpResponseMessage response = await httpClient.GetAsync("GetModList");
+        var response = await httpClient.GetAsync("GetModList");
 
         // 检查响应是否成功
         if (response.IsSuccessStatusCode)
         {
           // 读取响应内容
-          string responseBody = await response.Content.ReadAsStringAsync();
+          var responseBody = await response.Content.ReadAsStringAsync();
           return responseBody;
         }
         else
@@ -61,20 +62,20 @@ namespace WebSDK
     {
       var formData = new Dictionary<string, string>
       {
-         { "MD5", md5 }
+        { "MD5", md5 }
       };
       var content = new FormUrlEncodedContent(formData);
-      HttpResponseMessage response = await httpClient.PostAsync("Download", content);
+      var response = await httpClient.PostAsync("Download", content);
       // 确保响应成功
       response.EnsureSuccessStatusCode();
       // 读取响应内容
       if (response.Content.Headers.TryGetValues("Content-Disposition", out IEnumerable<string> values))
       {
-        string contentDisposition = values.First();
-        int index = contentDisposition.IndexOf("=") + 1;
-        string fileName = contentDisposition[index..];
+        var contentDisposition = values.First();
+        var index = contentDisposition.IndexOf("=") + 1;
+        var fileName = contentDisposition[index..];
         fileName = HttpUtility.UrlDecode(fileName);
-        string fileFullPath = Path.Combine(savePath, fileName);
+        var fileFullPath = Path.Combine(savePath, fileName);
         if (File.Exists(fileFullPath))
         {
           Console.Error.WriteLine($"{fileFullPath}已经存在");
@@ -82,7 +83,7 @@ namespace WebSDK
         else
         {
           // 读取响应内容并保存到文件
-          using FileStream fileStream = File.Create(fileFullPath); // 使用从头部获取的文件名保存文件
+          using var fileStream = File.Create(fileFullPath); // 使用从头部获取的文件名保存文件
           // 将响应内容写入到文件流中
           await response.Content.CopyToAsync(fileStream);
         }
@@ -98,13 +99,13 @@ namespace WebSDK
       try
       {
         // 发送 GET 请求
-        HttpResponseMessage response = await httpClient.GetAsync("GetServerList");
+        var response = await httpClient.GetAsync("GetServerList");
 
         // 检查响应是否成功
         if (response.IsSuccessStatusCode)
         {
           // 读取响应内容
-          string responseBody = await response.Content.ReadAsStringAsync();
+          var responseBody = await response.Content.ReadAsStringAsync();
           return responseBody;
         }
         else
@@ -120,4 +121,3 @@ namespace WebSDK
     }
   }
 }
-

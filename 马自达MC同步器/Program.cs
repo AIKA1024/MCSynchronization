@@ -5,18 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Velopack;
 
-namespace 马自达MC同步器
+namespace 马自达MC同步器;
+
+public class Program
 {
-  public class Program
+  [STAThread]
+  public static void Main()
   {
-    [STAThread]
-    public static void Main()
-    {
-      var vpk = VelopackApp.Build();
-      vpk.Run();
-      var app = new App();
-      app.InitializeComponent();
-      app.Run();
-    }
+    var vpk = VelopackApp.Build();
+    vpk.Run();
+    var app = new App();
+    app.InitializeComponent();
+    app.Run();
   }
 }

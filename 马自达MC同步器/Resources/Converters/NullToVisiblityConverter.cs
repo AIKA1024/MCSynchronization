@@ -8,25 +8,24 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace 马自达MC同步器.Resources.Converters
+namespace 马自达MC同步器.Resources.Converters;
+
+internal class NullToVisiblityConverter : MarkupExtension, IValueConverter
 {
-  class NullToVisiblityConverter : MarkupExtension, IValueConverter
+  public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
   {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-      if (value == null)
-        return Visibility.Collapsed;
-      return Visibility.Visible;
-    }
+    if (value == null)
+      return Visibility.Collapsed;
+    return Visibility.Visible;
+  }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-      throw new NotImplementedException();
-    }
+  public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+  {
+    throw new NotImplementedException();
+  }
 
-    public override object ProvideValue(IServiceProvider serviceProvider)
-    {
-      return this;
-    }
+  public override object ProvideValue(IServiceProvider serviceProvider)
+  {
+    return this;
   }
 }
