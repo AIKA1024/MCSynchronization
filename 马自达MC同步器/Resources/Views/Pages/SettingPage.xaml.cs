@@ -1,33 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Velopack.Sources;
 using Velopack;
+using Velopack.Sources;
 using 马自达MC同步器.Resources.ViewModels;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using 马自达MC同步器.Resources.Enums;
 
 namespace 马自达MC同步器.Resources.Pages;
 
 /// <summary>
-/// SettingPage.xaml 的交互逻辑
+///   SettingPage.xaml 的交互逻辑
 /// </summary>
 public partial class SettingPage : Page
 {
-  private SettingPageViewModel settingPageViewModel = new()
+  private readonly SettingPageViewModel settingPageViewModel = new()
   {
     Version = Application.ResourceAssembly.GetName().Version?.ToString(),
     Address = Settings.Default.Address,
@@ -99,7 +85,7 @@ public partial class SettingPage : Page
 
   private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
   {
-    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("explorer.exe", e.Uri.AbsoluteUri));
+    Process.Start(new ProcessStartInfo("explorer.exe", e.Uri.AbsoluteUri));
     e.Handled = true;
   }
 

@@ -1,16 +1,11 @@
-﻿using fNbt;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using fNbt;
 
 namespace 马自达MC同步器.Resources.Models;
 
 public class ServerInfo(NbtCompound compound) : INotifyPropertyChanged
 {
-  private NbtCompound compound = compound;
+  private readonly NbtCompound compound = compound;
 
   public string ip
   {

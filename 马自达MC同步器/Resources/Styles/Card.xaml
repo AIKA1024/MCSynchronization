@@ -32,8 +32,8 @@
                   <Button.Template>
                     <ControlTemplate TargetType="Button">
                       <Grid Background="Transparent">
-                        <Border x:Name="BG" Background="Black" Opacity="0"/>
-                        <ContentPresenter/>
+                        <Border x:Name="BG" Background="Black" Opacity="0" />
+                        <ContentPresenter />
                       </Grid>
 
                       <ControlTemplate.Triggers>

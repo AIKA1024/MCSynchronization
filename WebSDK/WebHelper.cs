@@ -1,19 +1,17 @@
-﻿using System.Net.Security;
-using WebSDK.Models;
+﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
-using System.Diagnostics;
 
 namespace WebSDK
 {
   public class WebHelper
   {
-    private HttpClient httpClient;
+    private readonly HttpClient httpClient;
 
     public WebHelper(Uri uri)
     {
@@ -46,10 +44,8 @@ namespace WebSDK
           var responseBody = await response.Content.ReadAsStringAsync();
           return responseBody;
         }
-        else
-        {
-          return "";
-        }
+
+        return "";
       }
       catch (HttpRequestException ex)
       {
@@ -108,10 +104,8 @@ namespace WebSDK
           var responseBody = await response.Content.ReadAsStringAsync();
           return responseBody;
         }
-        else
-        {
-          return "";
-        }
+
+        return "";
       }
       catch (HttpRequestException ex)
       {

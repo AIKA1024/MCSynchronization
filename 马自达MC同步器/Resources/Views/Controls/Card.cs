@@ -1,33 +1,27 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using 马自达MC同步器.Resources.Enums;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace 马自达MC同步器.Resources.Views.Controls;
 
 /// <summary>
-/// Card.xaml 的交互逻辑
+///   Card.xaml 的交互逻辑
 /// </summary>
 [ObservableObject]
 public partial class Card : ButtonBase
 {
-  public Card()
-  {
-  }
+
+  public static readonly DependencyProperty HeaderControlProperty =
+    DependencyProperty.Register(nameof(HeaderControl), typeof(FrameworkElement), typeof(Card),
+      new PropertyMetadata(null));
+
+  public static readonly DependencyProperty MDL2IconStrProperty =
+    DependencyProperty.Register(nameof(MDL2IconStr), typeof(string), typeof(Card), new PropertyMetadata(null));
+
+  public static readonly DependencyProperty CornerRadiusProperty =
+    DependencyProperty.Register(nameof(CornerRadius), typeof(CornerRadius), typeof(Card),
+      new PropertyMetadata(new CornerRadius()));
 
   [ObservableProperty] private bool isExpress;
 
@@ -37,10 +31,6 @@ public partial class Card : ButtonBase
     set => SetValue(HeaderControlProperty, value);
   }
 
-  public static readonly DependencyProperty HeaderControlProperty =
-    DependencyProperty.Register("HeaderControl", typeof(FrameworkElement), typeof(Card),
-      new PropertyMetadata(null));
-
 
   public string MDL2IconStr
   {
@@ -48,18 +38,11 @@ public partial class Card : ButtonBase
     set => SetValue(MDL2IconStrProperty, value);
   }
 
-  public static readonly DependencyProperty MDL2IconStrProperty =
-    DependencyProperty.Register("MDL2IconStr", typeof(string), typeof(Card), new PropertyMetadata(null));
-
   public CornerRadius CornerRadius
   {
     get => (CornerRadius)GetValue(CornerRadiusProperty);
     set => SetValue(CornerRadiusProperty, value);
   }
-
-  public static readonly DependencyProperty CornerRadiusProperty =
-    DependencyProperty.Register("CornerRadius", typeof(CornerRadius), typeof(Card),
-      new PropertyMetadata(new CornerRadius()));
 
   //private void ResponsivePanelClicks(object sender, RoutedEventArgs e)
   //{
@@ -78,7 +61,7 @@ public partial class Card : ButtonBase
     var panelButton = (Button)GetTemplateChild("panel")!;
     panelButton.Click += (sender, args) =>
     {
-      if (Content != null&&((Button)args.OriginalSource).Name == "panel")
+      if (Content != null && ((Button)args.OriginalSource).Name == "panel")
         IsExpress = !IsExpress;
     };
   }

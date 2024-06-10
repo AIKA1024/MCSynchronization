@@ -8,7 +8,7 @@ using 马自达MC同步器.Resources.ViewModels;
 namespace 马自达MC同步器.Resources.Views.Pages;
 
 /// <summary>
-/// ServerAddressPage.xaml 的交互逻辑
+///   ServerAddressPage.xaml 的交互逻辑
 /// </summary>
 public partial class ServerPage : Page
 {
@@ -33,7 +33,7 @@ public partial class ServerPage : Page
   private void AddServerWithView(string name, string ip, byte hidden)
   {
     var nbtFile = NBTHelper.GetNBTFile();
-    var nbtCompoundTag = new NbtCompound()
+    var nbtCompoundTag = new NbtCompound
     {
       new NbtString(nameof(name), name),
       new NbtString(nameof(ip), ip),
