@@ -1,4 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    x:Name="Me"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:control="clr-namespace:马自达MC同步器.Resources.Views.Controls"
                     xmlns:converter="clr-namespace:马自达MC同步器.Resources.Converters">
@@ -19,8 +20,7 @@
               <Grid.Resources>
                 <BooleanToVisibilityConverter x:Key="bvConverter" />
               </Grid.Resources>
-              <Border x:Name="BG" Background="Black" Opacity="0"
-                      CornerRadius="{TemplateBinding CornerRadius}" />
+
               <Grid>
                 <Grid.RowDefinitions>
                   <RowDefinition MinHeight="48" />
@@ -31,9 +31,16 @@
                 <Button Grid.Row="0" x:Name="panel" Background="Transparent">
                   <Button.Template>
                     <ControlTemplate TargetType="Button">
-                      <Border Background="{TemplateBinding Background}">
+                      <Grid Background="Transparent">
+                        <Border x:Name="BG" Background="Black" Opacity="0"/>
                         <ContentPresenter/>
-                      </Border>
+                      </Grid>
+
+                      <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                          <Setter TargetName="BG" Property="Opacity" Value=".02" />
+                        </Trigger>
+                      </ControlTemplate.Triggers>
                     </ControlTemplate>
                   </Button.Template>
 
@@ -74,11 +81,7 @@
             </Grid>
           </Border>
 
-          <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-              <Setter TargetName="BG" Property="Opacity" Value=".02" />
-            </Trigger>
-          </ControlTemplate.Triggers>
+
         </ControlTemplate>
       </Setter.Value>
     </Setter>

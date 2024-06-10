@@ -29,7 +29,7 @@ public partial class Card : ButtonBase
   {
   }
 
-  [ObservableProperty] public bool isExpress;
+  [ObservableProperty] private bool isExpress;
 
   public FrameworkElement HeaderControl
   {
@@ -75,7 +75,7 @@ public partial class Card : ButtonBase
   {
     base.OnApplyTemplate();
 
-    var panelButton = GetTemplateChild("panel") as Button;
+    var panelButton = (Button)GetTemplateChild("panel")!;
     panelButton.Click += (sender, args) =>
     {
       if (Content != null&&((Button)args.OriginalSource).Name == "panel")
