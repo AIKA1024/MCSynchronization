@@ -11,7 +11,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
-using 马自达MC同步器.Resources.Command;
 using 马自达MC同步器.Resources.Enums;
 using 马自达MC同步器.Resources.Models;
 

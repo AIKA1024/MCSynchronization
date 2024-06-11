@@ -73,8 +73,7 @@
             </Style>
           </StackPanel.Resources>
           <TextBlock>
-            <Hyperlink NavigateUri="https://github.com/windows-toolkit/WindowsCommunityToolkit"
-                       RequestNavigate="Hyperlink_RequestNavigate">
+            <Hyperlink NavigateUri="https://github.com/windows-toolkit/WindowsCommunityToolkit">
               https://github.com/windows-toolkit/WindowsCommunityToolkit
             </Hyperlink>
           </TextBlock>
@@ -85,6 +84,10 @@
 
           <TextBlock>
             <Hyperlink NavigateUri="https://github.com/NiclasOlofsson/fNbt">https://github.com/NiclasOlofsson/fNbt</Hyperlink>
+          </TextBlock>
+          
+          <TextBlock>
+            <Hyperlink NavigateUri="https://github.com/Raymai97/OpenFolderAndSelectItem">https://github.com/Raymai97/OpenFolderAndSelectItem</Hyperlink>
           </TextBlock>
         </StackPanel>
       </control:Card>
