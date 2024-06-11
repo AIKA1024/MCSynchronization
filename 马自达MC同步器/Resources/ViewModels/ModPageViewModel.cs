@@ -28,24 +28,13 @@ public partial class ModPageViewModel : ObservableObject
   {
     var selectedItems = items.ToList();
     var paths = items.Select(i => ((ModInfo)i).Name).ToList();
-    //await Task.Run(async () =>
-    //{
-    //  Process.Start("explorer.exe", Path.GetDirectoryName(((ModInfo)selectedItems[0]).FullName)).WaitForInputIdle();
-    //  await Task.Delay(2000);
-    //});
-    //SelectFiles(selectedItems.Select(e => ((ModInfo)e).FullName).ToList());
-
     string command = "dir";
     // 创建一个进程对象并设置参数
     Process process = new Process();
     process.StartInfo.FileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\OpenFolderAndSelect.exe"; // 指定要执行的程序（cmd）
     process.StartInfo.Arguments = $"{Path.GetDirectoryName(((ModInfo)selectedItems[0]).FullName)} \"{string.Join("\" \"", paths)}\""; // 指定要执行的命令和参数（/c 选项表示执行完命令后自动关闭 cmd 窗口）
-
     // 启动进程
     process.Start();
-
-
-    //Process.Start("OpenFolderAndSelect", $"{Path.GetDirectoryName(((ModInfo)selectedItems[0]).FullName)} {string.Join(" ", paths)}");
   }
 
   [RelayCommand]

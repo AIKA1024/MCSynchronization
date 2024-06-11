@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Dynamic;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using fNbt;
@@ -60,19 +61,18 @@ public partial class ServerPage : Page
       return;
     }
 
-    var serverList = JsonSerializer.Deserialize<List<ServerInfoOnlyData>>(jsonStr);
+    var serverList = JsonSerializer.Deserialize<List<ExpandoObject>>(jsonStr);
     if (serverList == null)
     {
       MessageBox.Show("服务器返回了空服务器列表!");
       return;
     }
 
-    foreach (var server in serverList)
+    foreach (dynamic item in serverList)
     {
-      if (viewModel.ServerUrl.Any(s => s.ip == server.ip))
+      if (viewModel.ServerUrl.Any(s => s.ip == Convert.ToString(item.ip)))
         continue;
-
-      AddServerWithView(server.name, server.ip, server.hidden);
+      AddServerWithView(Convert.ToString(item.name), Convert.ToString(item.ip), byte.Parse(Convert.ToString(item.hidden)));
     }
   }
 
