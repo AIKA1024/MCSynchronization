@@ -1,46 +1,113 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text.Json;
 using System.Windows;
+using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
+using 马自达MC同步器.Resources.Command;
 using 马自达MC同步器.Resources.Enums;
 using 马自达MC同步器.Resources.Models;
 
 namespace 马自达MC同步器.Resources.ViewModels;
 
-public partial class MainPageViewModel : ObservableObject
+public partial class ModPageViewModel : ObservableObject
 {
-  public OpenFolderDialog FolderBrowserDialog = new();
-  [ObservableProperty] private string gamePath = "";
+
   [ObservableProperty] private string tip = "";
 
   public ObservableCollection<ModInfo>? ModInfos { get; set; } = [];
-  
+
+  [RelayCommand]
+  private async void OpenItemToExplorer(IEnumerable<Object> items)
+  {
+    var selectedItems = items.ToList();
+    var paths = items.Select(i => ((ModInfo)i).Name).ToList();
+    //await Task.Run(async () =>
+    //{
+    //  Process.Start("explorer.exe", Path.GetDirectoryName(((ModInfo)selectedItems[0]).FullName)).WaitForInputIdle();
+    //  await Task.Delay(2000);
+    //});
+    //SelectFiles(selectedItems.Select(e => ((ModInfo)e).FullName).ToList());
+
+    string command = "dir";
+    // 创建一个进程对象并设置参数
+    Process process = new Process();
+    process.StartInfo.FileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\OpenFolderAndSelect.exe"; // 指定要执行的程序（cmd）
+    process.StartInfo.Arguments = $"{Path.GetDirectoryName(((ModInfo)selectedItems[0]).FullName)} \"{string.Join("\" \"", paths)}\""; // 指定要执行的命令和参数（/c 选项表示执行完命令后自动关闭 cmd 窗口）
+
+    // 启动进程
+    process.Start();
+
+
+    //Process.Start("OpenFolderAndSelect", $"{Path.GetDirectoryName(((ModInfo)selectedItems[0]).FullName)} {string.Join(" ", paths)}");
+  }
+
+  [RelayCommand]
+  private void DeleteItem(IEnumerable<Object> items)
+  {
+    var selectedItems = items.ToList();
+    var count = selectedItems.Count();
+    for (int i = 0; i < count; i++)
+    {
+      var modInfo = (ModInfo)selectedItems[i];
+      ModInfos.Remove(modInfo);
+      FileSystem.DeleteFile(modInfo.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+    }
+  }
+
+  private void SelectFiles(List<string> filesToSelect)
+  {
+    var shellAppType = Type.GetTypeFromProgID("Shell.Application");
+    dynamic shellApp = Activator.CreateInstance(shellAppType);
+    foreach (var window in shellApp.Windows())
+    {
+      foreach (var folderItem in window.Document.Folder.Items())
+      {
+        if (Enumerable.Contains(filesToSelect, folderItem.Path))
+        {
+          window.Document.SelectItem(folderItem, 1 + 8);
+          filesToSelect.Remove(folderItem.Path);
+        }
+      }
+    }
+  }
+
   public async Task TraverseMod()
   {
     Tip = "开始遍历mod文件";
-    ModInfos = null;
-    var mods = Directory.GetFiles(Path.Combine(GamePath, "mods"));
-    List<ModInfo> temp = [];
-    foreach (var mod in mods)
-      await Task.Run(() => { temp.Add(new ModInfo(Path.GetFileName(mod), CalculateFileMD5(mod))); });
-    ModInfos = new ObservableCollection<ModInfo>(temp);
+    //ModInfos = null;
+    ModInfos.Clear();
+    var mods = Directory.GetFiles(Path.Combine(Settings.Default.GamePath, "mods"));
+    //List<ModInfo> temp = [];
+    foreach (var modFullName in mods)
+      ModInfos.Add(new ModInfo(Path.GetFileName(modFullName), await CalculateFileMD5(modFullName), modFullName));
+    //ModInfos = new ObservableCollection<ModInfo>(temp);
     // Application.Current.Dispatcher.Invoke(() => { ModDataGrid.ItemsSource = ModInfos; });
     Tip = "遍历完成";
   }
-  
-  private static string CalculateFileMD5(string filename)
+
+  private async Task<string> CalculateFileMD5(string filename)
   {
-    using var md5 = MD5.Create();
-    using var stream = File.OpenRead(filename);
-    var hash = md5.ComputeHash(stream);
-    return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+    string result = "";
+    await Task.Run(() =>
+    {
+      using var md5 = MD5.Create();
+      using var stream = File.OpenRead(filename);
+      var hash = md5.ComputeHash(stream);
+      result = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+    });
+    return result;
   }
-  
-    public async void Synchronization(object sender, RoutedEventArgs e)
+
+  [RelayCommand]
+  public async Task Synchronization()
   {
     await TraverseMod();
     foreach (var item in ModInfos!) item.Status = SynchronizationStatus.额外;
@@ -80,7 +147,7 @@ public partial class MainPageViewModel : ObservableObject
 
       if (!found)
       {
-        ModInfo modInfo = new(remoteModInfo.Name, remoteModInfo.MD5, SynchronizationStatus.缺少);
+        ModInfo modInfo = new(remoteModInfo.Name, remoteModInfo.MD5, Path.Combine(Settings.Default.GamePath, "mods"), SynchronizationStatus.缺少);
         missList.Add(modInfo);
         ModInfos.Insert(0, modInfo);
       }

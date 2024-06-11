@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Windows;
+using System.Windows.Input;
 using 马自达MC同步器.Resources.Pages;
+using 马自达MC同步器.Resources.ViewModels;
 using 马自达MC同步器.Resources.Views.Pages;
 
 namespace 马自达MC同步器;
@@ -10,36 +12,37 @@ namespace 马自达MC同步器;
 /// </summary>
 public partial class MainWindow : Window
 {
-  public ModPage modPage;
-  public ServerPage serverPage;
-  public SettingPage settingPage;
+  private readonly MainWindowViewModel viewModel = new();
 
   public MainWindow()
   {
+    viewModel.ModPage = new ModPage();
+    viewModel.SettingPage = new SettingPage();
+    viewModel.ServerPage = new ServerPage();
+    DataContext = viewModel;
     InitializeComponent();
-    modPage = new ModPage();
-    settingPage = new SettingPage();
-    serverPage = new ServerPage();
-    MainFrame.Navigate(modPage);
+    MainFrame.Navigate(viewModel.ModPage);
   }
+
+  public void SelectDirectory(object sender, ExecutedRoutedEventArgs e) => viewModel.SelectDirectory(sender, e);
 
   private void ModPageCheck(object sender, RoutedEventArgs e)
   {
-    MainFrame.Navigate(modPage);
+    MainFrame.Navigate(viewModel.ModPage);
   }
 
   private void SettingPageCheck(object sender, RoutedEventArgs e)
   {
-    MainFrame.Navigate(settingPage);
+    MainFrame.Navigate(viewModel.SettingPage);
   }
 
   private void ServerPageCheck(object sender, RoutedEventArgs e)
   {
-    MainFrame.Navigate(serverPage);
+    MainFrame.Navigate(viewModel.ServerPage);
   }
 
   private void Window_Closing(object sender, CancelEventArgs e)
   {
-    settingPage.SaveSettingToFile();
+    viewModel.SettingPage.SaveSettingToFile();
   }
 }

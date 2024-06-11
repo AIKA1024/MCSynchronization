@@ -11,7 +11,6 @@ namespace 马自达MC同步器.Resources.Views.Controls;
 [ObservableObject]
 public partial class Card : ButtonBase
 {
-
   public static readonly DependencyProperty HeaderControlProperty =
     DependencyProperty.Register(nameof(HeaderControl), typeof(FrameworkElement), typeof(Card),
       new PropertyMetadata(null));

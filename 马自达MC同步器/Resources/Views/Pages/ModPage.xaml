@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:马自达MC同步器"
       mc:Ignorable="d"
       xmlns:cv="clr-namespace:马自达MC同步器.Resources.Converters"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -15,9 +16,9 @@
     </Grid.RowDefinitions>
 
     <DockPanel Margin="0 8" Background="White" LastChildFill="False">
-      <TextBlock Text="{Binding GamePath}" TextAlignment="Center" Margin="0 0 0 8" VerticalAlignment="Bottom" />
-      <Button x:Name="SyButton" Content="同步云端mod" DockPanel.Dock="Right" Click="Synchronization" />
-      <Button x:Name="SFButton" Content="选择游戏文件夹" Margin="0 0 8 0" DockPanel.Dock="Right" Click="Button_Click" />
+      <TextBlock Text="{Binding GamePath,Source={x:Static local:Settings.Default}}" TextAlignment="Center" Margin="0 0 0 8" VerticalAlignment="Bottom" />
+      <Button x:Name="SyButton" Command="{Binding SynchronizationCommand}" Content="同步云端mod" DockPanel.Dock="Right" />
+      <!-- <Button x:Name="SFButton" Content="选择游戏文件夹" Margin="0 0 8 0" DockPanel.Dock="Right" Click="Button_Click" /> -->
     </DockPanel>
 
     <DataGrid x:Name="ModDataGrid"
@@ -27,8 +28,33 @@
               ItemsSource="{Binding Path=ModInfos}"
               IsReadOnly="True"
               AutoGenerateColumns="False">
+      
+      <DataGrid.Resources>
+        <Style TargetType="{x:Type Border}">
+          <Setter Property="CornerRadius" Value="3" />
+        </Style>
+        
+        <ContextMenu x:Key="RowContextMenu">
+          <MenuItem Header="打开所在文件夹" Command="{Binding DataContext.OpenItemToExplorerCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding SelectedItems,Source={x:Reference ModDataGrid}}"/>
+          <MenuItem Header="移动到回收站" Command="{Binding DataContext.DeleteItemCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding SelectedItems,Source={x:Reference ModDataGrid}}"/>
+        </ContextMenu>
+      </DataGrid.Resources>
+      
+      <DataGrid.Style>
+        <Style TargetType="DataGrid">
+          <Setter Property="ContextMenu" Value="{StaticResource RowContextMenu}" />
+        </Style>
+      </DataGrid.Style>
+      
       <DataGrid.Columns>
-        <DataGridTextColumn Header="名称" Binding="{Binding Name}" />
+        <DataGridTemplateColumn Header="名称">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+                <TextBlock Text="{Binding Name}" Background="Transparent" VerticalAlignment="Center"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        
         <DataGridTemplateColumn Header="同步状态">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
@@ -43,14 +69,8 @@
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTextColumn Header="MD5" Binding="{Binding MD5}" />
-
       </DataGrid.Columns>
-      <DataGrid.Resources>
-        <Style TargetType="{x:Type Border}">
-          <Setter Property="CornerRadius" Value="3" />
-        </Style>
-      </DataGrid.Resources>
+      
     </DataGrid>
 
     <TextBlock Grid.Row="2" Text="{Binding Path=Tip}" Margin="0 2 0 0" />

@@ -6,7 +6,9 @@
         mc:Ignorable="d"
         Title="马自达MC同步器" Height="450" Width="800"
         Closing="Window_Closing">
-
+  <Window.CommandBindings>
+    <CommandBinding Command="{x:Static ApplicationCommands.Open}" Executed="SelectDirectory"/>
+  </Window.CommandBindings>
 
   <Grid>
     <Grid.ColumnDefinitions>

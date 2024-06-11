@@ -18,7 +18,6 @@ public partial class SettingPage : Page
     Version = Application.ResourceAssembly.GetName().Version?.ToString(),
     Address = Settings.Default.Address,
     MaxDownloadCount = Settings.Default.MaxDownloadCount,
-    GamePath = Settings.Default.GamePath
   };
 
   public SettingPage()

@@ -3,7 +3,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:Enum="clr-namespace:马自达MC同步器.Resources.Enums"
+      xmlns:local="clr-namespace:马自达MC同步器"
+      xmlns:enum="clr-namespace:马自达MC同步器.Resources.Enums"
       xmlns:control="clr-namespace:马自达MC同步器.Resources.Views.Controls"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -24,7 +25,7 @@
 
       <!--#region 卡片-->
       <TextBlock Text="服务器" Margin="0 8" />
-      <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static Enum:SegoeMDL2.服务器}">
+      <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static enum:SegoeMDL2.服务器}">
         <control:Card.HeaderControl>
           <TextBlock Text="同步服务器地址" VerticalAlignment="Center" />
         </control:Card.HeaderControl>
@@ -43,22 +44,23 @@
 
       <!--#region 库-->
       <TextBlock Text="库" Margin="0 8" />
-      <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static Enum:SegoeMDL2.文件夹}">
+      <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static enum:SegoeMDL2.文件夹}">
         <control:Card.HeaderControl>
           <DockPanel LastChildFill="False">
             <TextBlock DockPanel.Dock="Left" Text="游戏路径" VerticalAlignment="Center" />
-            <Button DockPanel.Dock="Right" Content="选择文件夹" Margin="0 0 16 0" />
+            <Button DockPanel.Dock="Right" Command="{x:Static ApplicationCommands.Open}" CommandParameter="Directory"
+                    Content="选择文件夹" Margin="0 0 16 0" />
           </DockPanel>
         </control:Card.HeaderControl>
 
-        <TextBlock Margin="46 16 0 16" Text="{Binding GamePath}" />
+        <TextBlock Margin="46 16 0 16" Text="{Binding GamePath,Source={x:Static local:Settings.Default}}" />
       </control:Card>
 
       <!--#endregion-->
 
       <!--#region 关于-->
       <TextBlock Text="关于" Margin="0 8" />
-      <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static Enum:SegoeMDL2.猫}">
+      <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static enum:SegoeMDL2.猫}">
         <control:Card.HeaderControl>
           <TextBlock Text="开源项目引用" VerticalAlignment="Center" />
         </control:Card.HeaderControl>
@@ -87,7 +89,7 @@
         </StackPanel>
       </control:Card>
 
-      <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static Enum:SegoeMDL2.感叹号}">
+      <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static enum:SegoeMDL2.感叹号}">
         <control:Card.HeaderControl>
           <TextBlock Text="详细信息" VerticalAlignment="Center" />
         </control:Card.HeaderControl>

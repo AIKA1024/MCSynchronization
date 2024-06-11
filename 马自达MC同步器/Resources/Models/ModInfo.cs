@@ -10,10 +10,13 @@ public partial class ModInfo : ObservableObject
 
   [ObservableProperty] private SynchronizationStatus status;
 
-  public ModInfo(string name, string md5, SynchronizationStatus status = SynchronizationStatus.未同步)
+  [ObservableProperty] private string fullName;
+
+  public ModInfo(string name, string md5,string fullName, SynchronizationStatus status = SynchronizationStatus.未同步)
   {
     Name = name;
     MD5 = md5;
+    FullName = fullName;
     this.status = status;
   }
 

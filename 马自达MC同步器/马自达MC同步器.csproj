@@ -17,13 +17,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2"/>
-        <PackageReference Include="MiNET.fnbt" Version="1.0.22"/>
-        <PackageReference Include="Velopack" Version="0.0.359"/>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+        <PackageReference Include="MiNET.fnbt" Version="1.0.22" />
+        <PackageReference Include="Velopack" Version="0.0.359" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\WebSDK\WebSDK.csproj"/>
+        <ProjectReference Include="..\WebSDK\WebSDK.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -35,10 +35,20 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Update="example_wildcard.cmd">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="OpenFolderAndSelect.exe">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Update="Settings.settings">
             <Generator>SettingsSingleFileGenerator</Generator>
             <LastGenOutput>Settings.Designer.cs</LastGenOutput>
         </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Resources\Command\" />
     </ItemGroup>
 
 </Project>
