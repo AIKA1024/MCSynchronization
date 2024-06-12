@@ -24,7 +24,10 @@ public partial class MainWindow : Window
     MainFrame.Navigate(viewModel.ModPage);
   }
 
-  public void SelectDirectory(object sender, ExecutedRoutedEventArgs e) => viewModel.SelectDirectory(sender, e);
+  public void SelectDirectory(object sender, ExecutedRoutedEventArgs e)
+  {
+    viewModel.SelectDirectory(sender, e);
+  }
 
   private void ModPageCheck(object sender, RoutedEventArgs e)
   {
@@ -43,6 +46,6 @@ public partial class MainWindow : Window
 
   private void Window_Closing(object sender, CancelEventArgs e)
   {
-    viewModel.SettingPage.SaveSettingToFile();
+    ((SettingPageViewModel)viewModel.SettingPage.DataContext).SaveSettingToFile();
   }
 }

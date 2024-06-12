@@ -33,11 +33,12 @@
         <StackPanel HorizontalAlignment="Stretch" Margin="46 16">
           <TextBox x:Name="AddressTextBox"
                    HorizontalAlignment="Stretch"
-                   Text="{Binding Address,UpdateSourceTrigger=LostFocus}"
+                   Text="{Binding Address,UpdateSourceTrigger=PropertyChanged}"
                    VerticalAlignment="Center"
-                   FontSize="16"
-                   LostFocus="AddressTextBox_LostFocus" />
-          <TextBlock x:Name="WarningTextBlock" Text="重启后生效" Visibility="Collapsed" Foreground="Red"
+                   FontSize="16"/>
+          <TextBlock Text="修改将在重启后生效"
+                     Visibility="{Binding AddressWarningVisblity}"
+                     Foreground="Red"
                      Margin="0 8 0 0" />
         </StackPanel>
       </control:Card>
@@ -85,7 +86,7 @@
           <TextBlock>
             <Hyperlink NavigateUri="https://github.com/NiclasOlofsson/fNbt">https://github.com/NiclasOlofsson/fNbt</Hyperlink>
           </TextBlock>
-          
+
           <TextBlock>
             <Hyperlink NavigateUri="https://github.com/Raymai97/OpenFolderAndSelectItem">https://github.com/Raymai97/OpenFolderAndSelectItem</Hyperlink>
           </TextBlock>
@@ -102,7 +103,7 @@
           <TextBlock Text="MAZDA MC同步器       Dedicated to group friends." />
           <StackPanel Orientation="Horizontal" Margin="0 10">
             <TextBlock Text="{Binding Version,StringFormat=版本：{0}}" VerticalAlignment="Center" />
-            <Button x:Name="UpdateBT" Content="软件更新" Margin="57 0 0 0" Click="UpdateBT_Click" />
+            <Button Content="软件更新" Margin="57 0 0 0" Command="{Binding UpdateCommand}"/>
           </StackPanel>
           <TextBlock>
             <Run Text="开发者:                         " />

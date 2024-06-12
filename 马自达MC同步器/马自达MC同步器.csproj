@@ -36,10 +36,10 @@
 
     <ItemGroup>
         <None Update="example_wildcard.cmd">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="OpenFolderAndSelect.exe">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Settings.settings">
             <Generator>SettingsSingleFileGenerator</Generator>
@@ -48,7 +48,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Resources\Command\" />
+        <Folder Include="Resources\Command\" />
     </ItemGroup>
 
 </Project>

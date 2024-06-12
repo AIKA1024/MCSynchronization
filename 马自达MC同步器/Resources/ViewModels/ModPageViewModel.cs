@@ -1,16 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Security.Policy;
 using System.Text.Json;
 using System.Windows;
-using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.VisualBasic.FileIO;
-using Microsoft.Win32;
 using 马自达MC同步器.Resources.Enums;
 using 马自达MC同步器.Resources.Models;
 
@@ -18,31 +14,31 @@ namespace 马自达MC同步器.Resources.ViewModels;
 
 public partial class ModPageViewModel : ObservableObject
 {
-
   [ObservableProperty] private string tip = "";
 
   public ObservableCollection<ModInfo>? ModInfos { get; set; } = [];
 
   [RelayCommand]
-  private async void OpenItemToExplorer(IEnumerable<Object> items)
+  private async void OpenItemToExplorer(IEnumerable<object> items)
   {
     var selectedItems = items.ToList();
     var paths = items.Select(i => ((ModInfo)i).Name).ToList();
-    string command = "dir";
+    var command = "dir";
     // 创建一个进程对象并设置参数
-    Process process = new Process();
+    var process = new Process();
     process.StartInfo.FileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\OpenFolderAndSelect.exe"; // 指定要执行的程序（cmd）
-    process.StartInfo.Arguments = $"{Path.GetDirectoryName(((ModInfo)selectedItems[0]).FullName)} \"{string.Join("\" \"", paths)}\""; // 指定要执行的命令和参数（/c 选项表示执行完命令后自动关闭 cmd 窗口）
+    process.StartInfo.Arguments =
+      $"{Path.GetDirectoryName(((ModInfo)selectedItems[0]).FullName)} \"{string.Join("\" \"", paths)}\""; // 指定要执行的命令和参数（/c 选项表示执行完命令后自动关闭 cmd 窗口）
     // 启动进程
     process.Start();
   }
 
   [RelayCommand]
-  private void DeleteItem(IEnumerable<Object> items)
+  private void DeleteItem(IEnumerable<object> items)
   {
     var selectedItems = items.ToList();
     var count = selectedItems.Count();
-    for (int i = 0; i < count; i++)
+    for (var i = 0; i < count; i++)
     {
       var modInfo = (ModInfo)selectedItems[i];
       ModInfos.Remove(modInfo);
@@ -55,16 +51,12 @@ public partial class ModPageViewModel : ObservableObject
     var shellAppType = Type.GetTypeFromProgID("Shell.Application");
     dynamic shellApp = Activator.CreateInstance(shellAppType);
     foreach (var window in shellApp.Windows())
-    {
-      foreach (var folderItem in window.Document.Folder.Items())
+    foreach (var folderItem in window.Document.Folder.Items())
+      if (Enumerable.Contains(filesToSelect, folderItem.Path))
       {
-        if (Enumerable.Contains(filesToSelect, folderItem.Path))
-        {
-          window.Document.SelectItem(folderItem, 1 + 8);
-          filesToSelect.Remove(folderItem.Path);
-        }
+        window.Document.SelectItem(folderItem, 1 + 8);
+        filesToSelect.Remove(folderItem.Path);
       }
-    }
   }
 
   public async Task TraverseMod()
@@ -83,7 +75,7 @@ public partial class ModPageViewModel : ObservableObject
 
   private async Task<string> CalculateFileMD5(string filename)
   {
-    string result = "";
+    var result = "";
     await Task.Run(() =>
     {
       using var md5 = MD5.Create();
@@ -135,7 +127,8 @@ public partial class ModPageViewModel : ObservableObject
 
       if (!found)
       {
-        ModInfo modInfo = new(remoteModInfo.Name, remoteModInfo.MD5, Path.Combine(Settings.Default.GamePath, "mods"), SynchronizationStatus.缺少);
+        ModInfo modInfo = new(remoteModInfo.Name, remoteModInfo.MD5, Path.Combine(Settings.Default.GamePath, "mods"),
+          SynchronizationStatus.缺少);
         missList.Add(modInfo);
         ModInfos.Insert(0, modInfo);
       }

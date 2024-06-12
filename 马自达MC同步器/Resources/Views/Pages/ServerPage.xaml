@@ -6,7 +6,7 @@
       xmlns:cv="clr-namespace:马自达MC同步器.Resources.Converters"
       xmlns:models="clr-namespace:马自达MC同步器.Resources.Models"
       mc:Ignorable="d"
-      d:DesignHeight="450" d:DesignWidth="800" Initialized="Page_Initialized"
+      d:DesignHeight="450" d:DesignWidth="800"
       Title="ServerPage" Margin="12">
 
   <Grid>
@@ -49,17 +49,23 @@
     <DockPanel Grid.Row="0" LastChildFill="False" Margin="0 8">
       <Button Click="ClickNewServer">
         <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
-          <TextBlock Text="&#xF8AA;" Foreground="#7094b0" FontWeight="Black" VerticalAlignment="Center"
+          <TextBlock Text="&#xF8AA;" Foreground="#7094b0"
+                     FontWeight="Black" VerticalAlignment="Center"
                      TextElement.FontFamily="Segoe MDL2 Assets" />
           <TextBlock Text="  新建条目" HorizontalAlignment="Center" />
         </StackPanel>
       </Button>
 
-      <Button x:Name="SyServerButton" Content="同步服务器列表" DockPanel.Dock="Right" Click="ClickSynchronizationServer" />
-      <Button Content="确认更改" Margin="0 0 8 0" DockPanel.Dock="Right" Click="ClickSaveNBT" />
+      <Button x:Name="SyServerButton" Content="同步服务器列表"
+              Command="{Binding SynchronizateServerCommand}"
+              DockPanel.Dock="Right" />
+      <Button Content="确认更改"
+              Command="{Binding SaveNBTCommand}"
+              Margin="0 0 8 0"
+              DockPanel.Dock="Right" />
     </DockPanel>
 
-    <ListBox x:Name="ServerListBox" Grid.Row="1" ItemsSource="{Binding ServerUrl}">
+    <ListBox x:Name="ServerListBox" Grid.Row="1" ItemsSource="{Binding ServerInfos}">
       <ListBox.ItemTemplate>
         <DataTemplate DataType="{x:Type models:ServerInfo}">
           <Grid Margin="5 0" Height="30">
@@ -78,7 +84,10 @@
                       IsChecked="{Binding hidden,Mode=TwoWay,Converter={cv:ByteToBoolConvert}}"
                       Content="是否隐藏" HorizontalAlignment="Left" VerticalAlignment="Center"
                       Background="White" />
-            <Button Grid.Column="3" Content="&#xE711;" Height="26" Click="ClickRemove" Margin="0"
+            <Button Grid.Column="3" Content="&#xE711;" Height="26"
+                    Command="{Binding DataContext.RemoveCommand,ElementName=ServerListBox}"
+                    CommandParameter="{Binding}"
+                    Margin="0"
                     Padding="0" Foreground="Red" FontWeight="Black" VerticalAlignment="Center"
                     TextElement.FontFamily="Segoe MDL2 Assets" />
           </Grid>

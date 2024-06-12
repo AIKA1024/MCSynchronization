@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using 马自达MC同步器.Resources.ViewModels;
 
 namespace 马自达MC同步器.Resources.Pages;
@@ -41,5 +39,4 @@ public partial class ModPage : Page
   {
     await modViewModel.TraverseMod();
   }
-
 }

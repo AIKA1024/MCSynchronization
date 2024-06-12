@@ -1,5 +1,4 @@
-﻿using System.Windows.Controls;
-using Velopack;
+﻿using Velopack;
 
 namespace 马自达MC同步器;
 

@@ -1,21 +1,82 @@
 ﻿using System.Collections.ObjectModel;
+using System.Dynamic;
+using System.Text.Json;
+using System.Windows;
+using CommunityToolkit.Mvvm.Input;
 using fNbt;
 using 马自达MC同步器.Resources.Models;
 
 namespace 马自达MC同步器.Resources.ViewModels;
 
-public class ServerPageViewModel
+public partial class ServerPageViewModel
 {
   private NbtFile nbtFile;
 
   public ServerPageViewModel(NbtFile nbtFile)
   {
     this.nbtFile = nbtFile;
-    if (nbtFile == null)
-      return;
     foreach (var item in ((NbtList)nbtFile.RootTag["servers"]).Cast<NbtCompound>())
-      ServerUrl.Add(new ServerInfo(item));
+      ServerInfos.Add(new ServerInfo(item));
   }
 
-  public ObservableCollection<ServerInfo> ServerUrl { get; set; } = [];
+  public ObservableCollection<ServerInfo> ServerInfos { get; set; } = [];
+
+  private void AddServer(string name, string ip, byte hidden)
+  {
+    nbtFile = NBTHelper.GetNBTFile();
+    var nbtCompoundTag = new NbtCompound
+    {
+      new NbtString(nameof(name), name),
+      new NbtString(nameof(ip), ip),
+      new NbtByte(nameof(hidden), hidden)
+    };
+    ((NbtList)nbtFile.RootTag["servers"]).Add(nbtCompoundTag);
+    ServerInfos.Add(new ServerInfo(nbtCompoundTag));
+  }
+
+  [RelayCommand]
+  private void SaveNBT()
+  {
+    NBTHelper.SaveNBTFile();
+  }
+
+  [RelayCommand]
+  private async Task SynchronizateServer()
+  {
+    if (string.IsNullOrEmpty(Settings.Default.GamePath))
+    {
+      MessageBox.Show("请先选择游戏文件夹");
+      return;
+    }
+
+    var jsonStr = await App.webHelper.GetRemoteServerList();
+    if (string.IsNullOrEmpty(jsonStr))
+    {
+      MessageBox.Show("连接服务器失败!");
+      return;
+    }
+
+    //由于serverInfo有额外的操作，因此无法使用该模型类
+    var serverList = JsonSerializer.Deserialize<List<ExpandoObject>>(jsonStr);
+    if (serverList == null)
+    {
+      MessageBox.Show("服务器返回了空服务器列表!");
+      return;
+    }
+
+    foreach (dynamic item in serverList)
+    {
+      if (ServerInfos.Any(s => s.ip == Convert.ToString(item.ip)))
+        continue;
+      AddServer(Convert.ToString(item.name), Convert.ToString(item.ip), byte.Parse(Convert.ToString(item.hidden)));
+    }
+  }
+
+  [RelayCommand]
+  private void Remove(ServerInfo serverInfo)
+  {
+    var index = ServerInfos.IndexOf(serverInfo);
+    ServerInfos.RemoveAt(index);
+    ((NbtList)NBTHelper.GetNBTFile().RootTag["servers"]).RemoveAt(index);
+  }
 }
