@@ -7,10 +7,9 @@ namespace 马自达MC同步器.Resources.Models;
 
 public partial class ModInfo : ObservableObject
 {
-
-  [ObservableProperty] private string fullName;
+  [ObservableProperty] private string fullFileName;
   private string md5 = "";
-  [ObservableProperty] private string name;
+  [ObservableProperty] private string disPlayName;
 
   [ObservableProperty] private SynchronizationStatus status;
 

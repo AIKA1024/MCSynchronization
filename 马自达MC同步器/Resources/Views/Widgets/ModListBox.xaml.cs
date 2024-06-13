@@ -14,28 +14,38 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using 马自达MC同步器.Resources.Models;
 
-namespace 马自达MC同步器.Resources.Views.Widgets
+namespace 马自达MC同步器.Resources.Views.Widgets;
+
+/// <summary>
+/// ModListBox.xaml 的交互逻辑
+/// </summary>
+public partial class ModListBox : UserControl
 {
-  /// <summary>
-  /// ModListBox.xaml 的交互逻辑
-  /// </summary>
-  public partial class ModListBox : UserControl
+  public ModListBox()
   {
-    public ModListBox()
-    {
-      InitializeComponent();
-    }
+    InitializeComponent();
+  }
 
 
+  public IEnumerable<ModInfo> ItemsSource
+  {
+    get => (IEnumerable<ModInfo>)GetValue(ItemsSourceProperty);
+    set => SetValue(ItemsSourceProperty, value);
+  }
 
-    public IEnumerable<ModInfo> ItemsSource
-    {
-      get { return (IEnumerable<ModInfo>)GetValue(ItemsSourceProperty); }
-      set { SetValue(ItemsSourceProperty, value); }
-    }
+  public static readonly DependencyProperty ItemsSourceProperty =
+    DependencyProperty.Register("ItemsSource", typeof(IEnumerable<ModInfo>), typeof(ModListBox),
+      new PropertyMetadata(null));
 
-    public static readonly DependencyProperty ItemsSourceProperty =
-        DependencyProperty.Register("ItemsSource", typeof(IEnumerable<ModInfo>), typeof(ModListBox), new PropertyMetadata(null));
+  private void ModList_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+  {
+    object dataConext = null;
+    if (e.OriginalSource is FrameworkElement)
+      dataConext = ((FrameworkElement)e.OriginalSource).DataContext;
+    else
+      dataConext = ((FrameworkContentElement)e.OriginalSource).DataContext;
 
+    if (ModList.SelectedItems.Contains(dataConext))
+      e.Handled = true;
   }
 }

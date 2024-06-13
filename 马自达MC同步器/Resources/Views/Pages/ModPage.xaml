@@ -6,7 +6,6 @@
       xmlns:local="clr-namespace:马自达MC同步器"
       mc:Ignorable="d"
       xmlns:widget="clr-namespace:马自达MC同步器.Resources.Views.Widgets"
-      xmlns:cv="clr-namespace:马自达MC同步器.Resources.Converters"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ModPage" Margin="12">
   <Grid>
@@ -79,7 +78,7 @@
 
     </DataGrid>-->
 
-    <widget:ModListBox Grid.Row="1" ItemsSource="{Binding Path=ModInfos}"/>
+    <widget:ModListBox Grid.Row="1" ItemsSource="{Binding Path=ModInfos}" />
 
     <TextBlock Grid.Row="2" Text="{Binding Path=Tip}" Margin="0 2 0 0" />
   </Grid>

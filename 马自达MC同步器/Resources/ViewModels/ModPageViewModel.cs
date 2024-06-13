@@ -32,13 +32,13 @@ public partial class ModPageViewModel : ObservableObject
     if (items.Count() == 0)
       return;
     var selectedItems = items.ToList();
-    var paths = items.Select(i => ((ModInfo)i).Name).ToList();
+    var paths = items.Select(i => Path.GetFileName(((ModInfo)i).FullFileName)).ToList();
     var command = "dir";
     // 创建一个进程对象并设置参数
     var process = new Process();
     process.StartInfo.FileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\OpenFolderAndSelect.exe"; // 指定要执行的程序（cmd）
     process.StartInfo.Arguments =
-      $"{Path.GetDirectoryName(((ModInfo)selectedItems[0]).FullName)} \"{string.Join("\" \"", paths)}\""; // 指定要执行的命令和参数（/c 选项表示执行完命令后自动关闭 cmd 窗口）
+      $"{Path.GetDirectoryName(((ModInfo)selectedItems[0]).FullFileName)} \"{string.Join("\" \"", paths)}\""; // 指定要执行的命令和参数（/c 选项表示执行完命令后自动关闭 cmd 窗口）
     // 启动进程
     process.Start();
   }
@@ -54,25 +54,22 @@ public partial class ModPageViewModel : ObservableObject
     {
       var modInfo = (ModInfo)selectedItems[i];
       ModInfos.Remove(modInfo);
-      Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(modInfo.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+      Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(modInfo.FullFileName, UIOption.OnlyErrorDialogs,
+        RecycleOption.SendToRecycleBin);
     }
   }
 
   public async Task LoadModInfo()
   {
-
     T GetValue<T>(TomlTable table, string key)
     {
-      if (table.TryGetValue(key, out var value) && value is T typedValue)
-      {
-        return typedValue;
-      }
-      return default(T); // Return the default value of T (e.g., null for reference types, 0 for int, false for bool)
+      if (table.TryGetValue(key, out var value) && value is T typedValue) return typedValue;
+      return default; // Return the default value of T (e.g., null for reference types, 0 for int, false for bool)
     }
 
     BitmapImage LoadBitmapImage(Stream stream)
     {
-      BitmapImage bitmap = new BitmapImage();
+      var bitmap = new BitmapImage();
       bitmap.BeginInit();
       bitmap.CacheOption = BitmapCacheOption.OnLoad;
       bitmap.StreamSource = stream;
@@ -83,12 +80,11 @@ public partial class ModPageViewModel : ObservableObject
 
     string ReadDescriptionByManifest(ZipArchive archive)
     {
-      string manifestInfoPath = "META-INF/MANIFEST.MF";
-      ZipArchiveEntry manifestEntry = archive.GetEntry(manifestInfoPath);
+      var manifestInfoPath = "META-INF/MANIFEST.MF";
+      var manifestEntry = archive.GetEntry(manifestInfoPath);
       if (manifestEntry != null)
-      {
         // 读取文件内容
-        using (StreamReader reader = new StreamReader(manifestEntry.Open()))
+        using (var reader = new StreamReader(manifestEntry.Open()))
         {
           string line;
           while ((line = reader.ReadLine()) != null)
@@ -96,15 +92,12 @@ public partial class ModPageViewModel : ObservableObject
             string[] parts = line.Split(new char[] { ':' }, 2, StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length == 2)
             {
-              string key = parts[0].Trim();
-              if (key == "Implementation-Version")
-              {
-                return parts[1].Trim();
-              }
+              var key = parts[0].Trim();
+              if (key == "Implementation-Version") return parts[1].Trim();
             }
           }
         }
-      }
+
       return "";
     }
 
@@ -116,31 +109,32 @@ public partial class ModPageViewModel : ObservableObject
     //List<ModInfo> temp = [];
     foreach (var modFullName in mods)
     {
-      string modName = Path.GetFileName(modFullName);
-      string modVersion = "";
-      string modDescription = "";
-      string modLogoPath = "";
+      var modFileName = Path.GetFileName(modFullName);
+      var modDisplayName = modFileName;//初始值，获取不到时使用文件名
+      var modVersion = "";
+      var modDescription = "";
+      var modLogoPath = "";
       BitmapImage? modLogo = null;
       var md5 = await CalculateFileMD5(modFullName);
-      string metaInfoPath = "META-INF/mods.toml";
-      
-      using (ZipArchive archive = ZipFile.OpenRead(modFullName))
+      var metaInfoPath = "META-INF/mods.toml";
+
+      using (var archive = ZipFile.OpenRead(modFullName))
       {
         // 查找指定文件
-        ZipArchiveEntry metaEntry = archive.GetEntry(metaInfoPath);
+        var metaEntry = archive.GetEntry(metaInfoPath);
         if (metaEntry != null)
         {
           // 读取文件内容
-          using (StreamReader reader = new StreamReader(metaEntry.Open()))
+          using (var reader = new StreamReader(metaEntry.Open()))
           {
-            string fileContent = reader.ReadToEnd();
-            TomlTable tomlTable = Toml.Parse(fileContent).ToModel();
-            TomlTableArray mod = (TomlTableArray)tomlTable["mods"];
+            var fileContent = reader.ReadToEnd();
+            var tomlTable = Toml.Parse(fileContent).ToModel();
+            var mod = (TomlTableArray)tomlTable["mods"];
             if (mod.Count() > 0)
             {
-              modName = GetValue<string>(mod[0], "displayName");
+              modDisplayName = GetValue<string>(mod[0], "displayName");
               modVersion = GetValue<string>(mod[0], "version");
-              modDescription = GetValue<string>(mod[0], "description")?.Replace("  ","");
+              modDescription = GetValue<string>(mod[0], "description")?.Replace("  ", "");
               modLogoPath = GetValue<string>(mod[0], "logoFile");
               TaskInfoHelper.Instance.TaskInfo = $"读取：{modFullName}";
             }
@@ -162,23 +156,31 @@ public partial class ModPageViewModel : ObservableObject
           //}
         }
       }
-      if (modName == "读取失败")
-        TaskInfoHelper.Instance.TaskInfo = $"读取失败:{modFullName}";
 
-      if (modDescription=="")
+      if (modDisplayName == modFileName)
+      {
+        modDisplayName = Path.GetFileNameWithoutExtension(modDisplayName);
+        TaskInfoHelper.Instance.TaskInfo = $"读取失败:{modFullName}";
+      }
+
+      if (string.IsNullOrWhiteSpace(modDescription) || modDescription == "")
         modDescription = "该mod没有提供任何描述...";
+
+      if (string.IsNullOrWhiteSpace(modVersion) || modVersion == "")
+        modVersion = "无法获取版本号";
 
       var modInfo = new ModInfo()
       {
-        Name = modName,
+        DisPlayName = modDisplayName,
         MD5 = await CalculateFileMD5(modFullName),
         Version = modVersion,
         Description = modDescription,
         Logo = modLogo,
-        FullName = modFullName,
+        FullFileName = modFullName
       };
       ModInfos.Add(modInfo);
     }
+
     TaskInfoHelper.Instance.TaskInfo = "遍历完成";
   }
 
@@ -207,6 +209,7 @@ public partial class ModPageViewModel : ObservableObject
     if (string.IsNullOrEmpty(jsonStr))
     {
       MessageBox.Show("与服务器链接失败");
+      Tip = "与服务器链接失败";
       return;
     }
 
@@ -215,7 +218,7 @@ public partial class ModPageViewModel : ObservableObject
     if (modList == null || modList.Count == 0)
     {
       MessageBox.Show("服务器返回了空的模组列表");
-      Tip = "完成";
+      Tip = "服务器返回了空的模组列表";
       return;
     }
 
@@ -238,8 +241,8 @@ public partial class ModPageViewModel : ObservableObject
       {
         var modInfo = new ModInfo()
         {
-          Name = remoteModInfo.Name,
-          FullName = Path.Combine(Settings.Default.GamePath, "mods", remoteModInfo.Name),
+          DisPlayName = remoteModInfo.DisPlayName,
+          FullFileName = Path.Combine(Settings.Default.GamePath, "mods", remoteModInfo.DisPlayName),
           MD5 = remoteModInfo.MD5,
           Status = SynchronizationStatus.缺少
         };

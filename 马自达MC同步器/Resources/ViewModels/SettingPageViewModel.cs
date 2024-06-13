@@ -15,10 +15,10 @@ public partial class SettingPageViewModel : ObservableValidator
     ValidateAllProperties();
   }
 
-  [ObservableProperty]
-  private Visibility addressWarningVisblity = Visibility.Collapsed;
+  [ObservableProperty] private Visibility addressWarningVisblity = Visibility.Collapsed;
 
   private string? address = Settings.Default.Address;
+
   [Attributes.Url(nameof(Address))]
   public string? Address
   {
@@ -31,8 +31,7 @@ public partial class SettingPageViewModel : ObservableValidator
     }
   }
 
-  [Range(1, 16)]
-  [ObservableProperty] public int maxDownloadCount = Settings.Default.MaxDownloadCount;
+  [Range(1, 16)] [ObservableProperty] public int maxDownloadCount = Settings.Default.MaxDownloadCount;
 
   [ObservableProperty] public string? version = Application.ResourceAssembly.GetName().Version?.ToString();
 

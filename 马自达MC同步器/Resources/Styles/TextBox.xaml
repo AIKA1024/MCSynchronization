@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <Style TargetType="TextBox">
-    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="BorderThickness" Value="0" />
     <Setter Property="Background" Value="white" />
     <Setter Property="Template">
       <Setter.Value>
@@ -21,7 +21,7 @@
             </Trigger>
 
             <Trigger Property="Validation.HasError" Value="True">
-              <Setter Property="BorderBrush" TargetName="BG" Value="red"/>
+              <Setter Property="BorderBrush" TargetName="BG" Value="red" />
             </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -31,7 +31,7 @@
     <Setter Property="Validation.ErrorTemplate">
       <Setter.Value>
         <ControlTemplate>
-          <AdornedElementPlaceholder x:Name="Placeholder" HorizontalAlignment="Left"/>
+          <AdornedElementPlaceholder x:Name="Placeholder" HorizontalAlignment="Left" />
         </ControlTemplate>
       </Setter.Value>
     </Setter>

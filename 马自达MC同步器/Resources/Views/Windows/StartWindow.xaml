@@ -4,19 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:helper="clr-namespace:马自达MC同步器.Resources.Helper"
-        xmlns:local="clr-namespace:马自达MC同步器.Resources.Views.Windows"
         mc:Ignorable="d" WindowStyle="None" AllowsTransparency="True" Background="Transparent"
-        Title="StartWindow" Height="400" Width="600" WindowStartupLocation="CenterScreen" Initialized="Window_Initialized">
-  <Border CornerRadius="5" Margin="5" Background="#f3f3f3">
+        Title="StartWindow" Height="400" Width="600" WindowStartupLocation="CenterScreen"
+        Initialized="Window_Initialized">
+  <Border CornerRadius="5" Margin="12" Background="#f3f3f3">
     <Border.Effect>
-      <DropShadowEffect ShadowDepth="2"/>
+      <DropShadowEffect Color="Black" Direction="315" ShadowDepth="8" BlurRadius="10" Opacity="0.3" />
     </Border.Effect>
 
     <Canvas>
       <TextBlock FontSize="24" FontWeight="Black" Text="MAZDA MC同步器"
-                 Canvas.Left="66" Canvas.Top="60"/>
-      <TextBlock Text="正在加载mod信息" Canvas.Left="66" Canvas.Top="332"/>
-      <TextBlock Text="{Binding TaskInfo,Source={x:Static helper:TaskInfoHelper.Instance}}" Canvas.Left="66" Canvas.Top="345"/>
+                 Canvas.Left="66" Canvas.Top="60" />
+      <TextBlock Text="正在加载mod信息" Canvas.Left="66" Canvas.Top="332" />
+      <TextBlock Text="{Binding TaskInfo,Source={x:Static helper:TaskInfoHelper.Instance}}" Canvas.Left="66"
+                 Canvas.Top="345" />
     </Canvas>
   </Border>
 </Window>
