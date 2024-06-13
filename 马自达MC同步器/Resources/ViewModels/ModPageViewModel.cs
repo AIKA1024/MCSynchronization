@@ -1,14 +1,22 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.VisualBasic.FileIO;
+using System.IO.Compression;
+using Tomlyn;
+using Tomlyn.Model;
 using 马自达MC同步器.Resources.Enums;
 using 马自达MC同步器.Resources.Models;
+using System.Windows.Media.Imaging;
+using System;
+using Microsoft.VisualBasic;
+using 马自达MC同步器.Resources.Helper;
 
 namespace 马自达MC同步器.Resources.ViewModels;
 
@@ -19,8 +27,10 @@ public partial class ModPageViewModel : ObservableObject
   public ObservableCollection<ModInfo>? ModInfos { get; set; } = [];
 
   [RelayCommand]
-  private async void OpenItemToExplorer(IEnumerable<object> items)
+  private void OpenItemToExplorer(IEnumerable<object> items)
   {
+    if (items.Count() == 0)
+      return;
     var selectedItems = items.ToList();
     var paths = items.Select(i => ((ModInfo)i).Name).ToList();
     var command = "dir";
@@ -36,41 +46,140 @@ public partial class ModPageViewModel : ObservableObject
   [RelayCommand]
   private void DeleteItem(IEnumerable<object> items)
   {
+    if (items.Count() == 0)
+      return;
     var selectedItems = items.ToList();
     var count = selectedItems.Count();
     for (var i = 0; i < count; i++)
     {
       var modInfo = (ModInfo)selectedItems[i];
       ModInfos.Remove(modInfo);
-      FileSystem.DeleteFile(modInfo.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+      Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(modInfo.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
     }
   }
 
-  private void SelectFiles(List<string> filesToSelect)
+  public async Task LoadModInfo()
   {
-    var shellAppType = Type.GetTypeFromProgID("Shell.Application");
-    dynamic shellApp = Activator.CreateInstance(shellAppType);
-    foreach (var window in shellApp.Windows())
-    foreach (var folderItem in window.Document.Folder.Items())
-      if (Enumerable.Contains(filesToSelect, folderItem.Path))
-      {
-        window.Document.SelectItem(folderItem, 1 + 8);
-        filesToSelect.Remove(folderItem.Path);
-      }
-  }
 
-  public async Task TraverseMod()
-  {
-    Tip = "开始遍历mod文件";
+    T GetValue<T>(TomlTable table, string key)
+    {
+      if (table.TryGetValue(key, out var value) && value is T typedValue)
+      {
+        return typedValue;
+      }
+      return default(T); // Return the default value of T (e.g., null for reference types, 0 for int, false for bool)
+    }
+
+    BitmapImage LoadBitmapImage(Stream stream)
+    {
+      BitmapImage bitmap = new BitmapImage();
+      bitmap.BeginInit();
+      bitmap.CacheOption = BitmapCacheOption.OnLoad;
+      bitmap.StreamSource = stream;
+      bitmap.EndInit();
+      //bitmap.Freeze(); // 使得BitmapImage在不同线程中可用
+      return bitmap;
+    }
+
+    string ReadDescriptionByManifest(ZipArchive archive)
+    {
+      string manifestInfoPath = "META-INF/MANIFEST.MF";
+      ZipArchiveEntry manifestEntry = archive.GetEntry(manifestInfoPath);
+      if (manifestEntry != null)
+      {
+        // 读取文件内容
+        using (StreamReader reader = new StreamReader(manifestEntry.Open()))
+        {
+          string line;
+          while ((line = reader.ReadLine()) != null)
+          {
+            string[] parts = line.Split(new char[] { ':' }, 2, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 2)
+            {
+              string key = parts[0].Trim();
+              if (key == "Implementation-Version")
+              {
+                return parts[1].Trim();
+              }
+            }
+          }
+        }
+      }
+      return "";
+    }
+
+    //var modMD5LogoDir = JsonSerializer.Deserialize<Dictionary<string,string>>(Settings.Default.ModMD5LogoDir);
+    TaskInfoHelper.Instance.TaskInfo = "开始遍历mod文件";
     //ModInfos = null;
     ModInfos.Clear();
     var mods = Directory.GetFiles(Path.Combine(Settings.Default.GamePath, "mods"));
     //List<ModInfo> temp = [];
     foreach (var modFullName in mods)
-      ModInfos.Add(new ModInfo(Path.GetFileName(modFullName), await CalculateFileMD5(modFullName), modFullName));
-    //ModInfos = new ObservableCollection<ModInfo>(temp);
-    // Application.Current.Dispatcher.Invoke(() => { ModDataGrid.ItemsSource = ModInfos; });
-    Tip = "遍历完成";
+    {
+      string modName = Path.GetFileName(modFullName);
+      string modVersion = "";
+      string modDescription = "";
+      string modLogoPath = "";
+      BitmapImage? modLogo = null;
+      var md5 = await CalculateFileMD5(modFullName);
+      string metaInfoPath = "META-INF/mods.toml";
+      
+      using (ZipArchive archive = ZipFile.OpenRead(modFullName))
+      {
+        // 查找指定文件
+        ZipArchiveEntry metaEntry = archive.GetEntry(metaInfoPath);
+        if (metaEntry != null)
+        {
+          // 读取文件内容
+          using (StreamReader reader = new StreamReader(metaEntry.Open()))
+          {
+            string fileContent = reader.ReadToEnd();
+            TomlTable tomlTable = Toml.Parse(fileContent).ToModel();
+            TomlTableArray mod = (TomlTableArray)tomlTable["mods"];
+            if (mod.Count() > 0)
+            {
+              modName = GetValue<string>(mod[0], "displayName");
+              modVersion = GetValue<string>(mod[0], "version");
+              modDescription = GetValue<string>(mod[0], "description")?.Replace("  ","");
+              modLogoPath = GetValue<string>(mod[0], "logoFile");
+              TaskInfoHelper.Instance.TaskInfo = $"读取：{modFullName}";
+            }
+          }
+
+          //可能没有version
+          if (modVersion == "${file.jarVersion}")
+            modVersion = ReadDescriptionByManifest(archive);
+
+          //读图片会内存错误 不知道咋整
+          //if (modLogoPath != null)
+          //{
+          //  ZipArchiveEntry logoEntry = archive.GetEntry(modLogoPath);
+          //  if (logoEntry != null)
+          //    using (var stream = logoEntry.Open())
+          //    {
+          //      modLogo = LoadBitmapImage(stream);
+          //    }
+          //}
+        }
+      }
+      if (modName == "读取失败")
+        TaskInfoHelper.Instance.TaskInfo = $"读取失败:{modFullName}";
+
+      if (modDescription=="")
+        modDescription = "该mod没有提供任何描述...";
+
+      var modInfo = new ModInfo()
+      {
+        Name = modName,
+        MD5 = await CalculateFileMD5(modFullName),
+        Version = modVersion,
+        Description = modDescription,
+        Logo = modLogo,
+        FullName = modFullName,
+      };
+      ModInfos.Add(modInfo);
+    }
+    TaskInfoHelper.Instance.TaskInfo = "遍历完成";
   }
 
   private async Task<string> CalculateFileMD5(string filename)
@@ -89,12 +198,12 @@ public partial class ModPageViewModel : ObservableObject
   [RelayCommand]
   public async Task Synchronization()
   {
-    await TraverseMod();
+    //await LoadModInfo();
     foreach (var item in ModInfos!) item.Status = SynchronizationStatus.额外;
 
     Tip = "与服务器对比mod文件中";
     var missList = new List<ModInfo>();
-    var jsonStr = await App.webHelper.GetRemoteModList();
+    var jsonStr = await App.Current.webHelper.GetRemoteModList();
     if (string.IsNullOrEmpty(jsonStr))
     {
       MessageBox.Show("与服务器链接失败");
@@ -127,8 +236,13 @@ public partial class ModPageViewModel : ObservableObject
 
       if (!found)
       {
-        ModInfo modInfo = new(remoteModInfo.Name, remoteModInfo.MD5, Path.Combine(Settings.Default.GamePath, "mods"),
-          SynchronizationStatus.缺少);
+        var modInfo = new ModInfo()
+        {
+          Name = remoteModInfo.Name,
+          FullName = Path.Combine(Settings.Default.GamePath, "mods", remoteModInfo.Name),
+          MD5 = remoteModInfo.MD5,
+          Status = SynchronizationStatus.缺少
+        };
         missList.Add(modInfo);
         ModInfos.Insert(0, modInfo);
       }
@@ -152,7 +266,7 @@ public partial class ModPageViewModel : ObservableObject
           try
           {
             modInfo.Status = SynchronizationStatus.下载中;
-            await App.webHelper.DownloadMod(modInfo.MD5,
+            await App.Current.webHelper.DownloadMod(modInfo.MD5,
               Path.Combine(Settings.Default.GamePath, "mods"));
             modInfo.Status = SynchronizationStatus.已同步;
           }

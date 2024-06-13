@@ -17,8 +17,20 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Properties\新文件夹\**" />
+      <EmbeddedResource Remove="Properties\新文件夹\**" />
+      <None Remove="Properties\新文件夹\**" />
+      <Page Remove="Properties\新文件夹\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\Images\Icons\NoIcon.png" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
         <PackageReference Include="MiNET.fnbt" Version="1.0.22" />
+        <PackageReference Include="Tomlyn" Version="0.17.0" />
         <PackageReference Include="Velopack" Version="0.0.359" />
     </ItemGroup>
 
@@ -49,6 +61,10 @@
 
     <ItemGroup>
         <Folder Include="Resources\Command\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="Resources\Images\Icons\NoIcon.png" />
     </ItemGroup>
 
 </Project>

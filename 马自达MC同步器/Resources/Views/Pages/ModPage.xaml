@@ -5,9 +5,10 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:马自达MC同步器"
       mc:Ignorable="d"
+      xmlns:widget="clr-namespace:马自达MC同步器.Resources.Views.Widgets"
       xmlns:cv="clr-namespace:马自达MC同步器.Resources.Converters"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="ModPage" Margin="12" Initialized="Page_Initialized">
+      Title="ModPage" Margin="12">
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="50" />
@@ -22,7 +23,7 @@
       <!-- <Button x:Name="SFButton" Content="选择游戏文件夹" Margin="0 0 8 0" DockPanel.Dock="Right" Click="Button_Click" /> -->
     </DockPanel>
 
-    <DataGrid x:Name="ModDataGrid"
+    <!--<DataGrid x:Name="ModDataGrid"
               RowHeaderWidth="0"
               Grid.Row="1"
               BorderBrush="#cdcdcd"
@@ -76,7 +77,9 @@
         </DataGridTemplateColumn>
       </DataGrid.Columns>
 
-    </DataGrid>
+    </DataGrid>-->
+
+    <widget:ModListBox Grid.Row="1" ItemsSource="{Binding Path=ModInfos}"/>
 
     <TextBlock Grid.Row="2" Text="{Binding Path=Tip}" Margin="0 2 0 0" />
   </Grid>

@@ -34,9 +34,4 @@ public partial class ModPage : Page
   //   SyButton.IsEnabled = true;
   //   SFButton.IsEnabled = true;
   // }
-
-  private async void Page_Initialized(object sender, EventArgs e)
-  {
-    await modViewModel.TraverseMod();
-  }
 }

@@ -12,13 +12,11 @@ namespace 马自达MC同步器;
 /// </summary>
 public partial class MainWindow : Window
 {
-  private readonly MainWindowViewModel viewModel = new();
+  private readonly MainWindowViewModel viewModel;
 
-  public MainWindow()
+  public MainWindow(MainWindowViewModel viewModel)
   {
-    viewModel.ModPage = new ModPage();
-    viewModel.SettingPage = new SettingPage();
-    viewModel.ServerPage = new ServerPage();
+    this.viewModel = viewModel;
     DataContext = viewModel;
     InitializeComponent();
     MainFrame.Navigate(viewModel.ModPage);
@@ -47,5 +45,6 @@ public partial class MainWindow : Window
   private void Window_Closing(object sender, CancelEventArgs e)
   {
     ((SettingPageViewModel)viewModel.SettingPage.DataContext).SaveSettingToFile();
+    Application.Current.Shutdown();
   }
 }

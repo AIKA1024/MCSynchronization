@@ -90,6 +90,10 @@
           <TextBlock>
             <Hyperlink NavigateUri="https://github.com/Raymai97/OpenFolderAndSelectItem">https://github.com/Raymai97/OpenFolderAndSelectItem</Hyperlink>
           </TextBlock>
+
+          <TextBlock>
+            <Hyperlink NavigateUri="https://github.com/xoofx/Tomlyn">https://github.com/xoofx/Tomlyn</Hyperlink>
+          </TextBlock>
         </StackPanel>
       </control:Card>
 

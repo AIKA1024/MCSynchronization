@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "马自达MC同步器": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}

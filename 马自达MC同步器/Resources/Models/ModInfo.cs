@@ -1,23 +1,24 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using 马自达MC同步器.Resources.Enums;
 
 namespace 马自达MC同步器.Resources.Models;
 
 public partial class ModInfo : ObservableObject
 {
+
   [ObservableProperty] private string fullName;
   private string md5 = "";
-  [ObservableProperty] public string name;
+  [ObservableProperty] private string name;
 
   [ObservableProperty] private SynchronizationStatus status;
 
-  public ModInfo(string name, string md5, string fullName, SynchronizationStatus status = SynchronizationStatus.未同步)
-  {
-    Name = name;
-    MD5 = md5;
-    FullName = fullName;
-    this.status = status;
-  }
+  [ObservableProperty] private string? version;
+
+  [ObservableProperty] private BitmapImage? logo;
+
+  [ObservableProperty] private string? description;
 
   public string MD5
   {

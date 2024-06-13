@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using fNbt;
+using 马自达MC同步器.Resources.Helper;
 using 马自达MC同步器.Resources.Models;
 
 namespace 马自达MC同步器.Resources.ViewModels;
@@ -49,7 +50,7 @@ public partial class ServerPageViewModel
       return;
     }
 
-    var jsonStr = await App.webHelper.GetRemoteServerList();
+    var jsonStr = await App.Current.webHelper.GetRemoteServerList();
     if (string.IsNullOrEmpty(jsonStr))
     {
       MessageBox.Show("连接服务器失败!");

@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using 马自达MC同步器.Resources.Helper;
 using 马自达MC同步器.Resources.ViewModels;
 
 namespace 马自达MC同步器.Resources.Views.Pages;
