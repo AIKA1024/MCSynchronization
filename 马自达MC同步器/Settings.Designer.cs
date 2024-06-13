@@ -57,17 +57,5 @@ namespace 马自达MC同步器 {
                 this["GamePath"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ModMD5LogoDir {
-            get {
-                return ((string)(this["ModMD5LogoDir"]));
-            }
-            set {
-                this["ModMD5LogoDir"] = value;
-            }
-        }
     }
 }
