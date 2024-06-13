@@ -11,6 +11,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using 马自达MC同步器.Resources.Commands;
 using 马自达MC同步器.Resources.Pages;
 using 马自达MC同步器.Resources.ViewModels;
 using 马自达MC同步器.Resources.Views.Pages;
@@ -27,21 +28,46 @@ public partial class StartWindow : Window
     InitializeComponent();
   }
 
-  private async void Window_Initialized(object sender, EventArgs e)
+  private async Task InitialMainWindow()
   {
-    //Settings.Default.ModMD5LogoDir ??= new();
-    //Directory.CreateDirectory(Path.Combine(App.Current.CachePath, "Logo"));
-
-
     var viewModel = new MainWindowViewModel()
     {
       ModPage = new ModPage(),
       SettingPage = new SettingPage(),
       ServerPage = new ServerPage()
     };
-    await ((ModPageViewModel)viewModel.ModPage.DataContext).LoadModInfo();
+    await((ModPageViewModel)viewModel.ModPage.DataContext).LoadModInfo();
     Hide();
     var mainWindow = new MainWindow(viewModel);
     mainWindow.Show();
+  }
+  private async void Window_Initialized(object sender, EventArgs e)
+  {
+    //Settings.Default.ModMD5LogoDir ??= new();
+    //Directory.CreateDirectory(Path.Combine(App.Current.CachePath, "Logo"));
+
+    if (string.IsNullOrEmpty(Settings.Default.GamePath))
+    {
+      Mask.Visibility = Visibility.Visible;
+      return;
+    }
+
+    await InitialMainWindow();
+  }
+
+  private async void Button_Click(object sender, RoutedEventArgs e)
+  {
+    SelectDirectory.Instance.Execute(null);
+
+    if (!string.IsNullOrEmpty(Settings.Default.GamePath))
+    {
+      Mask.Visibility = Visibility.Collapsed;
+      await InitialMainWindow();
+    }
+  }
+
+  private void ExitBT_Click(object sender, RoutedEventArgs e)
+  {
+      App.Current.Shutdown();
   }
 }

@@ -12,32 +12,6 @@ public partial class MainWindowViewModel : ObservableObject
 {
   public OpenFolderDialog FolderBrowserDialog = new();
 
-  private bool CheckPath(string path)
-  {
-    if (string.IsNullOrEmpty(path) || !Directory.Exists(Path.Combine(path, "mods")))
-      return false;
-    return true;
-  }
-
-  private void SetGamePath(string gamePath)
-  {
-    Settings.Default.GamePath = gamePath;
-    Settings.Default.Save();
-  }
-
-  public void SelectDirectory(object sender, ExecutedRoutedEventArgs e)
-  {
-    if (FolderBrowserDialog.ShowDialog() != true)
-      return;
-    if (!CheckPath(FolderBrowserDialog.FolderName))
-    {
-      MessageBox.Show("路径不正确");
-      return;
-    }
-
-    SetGamePath(FolderBrowserDialog.FolderName);
-  }
-
   #region Page
 
   [ObservableProperty] private ModPage modPage;

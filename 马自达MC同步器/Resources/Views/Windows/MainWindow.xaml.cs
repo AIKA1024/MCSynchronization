@@ -22,11 +22,6 @@ public partial class MainWindow : Window
     MainFrame.Navigate(viewModel.ModPage);
   }
 
-  public void SelectDirectory(object sender, ExecutedRoutedEventArgs e)
-  {
-    viewModel.SelectDirectory(sender, e);
-  }
-
   private void ModPageCheck(object sender, RoutedEventArgs e)
   {
     MainFrame.Navigate(viewModel.ModPage);

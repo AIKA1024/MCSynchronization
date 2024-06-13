@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:马自达MC同步器"
       xmlns:enum="clr-namespace:马自达MC同步器.Resources.Enums"
+      xmlns:command="clr-namespace:马自达MC同步器.Resources.Commands"
       xmlns:control="clr-namespace:马自达MC同步器.Resources.Views.Controls"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -49,7 +50,7 @@
         <control:Card.HeaderControl>
           <DockPanel LastChildFill="False">
             <TextBlock DockPanel.Dock="Left" Text="游戏路径" VerticalAlignment="Center" />
-            <Button DockPanel.Dock="Right" Command="{x:Static ApplicationCommands.Open}" CommandParameter="Directory"
+            <Button DockPanel.Dock="Right" Command="{x:Static command:SelectDirectory.Instance}"
                     Content="选择文件夹" Margin="0 0 16 0" />
           </DockPanel>
         </control:Card.HeaderControl>

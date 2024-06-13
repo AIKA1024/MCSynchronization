@@ -14,7 +14,7 @@ public partial class ServerPage : Page
 
   public ServerPage()
   {
-    viewModel = new ServerPageViewModel(NBTHelper.GetNBTFile());
+    viewModel = new ServerPageViewModel();
     DataContext = viewModel;
     InitializeComponent();
   }

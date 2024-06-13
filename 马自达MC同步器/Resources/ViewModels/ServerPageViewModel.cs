@@ -11,12 +11,12 @@ namespace 马自达MC同步器.Resources.ViewModels;
 
 public partial class ServerPageViewModel
 {
-  private NbtFile nbtFile;
-
-  public ServerPageViewModel(NbtFile nbtFile)
+  public ServerPageViewModel()
   {
-    this.nbtFile = nbtFile;
-    foreach (var item in ((NbtList)nbtFile.RootTag["servers"]).Cast<NbtCompound>())
+    if (NBTHelper.GetNBTFile() == null)
+      return;
+
+    foreach (var item in ((NbtList)NBTHelper.GetNBTFile().RootTag["servers"]).Cast<NbtCompound>())
       ServerInfos.Add(new ServerInfo(item));
   }
 
@@ -24,14 +24,13 @@ public partial class ServerPageViewModel
 
   private void AddServer(string name, string ip, byte hidden)
   {
-    nbtFile = NBTHelper.GetNBTFile();
     var nbtCompoundTag = new NbtCompound
     {
       new NbtString(nameof(name), name),
       new NbtString(nameof(ip), ip),
       new NbtByte(nameof(hidden), hidden)
     };
-    ((NbtList)nbtFile.RootTag["servers"]).Add(nbtCompoundTag);
+    ((NbtList)NBTHelper.GetNBTFile().RootTag["servers"]).Add(nbtCompoundTag);
     ServerInfos.Add(new ServerInfo(nbtCompoundTag));
   }
 
