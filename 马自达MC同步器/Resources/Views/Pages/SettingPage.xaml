@@ -13,7 +13,7 @@
   <ScrollViewer VerticalScrollBarVisibility="Hidden">
     <StackPanel Hyperlink.RequestNavigate="Hyperlink_RequestNavigate">
       <StackPanel.Resources>
-        <Style BasedOn="{StaticResource {x:Type control:Card}}" TargetType="control:Card">
+        <Style BasedOn="{StaticResource {x:Type control:Expander}}" TargetType="control:Expander">
           <Setter Property="Margin" Value="0 0 0 8" />
         </Style>
       </StackPanel.Resources>
@@ -26,10 +26,10 @@
 
       <!--#region 卡片-->
       <TextBlock Text="服务器" Margin="0 8" />
-      <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static enum:SegoeMDL2.服务器}">
-        <control:Card.HeaderControl>
+      <control:Expander CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static enum:SegoeMDL2.服务器}">
+        <control:Expander.HeaderControl>
           <TextBlock Text="同步服务器地址" VerticalAlignment="Center" />
-        </control:Card.HeaderControl>
+        </control:Expander.HeaderControl>
 
         <StackPanel HorizontalAlignment="Stretch" Margin="46 16">
           <TextBox x:Name="AddressTextBox"
@@ -42,30 +42,30 @@
                      Foreground="Red"
                      Margin="0 8 0 0" />
         </StackPanel>
-      </control:Card>
+      </control:Expander>
 
       <!--#region 库-->
       <TextBlock Text="库" Margin="0 8" />
-      <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static enum:SegoeMDL2.文件夹}">
-        <control:Card.HeaderControl>
+      <control:Expander CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static enum:SegoeMDL2.文件夹}">
+        <control:Expander.HeaderControl>
           <DockPanel LastChildFill="False">
             <TextBlock DockPanel.Dock="Left" Text="游戏路径" VerticalAlignment="Center" />
             <Button DockPanel.Dock="Right" Command="{x:Static command:SelectDirectory.Instance}"
                     Content="选择文件夹" Margin="0 0 16 0" />
           </DockPanel>
-        </control:Card.HeaderControl>
+        </control:Expander.HeaderControl>
 
         <TextBlock Margin="46 16 0 16" Text="{Binding GamePath,Source={x:Static local:Settings.Default}}" />
-      </control:Card>
+      </control:Expander>
 
       <!--#endregion-->
 
       <!--#region 关于-->
       <TextBlock Text="关于" Margin="0 8" />
-      <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static enum:SegoeMDL2.猫}">
-        <control:Card.HeaderControl>
+      <control:Expander CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static enum:SegoeMDL2.猫}">
+        <control:Expander.HeaderControl>
           <TextBlock Text="开源项目引用" VerticalAlignment="Center" />
-        </control:Card.HeaderControl>
+        </control:Expander.HeaderControl>
 
         <StackPanel Margin="46 0 0 16">
           <StackPanel.Resources>
@@ -96,12 +96,12 @@
             <Hyperlink NavigateUri="https://github.com/xoofx/Tomlyn">https://github.com/xoofx/Tomlyn</Hyperlink>
           </TextBlock>
         </StackPanel>
-      </control:Card>
+      </control:Expander>
 
-      <control:Card CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static enum:SegoeMDL2.感叹号}">
-        <control:Card.HeaderControl>
+      <control:Expander CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static enum:SegoeMDL2.感叹号}">
+        <control:Expander.HeaderControl>
           <TextBlock Text="详细信息" VerticalAlignment="Center" />
-        </control:Card.HeaderControl>
+        </control:Expander.HeaderControl>
 
         <!--呃 不知道用什么布局好-->
         <StackPanel Margin="46 16">
@@ -115,7 +115,7 @@
             <Hyperlink>https://github.com/AIKA1024</Hyperlink>
           </TextBlock>
         </StackPanel>
-      </control:Card>
+      </control:Expander>
       <!--#endregion-->
 
       <!--#endregion-->

@@ -44,7 +44,7 @@ public partial class StartWindow : Window
   private async void Window_Initialized(object sender, EventArgs e)
   {
     //Settings.Default.ModMD5LogoDir ??= new();
-    //Directory.CreateDirectory(Path.Combine(App.Current.CachePath, "Logo"));
+    Directory.CreateDirectory(Path.Combine(App.Current.CachePath, "Logo"));
 
     if (string.IsNullOrEmpty(Settings.Default.GamePath))
     {

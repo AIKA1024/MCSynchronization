@@ -39,8 +39,10 @@
                 <Border.Clip>
                   <RectangleGeometry Rect="0,0,34,34" RadiusX="6" RadiusY="6" />
                 </Border.Clip>
-                <!--<Image Source="{Binding Logo,FallbackValue={StaticResource DefaultImage}}"/>-->
-                <Image Source="{StaticResource DefaultImage}" />
+                <Image Source="{Binding Logo,
+                  TargetNullValue={StaticResource DefaultImage},
+                  FallbackValue={StaticResource DefaultImage}}"/>
+                <!--<Image Source="{StaticResource DefaultImage}" />-->
               </Border>
               <StackPanel Grid.Column="1" Margin="8 0 0 0">
                 <TextBlock>

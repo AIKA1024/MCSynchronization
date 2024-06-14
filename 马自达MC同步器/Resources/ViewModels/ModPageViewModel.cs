@@ -33,10 +33,9 @@ public partial class ModPageViewModel : ObservableObject
       return;
     var selectedItems = items.ToList();
     var paths = items.Select(i => Path.GetFileName(((ModInfo)i).FullFileName)).ToList();
-    var command = "dir";
     // 创建一个进程对象并设置参数
     var process = new Process();
-    process.StartInfo.FileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\OpenFolderAndSelect.exe"; // 指定要执行的程序（cmd）
+    process.StartInfo.FileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\OpenFolderAndSelect.exe";
     process.StartInfo.Arguments =
       $"{Path.GetDirectoryName(((ModInfo)selectedItems[0]).FullFileName)} \"{string.Join("\" \"", paths)}\""; // 指定要执行的命令和参数（/c 选项表示执行完命令后自动关闭 cmd 窗口）
     // 启动进程
@@ -101,12 +100,9 @@ public partial class ModPageViewModel : ObservableObject
       return "";
     }
 
-    //var modMD5LogoDir = JsonSerializer.Deserialize<Dictionary<string,string>>(Settings.Default.ModMD5LogoDir);
     TaskInfoHelper.Instance.TaskInfo = "开始遍历mod文件";
-    //ModInfos = null;
     ModInfos.Clear();
     var mods = Directory.GetFiles(Path.Combine(Settings.Default.GamePath, "mods"));
-    //List<ModInfo> temp = [];
     foreach (var modFullName in mods)
     {
       var modFileName = Path.GetFileName(modFullName);

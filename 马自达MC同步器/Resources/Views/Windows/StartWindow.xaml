@@ -11,13 +11,13 @@
         Initialized="Window_Initialized">
   <Border CornerRadius="5" Margin="12" Background="#f3f3f3">
     <Border.Effect>
-      <DropShadowEffect Color="Black" Direction="315" ShadowDepth="8" BlurRadius="10" Opacity="0.3" />
+      <DropShadowEffect Color="Black" ShadowDepth="8" BlurRadius="10" Opacity="0.3" />
     </Border.Effect>
 
     <Grid>
       <Grid x:Name="Mask" d:Visibility="Visible" Visibility="Collapsed">
         <Border Background="Black" Opacity=".5" CornerRadius="5"/>
-        <Border Width="400" Height="200" Background="#e5e5e5" CornerRadius="5">
+        <Border Width="400" Height="200" Background="White" CornerRadius="5">
           <Canvas>
             <TextBlock Canvas.Top="20" Canvas.Left="136" FontSize="14" FontWeight="Black" Text="选择MineCraft目录"/>
             <TextBlock Canvas.Top="50" Width="362" TextWrapping="Wrap" Canvas.Left="60" Text="同步器需要获取MineCraft目录来正常工作,例如:&#xA;PCL2\.minecraft\versions\All the Mods 9 - No Frills"/>

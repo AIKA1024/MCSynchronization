@@ -9,7 +9,9 @@
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="Button">
-          <Border x:Name="Border" Padding="{TemplateBinding Padding}" Width="{TemplateBinding Width}"
+          <Grid>
+            <Border x:Name="Mask" Background="Black" Opacity="0" Panel.ZIndex="1" CornerRadius="{TemplateBinding Border.CornerRadius}"/>
+            <Border x:Name="Border" Padding="{TemplateBinding Padding}" Width="{TemplateBinding Width}"
                   Height="{TemplateBinding Height}"
                   Background="{TemplateBinding Background}"
                   MinWidth="{TemplateBinding MinWidth}"
@@ -17,21 +19,21 @@
                   BorderBrush="{TemplateBinding BorderBrush}"
                   BorderThickness="{TemplateBinding BorderThickness}"
                   CornerRadius="{TemplateBinding Border.CornerRadius}">
-            <ContentPresenter Name="ContentPresenter"
-                              Margin="{TemplateBinding Padding}"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              TextElement.Foreground="{TemplateBinding Foreground}"
-                              TextElement.FontSize="{TemplateBinding FontSize}"
-                              TextElement.FontFamily="{TemplateBinding FontFamily}" />
+              <ContentPresenter Name="ContentPresenter"
+                  Margin="{TemplateBinding Padding}"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  TextElement.Foreground="{TemplateBinding Foreground}"
+                  TextElement.FontSize="{TemplateBinding FontSize}"
+                  TextElement.FontFamily="{TemplateBinding FontFamily}" />
           </Border>
-
+          </Grid>
           <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-              <Setter Property="Background" Value="#eaeaea" />
+              <Setter TargetName="Mask" Property="Opacity" Value=".02" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-              <Setter TargetName="Border" Property="Background" Value="#ededed" />
+              <Setter TargetName="Mask" Property="Opacity" Value=".03" />
             </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>

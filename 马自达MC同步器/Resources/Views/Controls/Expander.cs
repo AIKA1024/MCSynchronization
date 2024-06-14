@@ -9,17 +9,17 @@ namespace 马自达MC同步器.Resources.Views.Controls;
 ///   Card.xaml 的交互逻辑
 /// </summary>
 [ObservableObject]
-public partial class Card : ButtonBase
+public partial class Expander : ButtonBase
 {
   public static readonly DependencyProperty HeaderControlProperty =
-    DependencyProperty.Register(nameof(HeaderControl), typeof(FrameworkElement), typeof(Card),
+    DependencyProperty.Register(nameof(HeaderControl), typeof(FrameworkElement), typeof(Expander),
       new PropertyMetadata(null));
 
   public static readonly DependencyProperty MDL2IconStrProperty =
-    DependencyProperty.Register(nameof(MDL2IconStr), typeof(string), typeof(Card), new PropertyMetadata(null));
+    DependencyProperty.Register(nameof(MDL2IconStr), typeof(string), typeof(Expander), new PropertyMetadata(null));
 
   public static readonly DependencyProperty CornerRadiusProperty =
-    DependencyProperty.Register(nameof(CornerRadius), typeof(CornerRadius), typeof(Card),
+    DependencyProperty.Register(nameof(CornerRadius), typeof(CornerRadius), typeof(Expander),
       new PropertyMetadata(new CornerRadius()));
 
   [ObservableProperty] private bool isExpress;

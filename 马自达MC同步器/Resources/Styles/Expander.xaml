@@ -3,7 +3,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:control="clr-namespace:马自达MC同步器.Resources.Views.Controls"
                     xmlns:converter="clr-namespace:马自达MC同步器.Resources.Converters">
-  <Style TargetType="control:Card">
+  <Style TargetType="control:Expander">
     <Setter Property="Padding" Value="4" />
     <Setter Property="CornerRadius" Value="5" />
     <Setter Property="BorderBrush" Value="#eaeaea" />
@@ -11,7 +11,7 @@
     <Setter Property="MinHeight" Value="50" />
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="control:Card">
+        <ControlTemplate TargetType="control:Expander">
           <Border BorderThickness="{TemplateBinding BorderThickness}"
                   BorderBrush="{TemplateBinding BorderBrush}"
                   CornerRadius="{TemplateBinding CornerRadius}"
