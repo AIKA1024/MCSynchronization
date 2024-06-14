@@ -14,7 +14,9 @@
     <StackPanel Hyperlink.RequestNavigate="Hyperlink_RequestNavigate">
       <StackPanel.Resources>
         <Style BasedOn="{StaticResource {x:Type control:Expander}}" TargetType="control:Expander">
+          <Setter Property="CornerRadius" Value="5"/>
           <Setter Property="Margin" Value="0 0 0 8" />
+          <Setter Property="Padding" Value="16 10"/>
         </Style>
       </StackPanel.Resources>
 
@@ -25,24 +27,8 @@
   <TextBox x:Name="MaxDounloadTextBox" Text="{Binding MaxDownloadCount,FallbackValue=1}" IsEnabled="False" Height="30" Margin="0 0 0 6" FontSize="16"/>-->
 
       <!--#region 卡片-->
-      <TextBlock Text="服务器" Margin="0 8" />
-      <control:Expander CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static enum:SegoeMDL2.服务器}">
-        <control:Expander.HeaderControl>
-          <TextBlock Text="同步服务器地址" VerticalAlignment="Center" />
-        </control:Expander.HeaderControl>
 
-        <StackPanel HorizontalAlignment="Stretch" Margin="46 16">
-          <TextBox x:Name="AddressTextBox"
-                   HorizontalAlignment="Stretch"
-                   Text="{Binding Address,UpdateSourceTrigger=PropertyChanged}"
-                   VerticalAlignment="Center"
-                   FontSize="16" />
-          <TextBlock Text="修改将在重启后生效"
-                     Visibility="{Binding AddressWarningVisblity}"
-                     Foreground="Red"
-                     Margin="0 8 0 0" />
-        </StackPanel>
-      </control:Expander>
+     
 
       <!--#region 库-->
       <TextBlock Text="库" Margin="0 8" />
@@ -60,9 +46,42 @@
 
       <!--#endregion-->
 
+
+      <!--#region 网络-->
+      <TextBlock Text="网络" Margin="0 8" />
+      <control:Expander MDL2IconStr="{x:Static enum:SegoeMDL2.服务器}">
+        <control:Expander.HeaderControl>
+          <TextBlock Text="同步服务器地址" VerticalAlignment="Center" />
+        </control:Expander.HeaderControl>
+
+        <StackPanel HorizontalAlignment="Stretch" Margin="46 16">
+          <TextBox x:Name="AddressTextBox"
+              HorizontalAlignment="Stretch"
+              Text="{Binding Address,UpdateSourceTrigger=PropertyChanged}"
+              VerticalAlignment="Center"
+              FontSize="16" />
+          <TextBlock Text="修改将在重启后生效"
+                Visibility="{Binding AddressWarningVisblity}"
+                Foreground="Red"
+                Margin="0 8 0 0" />
+        </StackPanel>
+      </control:Expander>
+
+      <control:Expander MDL2IconStr="{x:Static enum:SegoeMDL2.网络}">
+        <control:Expander.HeaderControl>
+          <TextBlock Text="下载源" VerticalAlignment="Center" />
+        </control:Expander.HeaderControl>
+
+        <StackPanel Margin="46 16">
+          <CheckBox Content="modrinth" Margin="0 0 0 16"/>
+          <CheckBox Content="curseforge" IsEnabled="False"/>
+        </StackPanel>
+      </control:Expander>
+      <!--#endregion-->
+
       <!--#region 关于-->
       <TextBlock Text="关于" Margin="0 8" />
-      <control:Expander CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static enum:SegoeMDL2.猫}">
+      <control:Expander MDL2IconStr="{x:Static enum:SegoeMDL2.猫}">
         <control:Expander.HeaderControl>
           <TextBlock Text="开源项目引用" VerticalAlignment="Center" />
         </control:Expander.HeaderControl>
@@ -98,7 +117,7 @@
         </StackPanel>
       </control:Expander>
 
-      <control:Expander CornerRadius="5" Padding="16 10" MDL2IconStr="{x:Static enum:SegoeMDL2.感叹号}">
+      <control:Expander MDL2IconStr="{x:Static enum:SegoeMDL2.感叹号}">
         <control:Expander.HeaderControl>
           <TextBlock Text="详细信息" VerticalAlignment="Center" />
         </control:Expander.HeaderControl>

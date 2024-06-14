@@ -13,29 +13,29 @@ namespace WebSDK
   {
     private readonly HttpClient httpClient;
 
-    public WebHelper(Uri uri)
+    public WebHelper()
     {
       var handler = new HttpClientHandler
       {
         ServerCertificateCustomValidationCallback = (sender, cert, chain, SslPolicyErrors) => true
       };
-      httpClient = new HttpClient(handler)
-      {
-        BaseAddress = uri
-      };
+      httpClient = new HttpClient(handler);
     }
 
-    public void ChangeBaseAddress(Uri uri)
-    {
-      httpClient.BaseAddress = uri;
-    }
 
-    public async Task<string> GetRemoteModList()
+
+    #region 群友服务器方法
+    /// <summary>
+    /// 获取群友远程服务器上的mod列表
+    /// </summary>
+    /// <param name="uri"></param>
+    /// <returns></returns>
+    public async Task<string> GetRemoteModList(string uri)
     {
       try
       {
         // 发送 GET 请求
-        var response = await httpClient.GetAsync("GetModList");
+        var response = await httpClient.GetAsync(uri);
 
         // 检查响应是否成功
         if (response.IsSuccessStatusCode)
@@ -89,13 +89,17 @@ namespace WebSDK
         Console.WriteLine("未找到文件名信息。");
       }
     }
-
-    public async Task<string> GetRemoteServerList()
+    /// <summary>
+    /// 获取群友远程服务器上的MC服务器列表
+    /// </summary>
+    /// <param name="uri"></param>
+    /// <returns></returns>
+    public async Task<string> GetRemoteServerList(string url)
     {
       try
       {
         // 发送 GET 请求
-        var response = await httpClient.GetAsync("GetServerList");
+        var response = await httpClient.GetAsync(url);
 
         // 检查响应是否成功
         if (response.IsSuccessStatusCode)
@@ -113,5 +117,12 @@ namespace WebSDK
         return "";
       }
     }
+    #endregion
+
+    #region modrinthAPi
+
+
+
+    #endregion
   }
 }

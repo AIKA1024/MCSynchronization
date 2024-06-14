@@ -182,12 +182,13 @@ public partial class ModPageViewModel : ObservableObject
   [RelayCommand]
   public async Task Synchronization()
   {
+    var uri = Settings.Default.Address+ "/GetModList";
     //await LoadModInfo();
     foreach (var item in ModInfos!) item.Status = SynchronizationStatus.额外;
 
     Tip = "与服务器对比mod文件中";
     var missList = new List<ModInfo>();
-    var jsonStr = await App.Current.webHelper.GetRemoteModList();
+    var jsonStr = await App.Current.webHelper.GetRemoteModList(uri);
     if (string.IsNullOrEmpty(jsonStr))
     {
       MessageBox.Show("与服务器链接失败");

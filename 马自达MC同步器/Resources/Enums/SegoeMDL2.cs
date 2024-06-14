@@ -12,6 +12,7 @@ public static class SegoeMDL2
   public const string 朝上箭头 = "\ue96d";
   public const string 朝下箭头 = "\ue96e";
   public const string 扳手 = "\ue90f";
+  public const string 网络 = "\ue774";
   public const string 服务器 = "\ue968";
   public const string 猫 = "\uf1ad";
   public const string 文件夹 = "\ue838";
