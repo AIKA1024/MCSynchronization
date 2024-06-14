@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text.Json;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -111,7 +110,7 @@ public partial class ModPageViewModel : ObservableObject
       var modDescription = "";
       var modLogoPath = "";
       BitmapImage? modLogo = null;
-      var md5 = await CalculateFileMD5(modFullName);
+      var md5 = await FileHashHelper.ComputeMd5HashAsync(modFullName);
       var metaInfoPath = "META-INF/mods.toml";
 
       using (var archive = ZipFile.OpenRead(modFullName))
@@ -168,7 +167,7 @@ public partial class ModPageViewModel : ObservableObject
       var modInfo = new ModInfo()
       {
         DisPlayName = modDisplayName,
-        MD5 = await CalculateFileMD5(modFullName),
+        Sha1Hash = await FileHashHelper.ComputeSha1HashForFileAsync(modFullName),
         Version = modVersion,
         Description = modDescription,
         Logo = modLogo,
@@ -178,19 +177,6 @@ public partial class ModPageViewModel : ObservableObject
     }
 
     TaskInfoHelper.Instance.TaskInfo = "遍历完成";
-  }
-
-  private async Task<string> CalculateFileMD5(string filename)
-  {
-    var result = "";
-    await Task.Run(() =>
-    {
-      using var md5 = MD5.Create();
-      using var stream = File.OpenRead(filename);
-      var hash = md5.ComputeHash(stream);
-      result = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-    });
-    return result;
   }
 
   [RelayCommand]
@@ -209,9 +195,9 @@ public partial class ModPageViewModel : ObservableObject
       return;
     }
 
-    var modList = JsonSerializer.Deserialize<List<ModInfo>>(jsonStr);
+    var RemoteModList = JsonSerializer.Deserialize<List<ModInfo>>(jsonStr);
 
-    if (modList == null || modList.Count == 0)
+    if (RemoteModList == null || RemoteModList.Count == 0)
     {
       MessageBox.Show("服务器返回了空的模组列表");
       Tip = "服务器返回了空的模组列表";
@@ -222,11 +208,11 @@ public partial class ModPageViewModel : ObservableObject
     // 设置最大并发下载任务数量
     SemaphoreSlim semaphore = new(Settings.Default.MaxDownloadCount);
 
-    foreach (var remoteModInfo in modList)
+    foreach (var remoteModInfo in RemoteModList)
     {
       var found = false;
       foreach (var localModInfo in ModInfos)
-        if (remoteModInfo.MD5 == localModInfo.MD5)
+        if (remoteModInfo.Sha1Hash == localModInfo.Sha1Hash)
         {
           localModInfo.Status = SynchronizationStatus.已同步;
           found = true;
@@ -237,9 +223,9 @@ public partial class ModPageViewModel : ObservableObject
       {
         var modInfo = new ModInfo()
         {
-          DisPlayName = remoteModInfo.DisPlayName,
-          FullFileName = Path.Combine(Settings.Default.GamePath, "mods", remoteModInfo.DisPlayName),
-          MD5 = remoteModInfo.MD5,
+          FileName = remoteModInfo.FileName,
+          FullFileName = Path.Combine(Settings.Default.GamePath, "mods", remoteModInfo.FileName),
+          Sha1Hash = remoteModInfo.Sha1Hash,
           Status = SynchronizationStatus.缺少
         };
         missList.Add(modInfo);
@@ -265,7 +251,7 @@ public partial class ModPageViewModel : ObservableObject
           try
           {
             modInfo.Status = SynchronizationStatus.下载中;
-            await App.Current.webHelper.DownloadMod(modInfo.MD5,
+            await App.Current.webHelper.DownloadMod(modInfo.Sha1Hash,
               Path.Combine(Settings.Default.GamePath, "mods"));
             modInfo.Status = SynchronizationStatus.已同步;
           }

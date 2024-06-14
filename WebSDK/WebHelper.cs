@@ -54,11 +54,11 @@ namespace WebSDK
       }
     }
 
-    public async Task DownloadMod(string md5, string savePath)
+    public async Task DownloadMod(string sha1, string savePath)
     {
       var formData = new Dictionary<string, string>
       {
-        { "MD5", md5 }
+        { "Sha1", sha1 }
       };
       var content = new FormUrlEncodedContent(formData);
       var response = await httpClient.PostAsync("Download", content);
