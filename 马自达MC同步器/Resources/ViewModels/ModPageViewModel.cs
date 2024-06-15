@@ -1,26 +1,20 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text.Json;
-using System.Windows;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.VisualBasic.FileIO;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.IO.Compression;
+using System.Text.Json;
+using System.Windows;
+using System.Windows.Media.Imaging;
 using Tomlyn;
 using Tomlyn.Model;
+using 马自达MC同步器.Resources.Commands;
 using 马自达MC同步器.Resources.Enums;
-using 马自达MC同步器.Resources.Models;
-using System.Windows.Media.Imaging;
-using System;
-using Microsoft.VisualBasic;
 using 马自达MC同步器.Resources.Helper;
-using System.Windows.Threading;
-using System.Reflection;
-using System.Windows.Data;
-using System.ComponentModel;
-using 马自达MC同步器.Resources.Pages;
+using 马自达MC同步器.Resources.Models;
+using 马自达MC同步器.Resources.MyEventArgs;
 
 namespace 马自达MC同步器.Resources.ViewModels;
 
@@ -48,12 +42,22 @@ public partial class ModPageViewModel : ObservableObject
       fileSystemWatcher.Deleted += OnDeleted;
       App.Current.Exit += (sender, e) => fileSystemWatcher.Dispose();
     }
+    SelectDirectory.Instance.PathChanged += GamePathChanged;
+  }
+  private async void GamePathChanged(object sender, GamePathChangedEventArgs e)
+  {
+    ModInfos.Clear();
+    fileSystemWatcher.Path = e.NewPath;
+    await LoadAllModInfo();
   }
 
   #region ModFileChangeHandler
 
   private async void OnCreated(object sender, FileSystemEventArgs e)
   {
+    FileInfo file = new FileInfo(e.FullPath);
+    if (file.Length < 1024)
+      return;
     var modinfo = await LoadMod(e.FullPath);
     if (modinfo == null)
       return;
@@ -74,7 +78,8 @@ public partial class ModPageViewModel : ObservableObject
 
   private async void OnChanged(object sender, FileSystemEventArgs e)
   {
-    var modinfo = ModInfos.First(m => m.FileName == e.Name);
+    var modinfo = ModInfos.FirstOrDefault(m => m.FileName == e.Name);
+    if (modinfo == null) return;
     CopyPropertiesTo(await LoadMod(e.FullPath), modinfo);
   }
 
@@ -98,7 +103,8 @@ public partial class ModPageViewModel : ObservableObject
     if (!items.Any())
       return;
     var selectedItems = items.ToList();
-    var paths = items.Select(i => Path.GetFileName(((ModInfo)i).FullFileName)).ToList();
+    var paths = items.Where(i => !string.IsNullOrEmpty(((ModInfo)i).DisplayName))
+      .Select(i => Path.GetFileName(((ModInfo)i).FullFileName)).ToList();
     // 创建一个进程对象并设置参数
     var process = new Process();
     process.StartInfo.FileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\OpenFolderAndSelect.exe";
@@ -113,7 +119,7 @@ public partial class ModPageViewModel : ObservableObject
   {
     if (!items.Any())
       return;
-    var selectedItems = items.ToList();
+    var selectedItems = items.Where(i => !string.IsNullOrEmpty(((ModInfo)i).DisplayName)).ToList();
     var count = selectedItems.Count;
     for (var i = 0; i < count; i++)
     {
@@ -128,7 +134,6 @@ public partial class ModPageViewModel : ObservableObject
 
   public async Task LoadAllModInfo()
   {
-
     TaskInfoHelper.Instance.TaskInfo = "开始遍历mod文件";
     ModInfos.Clear();
     var mods = Directory.GetFiles(Path.Combine(Settings.Default.GamePath, "mods"));
@@ -180,7 +185,7 @@ public partial class ModPageViewModel : ObservableObject
               modVersion = GetValue<string>(mod[0], "version");
               modDescription = GetValue<string>(mod[0], "description")?.Replace("  ", "");
               modLogoPath = GetValue<string>(mod[0], "logoFile");
-              TaskInfoHelper.Instance.TaskInfo = $"读取：{modFullFileName}";
+              TaskInfoHelper.Instance.TaskInfo = $"读取：{modFileName}";
             }
           }
 
@@ -194,7 +199,7 @@ public partial class ModPageViewModel : ObservableObject
       if (modDisplayName == modFileName)
       {
         modDisplayName = Path.GetFileNameWithoutExtension(modDisplayName);
-        TaskInfoHelper.Instance.TaskInfo = $"读取失败:{modFullFileName}";
+        TaskInfoHelper.Instance.TaskInfo = $"读取配置失败:{modFileName}";
       }
 
       if (string.IsNullOrWhiteSpace(modDescription) || modDescription == "")
@@ -206,6 +211,7 @@ public partial class ModPageViewModel : ObservableObject
       var modInfo = new ModInfo()
       {
         DisplayName = modDisplayName,
+        FileName = Path.GetFileName(modFullFileName),
         Sha1Hash = await FileHashHelper.ComputeSha1HashForFileAsync(modFullFileName),
         Version = modVersion,
         Description = modDescription,
@@ -343,7 +349,7 @@ public partial class ModPageViewModel : ObservableObject
           }
           catch (Exception ex)
           {
-            missList[index].Status = SynchronizationStatus.缺少;
+            missList[index].Status = SynchronizationStatus.下载失败;
             Debug.WriteLine($"下载模组失败：{ex.Message}");
           }
           finally

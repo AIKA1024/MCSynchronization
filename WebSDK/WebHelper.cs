@@ -19,7 +19,10 @@ namespace WebSDK
       {
         ServerCertificateCustomValidationCallback = (sender, cert, chain, SslPolicyErrors) => true
       };
-      httpClient = new HttpClient(handler);
+      httpClient = new HttpClient(handler)
+      {
+        Timeout = TimeSpan.FromSeconds(200)
+      };
     }
 
 

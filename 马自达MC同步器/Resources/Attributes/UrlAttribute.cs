@@ -17,7 +17,7 @@ public sealed class UrlAttribute : ValidationAttribute
     PropertyName = propertyName;
   }
 
-  protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+  protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
   {
     var instance = validationContext.ObjectInstance;
 

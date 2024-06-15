@@ -6,5 +6,6 @@ public enum SynchronizationStatus
   缺少,
   已同步,
   额外,
-  下载中
+  下载中,
+  下载失败
 }

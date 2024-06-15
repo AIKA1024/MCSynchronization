@@ -9,9 +9,9 @@
         mc:Ignorable="d" WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         Title="StartWindow" Height="400" Width="600" WindowStartupLocation="CenterScreen"
         Initialized="Window_Initialized">
-  <Border CornerRadius="5" Margin="12" Background="#f3f3f3">
+  <Border CornerRadius="5" Margin="12" Background="White">
     <Border.Effect>
-      <DropShadowEffect Color="Black" ShadowDepth="8" BlurRadius="10" Opacity="0.3" />
+      <DropShadowEffect Color="Black" ShadowDepth="7" BlurRadius="10" Opacity="0.3" />
     </Border.Effect>
 
     <Grid>
@@ -21,7 +21,7 @@
           <Canvas>
             <TextBlock Canvas.Top="20" Canvas.Left="136" FontSize="14" FontWeight="Black" Text="选择MineCraft目录"/>
             <TextBlock Canvas.Top="50" Width="362" TextWrapping="Wrap" Canvas.Left="60" Text="同步器需要获取MineCraft目录来正常工作,例如:&#xA;PCL2\.minecraft\versions\All the Mods 9 - No Frills"/>
-            <Button Content="选择文件夹" Click="Button_Click" Canvas.Left="140" Canvas.Top="134"/>
+            <Button Content="选择文件夹" Click="Button_Click" Canvas.Left="130" Canvas.Top="134"/>
             <Button x:Name="ExitBT" Background="#e74c3c"
                     Foreground="#e5e5e5" FontWeight="Black"
                     Content="退出" Click="ExitBT_Click" Canvas.Left="230" Canvas.Top="134"/>

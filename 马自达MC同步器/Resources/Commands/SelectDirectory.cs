@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using 马自达MC同步器.Resources.MyEventArgs;
 
 namespace 马自达MC同步器.Resources.Commands
 {
@@ -22,6 +23,8 @@ namespace 马自达MC同步器.Resources.Commands
 
     public OpenFolderDialog FolderBrowserDialog = new();
 
+    public event Action<object ,GamePathChangedEventArgs> PathChanged;
+
     public bool CanExecute(object? parameter)
     {
       return true;
@@ -29,6 +32,7 @@ namespace 马自达MC同步器.Resources.Commands
 
     public void Execute(object? parameter)
     {
+      var oldPath = FolderBrowserDialog.FolderName;
       if (FolderBrowserDialog.ShowDialog() != true)
       {
         DialogButtonResult = false;
@@ -43,6 +47,8 @@ namespace 马自达MC同步器.Resources.Commands
       }
 
       SetGamePath(FolderBrowserDialog.FolderName);
+      if (oldPath != FolderBrowserDialog.FolderName)
+        PathChanged(this,new GamePathChangedEventArgs(oldPath, FolderBrowserDialog.FolderName));
       return;
     }
 
