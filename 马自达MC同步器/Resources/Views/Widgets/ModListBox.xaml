@@ -46,8 +46,8 @@
               </Border>
               <StackPanel Grid.Column="1" Margin="8 0 0 0">
                 <TextBlock>
-                  <Run Text="{Binding DisPlayName,TargetNullValue=正在下载该mod}" />
-                  <Run Text="{Binding Version,StringFormat={} | {0}}" Foreground="#adadad" />
+                  <Run Text="{Binding DisplayName,TargetNullValue=正在下载该mod}" />
+                  <Run Text="{Binding Version,StringFormat={} | {0},TargetNullValue={x:Null}}" Foreground="#adadad" />
                 </TextBlock>
                 <TextBlock Margin="0 4" Height="20"
                            HorizontalAlignment="Left"

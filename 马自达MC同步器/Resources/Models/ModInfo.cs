@@ -12,7 +12,7 @@ public partial class ModInfo : ObservableObject
   
   [ObservableProperty] private string? sha1Hash = "";
   
-  [ObservableProperty] private string? disPlayName;
+  [ObservableProperty] private string? displayName;
 
   [ObservableProperty] private SynchronizationStatus status;
 

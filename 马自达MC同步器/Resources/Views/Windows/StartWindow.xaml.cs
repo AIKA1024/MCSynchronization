@@ -36,7 +36,7 @@ public partial class StartWindow : Window
       SettingPage = new SettingPage(),
       ServerPage = new ServerPage()
     };
-    await((ModPageViewModel)viewModel.ModPage.DataContext).LoadModInfo();
+    await((ModPageViewModel)viewModel.ModPage.DataContext).LoadAllModInfo();
     Hide();
     var mainWindow = new MainWindow(viewModel);
     mainWindow.Show();
@@ -45,6 +45,7 @@ public partial class StartWindow : Window
   {
     //Settings.Default.ModMD5LogoDir ??= new();
     Directory.CreateDirectory(Path.Combine(App.Current.CachePath, "Logo"));
+    Directory.CreateDirectory(App.Current.DownloadPath);
 
     if (string.IsNullOrEmpty(Settings.Default.GamePath))
     {

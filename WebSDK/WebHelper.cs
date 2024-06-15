@@ -54,14 +54,14 @@ namespace WebSDK
       }
     }
 
-    public async Task DownloadMod(string sha1, string savePath)
+    public async Task DownloadMod(string url,string sha1, string savePath)
     {
       var formData = new Dictionary<string, string>
       {
         { "Sha1", sha1 }
       };
       var content = new FormUrlEncodedContent(formData);
-      var response = await httpClient.PostAsync("Download", content);
+      var response = await httpClient.PostAsync(url, content);
       // 确保响应成功
       response.EnsureSuccessStatusCode();
       // 读取响应内容
