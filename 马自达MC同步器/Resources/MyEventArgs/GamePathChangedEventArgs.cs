@@ -8,13 +8,13 @@ namespace 马自达MC同步器.Resources.MyEventArgs
 {
   public class GamePathChangedEventArgs : EventArgs
   {
-    public string oldPath;
-    public string NewPath;
+    public string OldPath { get; set; }
+    public string NewPath{ get; set; }
 
-    public GamePathChangedEventArgs(string oldPath,string NewPath)
+    public GamePathChangedEventArgs(string oldPath,string newPath)
     {
-      this.oldPath = oldPath;
-      this.NewPath = NewPath;
+      OldPath = oldPath;
+      NewPath = newPath;
     }
   }
 }

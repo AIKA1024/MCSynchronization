@@ -48,8 +48,7 @@ namespace 马自达MC同步器.Resources.Commands
 
       SetGamePath(FolderBrowserDialog.FolderName);
       if (oldPath != FolderBrowserDialog.FolderName)
-        PathChanged(this,new GamePathChangedEventArgs(oldPath, FolderBrowserDialog.FolderName));
-      return;
+        PathChanged?.Invoke(this,new GamePathChangedEventArgs(oldPath, FolderBrowserDialog.FolderName));
     }
 
 
