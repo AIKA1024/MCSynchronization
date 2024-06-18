@@ -6,6 +6,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace WebSDK
 {
@@ -49,23 +53,25 @@ namespace WebSDK
       }
     }
 
-    public async Task DownloadImageAsync(string url, string localPath)
+    public async Task DownloadImageAsync(string url, string localPath,int numberOfRetries = 1)
     {
-      using (HttpClient client = new HttpClient())
+      for (int i = 0; i < numberOfRetries; i++)
       {
         // 发送HTTP GET请求获取图片数据
-        HttpResponseMessage response = await client.GetAsync(url);
-        response.EnsureSuccessStatusCode();
+        HttpResponseMessage response = await httpClient.GetAsync(url);
+        if (!response.IsSuccessStatusCode)
+          continue;
 
         // 读取图片数据为字节数组
         byte[] imageBytes = await response.Content.ReadAsByteArrayAsync();
 
         // 将图片数据保存到本地文件
         await File.WriteAllBytesAsync(localPath, imageBytes);
+        break;
       }
     }
 
-    public async Task DownloadMod(string url,string sha1, string savePath)
+    public async Task DownloadMod(string url, string sha1, string savePath)
     {
       var formData = new Dictionary<string, string>
       {
@@ -102,11 +108,56 @@ namespace WebSDK
     }
 
     #region modrinthAPi
-    public async Task<string> GetVersionFromHashAsnyc(string sha1Hash)=>
-      await GetAsync($"https://api.modrinth.com/v2/version_file/{sha1Hash}");
+    public async Task<JsonObject?> GetVersionListFromHashasync(List<string>? sha1HashList)
+    {
+      if (sha1HashList == null || sha1HashList.Count == 0)
+        return null;
 
-    public async Task<string> GetProjectFromID(string id) =>
-      await GetAsync($"https://api.modrinth.com/v2/project/{id}");
+      var requestBody = new
+      {
+        hashes = sha1HashList,
+        algorithm = "sha1"
+      };
+      var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
+
+      var response = await httpClient.PostAsync("https://api.modrinth.com/v2/version_files", jsonContent);
+      // 确保响应成功
+      if (response.IsSuccessStatusCode)
+      {
+        // 读取响应内容
+        string responseContent = await response.Content.ReadAsStringAsync();
+        if (string.IsNullOrEmpty(responseContent) || responseContent == "{}")
+          return null;
+        return JsonSerializer.Deserialize<JsonObject>(responseContent); ;
+      }
+      return null;
+    }
+
+    public async Task<JsonArray?> GetProjectListFromID(List<string> idList)
+    {
+      var resultStr = await
+        GetAsync($"https://api.modrinth.com/v2/projects?ids={JsonSerializer.Serialize(idList)}");
+      if (string.IsNullOrEmpty(resultStr))
+        return null;
+
+      return JsonSerializer.Deserialize<JsonArray?>(resultStr);
+    }
+
+    public async Task<JsonObject?> GetVersionFromHashAsnyc(string sha1Hash)
+    {
+      var response = await GetAsync($"https://api.modrinth.com/v2/version_file/{sha1Hash}");
+      if (string.IsNullOrEmpty(response))
+        return null;
+      return JsonSerializer.Deserialize<JsonObject>(response);
+    }
+
+    public async Task<JsonObject?> GetProjectFromID(string id)
+    {
+      var response = await GetAsync($"https://api.modrinth.com/v2/project/{id}");
+      if (string.IsNullOrEmpty(response))
+        return null;
+      return JsonSerializer.Deserialize<JsonObject>(response);
+    }
     #endregion
   }
 }

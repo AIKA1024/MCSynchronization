@@ -3,9 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.VisualBasic.FileIO;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Dynamic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Security.Policy;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -13,7 +13,6 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using Tomlyn;
 using Tomlyn.Model;
-using WebSDK;
 using 马自达MC同步器.Resources.Commands;
 using 马自达MC同步器.Resources.Enums;
 using 马自达MC同步器.Resources.Helper;
@@ -62,7 +61,7 @@ public partial class ModPageViewModel : ObservableObject
     FileInfo file = new FileInfo(e.FullPath);
     if (file.Length < 1024)
       return;
-    var modinfo = await LoadMod(e.FullPath);
+    var modinfo = await LoadModZip(e.FullPath);
     if (modinfo == null)
       return;
     int index = 0;
@@ -84,7 +83,7 @@ public partial class ModPageViewModel : ObservableObject
   {
     var modinfo = ModInfos.FirstOrDefault(m => m.FileName == e.Name);
     if (modinfo == null) return;
-    CopyPropertiesTo(await LoadMod(e.FullPath), modinfo);
+    CopyPropertiesTo(await LoadModZip(e.FullPath), modinfo);
   }
 
   private void OnDeleted(object sender, FileSystemEventArgs e)
@@ -129,7 +128,7 @@ public partial class ModPageViewModel : ObservableObject
     {
       var modInfo = (ModInfo)selectedItems[i];
       //ModInfos.Remove(modInfo); //统一用fileSystemWatcher的删除事件
-      FileSystem.DeleteFile(modInfo.FullFileName, UIOption.OnlyErrorDialogs,
+      Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(modInfo.FullFileName, UIOption.OnlyErrorDialogs,
         RecycleOption.SendToRecycleBin);
     }
   }
@@ -143,14 +142,87 @@ public partial class ModPageViewModel : ObservableObject
     var mods = Directory.GetFiles(Path.Combine(Settings.Default.GamePath, "mods"));
     foreach (var modFullName in mods)
     {
-      ModInfo? modInfo = await LoadMod(modFullName);
+      ModInfo? modInfo = await LoadModZip(modFullName);
       if (modInfo != null)
+      {
+        await LoadModCache(modInfo);
         ModInfos.Add(modInfo);
+      }
     }
+    TaskInfoHelper.Instance.TaskInfo = "联网查询mod信息..";
+    await GetModInfoFromModrinth(ModInfos.Where(m => !m.LoadedCacheOrRemote).ToList());
     TaskInfoHelper.Instance.TaskInfo = "遍历完成";
   }
 
-  private async Task<ModInfo?> LoadMod(string modFullFileName)
+  private async Task GetModInfoFromModrinth(List<ModInfo> ModList)
+  {
+    var modrinthModFileInfos = (await App.Current.webHelper.GetVersionListFromHashasync(
+      ModList.Select(m => m.Sha1Hash.ToLower()).ToList()));
+
+    var modrinthProjectsArray = await App.Current.webHelper.GetProjectListFromID(
+      modrinthModFileInfos?.Select(m => m.Value["project_id"].ToString()).ToList());
+
+    if (modrinthModFileInfos == null || modrinthProjectsArray == null)
+    {
+      TaskInfoHelper.Instance.TaskInfo = "联网查询失败,可能modrinth还没收录安装的部分mod";
+      await Task.Delay(1000);
+      return;
+    }
+
+    Dictionary<string, JsonObject> modrinthProjectsDir = modrinthProjectsArray
+      .OfType<JsonObject>()
+      .ToDictionary(
+          m => m["id"].ToString(),
+          m => m
+      );
+
+    //todo 多线程加载
+
+    foreach (var modinfo in ModList)
+    {
+      if (!modrinthModFileInfos.ContainsKey(modinfo.Sha1Hash))
+        continue;
+
+      var modVersionJObj = modrinthModFileInfos[modinfo.Sha1Hash];
+      var modProjectId = modVersionJObj["project_id"].ToString();
+      var projectJObj = modrinthProjectsDir[modProjectId];
+
+      var cacheFilePath = Path.Combine(App.Current.CachePath, modinfo.Sha1Hash + ".json");
+      var cacheHelper = new CacheHelper();
+      
+      File.Create(cacheFilePath).Dispose();
+      var logoUrl = projectJObj["icon_url"]?.ToString();
+      if (logoUrl != null)
+      {
+        var logoFilePath = Path.Combine(App.Current.LogoPath, modinfo.Sha1Hash + ".png");
+        await App.Current.webHelper.DownloadImageAsync(projectJObj["icon_url"].ToString(), logoFilePath);
+        projectJObj["icon_url"] = logoFilePath;
+        projectJObj["body"] = null;//不需要的信息
+        modVersionJObj["changelog"] = null;
+
+        var modLogo = new BitmapImage();
+        modLogo.BeginInit();
+        modLogo.CacheOption = BitmapCacheOption.OnLoad; // 确保图像被完全加载到内存中
+        modLogo.UriSource = new Uri(logoFilePath);
+        modLogo.DecodePixelWidth = 34;
+        modLogo.DecodePixelHeight = 34;
+        modLogo.EndInit();
+        modLogo.Freeze();
+        modinfo.Logo = modLogo;
+      }
+      using (var writer = new StreamWriter(cacheFilePath))
+      {
+        JsonObject versionAndProjectFrom = new()
+        {
+          { nameof(modVersionJObj), modVersionJObj.DeepClone() },
+          { nameof(projectJObj), projectJObj.DeepClone() }
+        };
+        await writer.WriteAsync(JsonSerializer.Serialize(versionAndProjectFrom));
+      }
+    }
+  }
+
+  private async Task<ModInfo?> LoadModZip(string modFullFileName)
   {
     try
     {
@@ -165,7 +237,6 @@ public partial class ModPageViewModel : ObservableObject
       var modDisplayName = modFileName;//初始值，获取不到时使用文件名
       var modVersion = "";
       var modDescription = "";
-      var md5 = await FileHashHelper.ComputeMd5HashAsync(modFullFileName);
       var metaInfoPath = "META-INF/mods.toml";
 
       using (var archive = ZipFile.OpenRead(modFullFileName))
@@ -188,11 +259,9 @@ public partial class ModPageViewModel : ObservableObject
               TaskInfoHelper.Instance.TaskInfo = $"读取：{modFileName}";
             }
           }
-
           //可能没有version
           if (modVersion == "${file.jarVersion}")
             modVersion = ReadDescriptionByManifest(archive);
-
         }
       }
 
@@ -202,55 +271,54 @@ public partial class ModPageViewModel : ObservableObject
         TaskInfoHelper.Instance.TaskInfo = $"读取配置失败:{modFileName}";
       }
 
-      #region 查询modrinth
-      JsonObject? VersionAndProjectFrom = null;
-      var sha1Hash = await FileHashHelper.ComputeSha1HashForFileAsync(modFullFileName);
-      var cacheFilePath = Path.Combine(App.Current.CachePath, sha1Hash + ".json");
+      var modInfo = new ModInfo()
+      {
+        DisplayName = modDisplayName,
+        FileName = Path.GetFileName(modFullFileName),
+        Sha1Hash = (await FileHashHelper.ComputeSha1HashForFileAsync(modFullFileName)).ToLower(),
+        Version = modVersion,
+        Description = modDescription,
+        FullFileName = modFullFileName,
+      };
+
+      return modInfo;
+    }
+    catch (Exception ex)
+    {
+      Debug.WriteLine(ex.Message);
+      return null;
+    }
+  }
+
+  public async Task LoadModCache(ModInfo modInfo)
+  {
+    await Task.Run(() =>
+    {
+      string? modVersion = null;
+      string? modDescription = null;
+      JsonObject? VersionAndProjectJObj = null;
+      var cacheFilePath = Path.Combine(App.Current.CachePath, modInfo.Sha1Hash + ".json");
       var cacheHelper = new CacheHelper();
-      if (!cacheHelper.HasModCache(sha1Hash))
+      var loadedCacheOrRemote = false;
+      if (cacheHelper.HasModCache(modInfo.Sha1Hash))
       {
-        var VersionFromStr = await App.Current.webHelper.GetVersionFromHashAsnyc(sha1Hash);
-        File.Create(cacheFilePath).Dispose();
-        if (!string.IsNullOrEmpty(VersionFromStr))
-        {
-          var VersionFrom = JsonSerializer.Deserialize<JsonObject>(VersionFromStr);
-
-          var ProjectFrom = JsonSerializer.Deserialize<JsonObject>(
-            await App.Current.webHelper.GetProjectFromID(VersionFrom["project_id"].ToString()));
-
-          if (ProjectFrom["icon_url"] != null)
-          {
-            var logoFilePath = Path.Combine(App.Current.LogoPath, sha1Hash + ".png");
-            await App.Current.webHelper.DownloadImageAsync(ProjectFrom["icon_url"].ToString(), logoFilePath);
-            ProjectFrom["icon_url"] = logoFilePath;
-          }
-
-          
-          using (var writer = new StreamWriter(cacheFilePath))
-          {
-            VersionAndProjectFrom = new();
-            VersionAndProjectFrom.Add(nameof(VersionFrom), VersionFrom);
-            VersionAndProjectFrom.Add(nameof(ProjectFrom), ProjectFrom);
-            await writer.WriteAsync(JsonSerializer.Serialize(VersionAndProjectFrom));
-          }
-        }
+        VersionAndProjectJObj = cacheHelper.GetModCache(modInfo.Sha1Hash);
+        loadedCacheOrRemote = true;
       }
-      else
-        VersionAndProjectFrom = cacheHelper.GetModCache(sha1Hash);
 
-      if (string.IsNullOrWhiteSpace(modDescription))
+      if (string.IsNullOrEmpty(modInfo.Description))
       {
-        var remoteDiscription = VersionAndProjectFrom?["ProjectFrom"]["description"].ToString();
+        var remoteDiscription = VersionAndProjectJObj?["projectJObj"]["description"].ToString();
         modDescription = string.IsNullOrEmpty(remoteDiscription) ? "该mod没有提供任何描述..." : remoteDiscription;
       }
-      if (string.IsNullOrWhiteSpace(modVersion))
+      if (string.IsNullOrEmpty(modInfo.Version))
       {
-        var remoteVersion = VersionAndProjectFrom?["VersionFrom"]["version_number"].ToString();
+        var remoteVersion = VersionAndProjectJObj?["modVersionJObj"]["version_number"].ToString();
         modVersion = string.IsNullOrEmpty(remoteVersion) ? "无法获取版本号..." : remoteVersion;
       }
 
       BitmapImage? modLogo = null;
-      var url = VersionAndProjectFrom?["ProjectFrom"]["icon_url"]?.ToString();
+      var url = VersionAndProjectJObj?["projectJObj"]["icon_url"]?.ToString();
       if (!string.IsNullOrEmpty(url))
       {
         modLogo = new BitmapImage();
@@ -262,26 +330,11 @@ public partial class ModPageViewModel : ObservableObject
         modLogo.EndInit();
         modLogo.Freeze();
       }
-      #endregion
-
-      var modInfo = new ModInfo()
-      {
-        DisplayName = modDisplayName,
-        FileName = Path.GetFileName(modFullFileName),
-        Sha1Hash = sha1Hash,
-        Version = modVersion,
-        Description = modDescription,
-        Logo = modLogo,
-        FullFileName = modFullFileName
-      };
-
-      return modInfo;
-    }
-    catch (Exception ex)
-    {
-      Debug.WriteLine(ex.Message);
-      return null;
-    }
+      modInfo.Description = modDescription?? modInfo.Description;
+      modInfo.Version = modVersion ?? modInfo.Version;
+      modInfo.Logo = modLogo;
+      modInfo.LoadedCacheOrRemote = loadedCacheOrRemote;
+    });
   }
 
   T GetValue<T>(TomlTable table, string key)

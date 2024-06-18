@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.IO;
+using System.Text.Json.Serialization;
 using System.Windows.Media.Imaging;
 using 马自达MC同步器.Resources.Enums;
 
@@ -14,6 +15,7 @@ public partial class ModInfo : ObservableObject
   
   [ObservableProperty] private string? displayName;
 
+  [JsonIgnore]
   [ObservableProperty] private SynchronizationStatus status;
 
   [ObservableProperty] private string? version;
@@ -21,4 +23,7 @@ public partial class ModInfo : ObservableObject
   [ObservableProperty] private BitmapImage? logo;
 
   [ObservableProperty] private string? description;
+
+  [JsonIgnore]
+  [ObservableProperty] private bool loadedCacheOrRemote;
 }
