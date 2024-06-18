@@ -9,7 +9,7 @@ namespace 马自达MC同步器.Resources.Helper;
 
 internal partial class TaskInfoHelper : ObservableObject
 {
-  public static TaskInfoHelper Instance = new();
+  public static TaskInfoHelper Instance { get; } = new();
 
   [ObservableProperty] private string taskInfo = "";
 }

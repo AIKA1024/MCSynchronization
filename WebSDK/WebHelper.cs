@@ -26,19 +26,12 @@ namespace WebSDK
     }
 
 
-
-    #region 群友服务器方法
-    /// <summary>
-    /// 获取群友远程服务器上的mod列表
-    /// </summary>
-    /// <param name="uri"></param>
-    /// <returns></returns>
-    public async Task<string> GetRemoteModList(string uri)
+    public async Task<string> GetAsync(string url)
     {
       try
       {
         // 发送 GET 请求
-        var response = await httpClient.GetAsync(uri);
+        var response = await httpClient.GetAsync(url);
 
         // 检查响应是否成功
         if (response.IsSuccessStatusCode)
@@ -47,13 +40,28 @@ namespace WebSDK
           var responseBody = await response.Content.ReadAsStringAsync();
           return responseBody;
         }
-
         return "";
       }
       catch (HttpRequestException ex)
       {
         Debug.WriteLine(ex.Message);
         return "";
+      }
+    }
+
+    public async Task DownloadImageAsync(string url, string localPath)
+    {
+      using (HttpClient client = new HttpClient())
+      {
+        // 发送HTTP GET请求获取图片数据
+        HttpResponseMessage response = await client.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+
+        // 读取图片数据为字节数组
+        byte[] imageBytes = await response.Content.ReadAsByteArrayAsync();
+
+        // 将图片数据保存到本地文件
+        await File.WriteAllBytesAsync(localPath, imageBytes);
       }
     }
 
@@ -92,40 +100,13 @@ namespace WebSDK
         Console.WriteLine("未找到文件名信息。");
       }
     }
-    /// <summary>
-    /// 获取群友远程服务器上的MC服务器列表
-    /// </summary>
-    /// <param name="uri"></param>
-    /// <returns></returns>
-    public async Task<string> GetRemoteServerList(string url)
-    {
-      try
-      {
-        // 发送 GET 请求
-        var response = await httpClient.GetAsync(url);
-
-        // 检查响应是否成功
-        if (response.IsSuccessStatusCode)
-        {
-          // 读取响应内容
-          var responseBody = await response.Content.ReadAsStringAsync();
-          return responseBody;
-        }
-
-        return "";
-      }
-      catch (HttpRequestException ex)
-      {
-        Console.WriteLine(ex.Message);
-        return "";
-      }
-    }
-    #endregion
 
     #region modrinthAPi
+    public async Task<string> GetVersionFromHashAsnyc(string sha1Hash)=>
+      await GetAsync($"https://api.modrinth.com/v2/version_file/{sha1Hash}");
 
-
-
+    public async Task<string> GetProjectFromID(string id) =>
+      await GetAsync($"https://api.modrinth.com/v2/project/{id}");
     #endregion
   }
 }

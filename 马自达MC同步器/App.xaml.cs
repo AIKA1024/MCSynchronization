@@ -17,7 +17,8 @@ public partial class App : Application
   public WebHelper webHelper = new();
 
   public readonly string CachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cache");
-  public readonly string DownloadPath = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cache"), "Download");
+  public readonly string LogoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cache","Logo");
+  public readonly string DownloadPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cache", "Download");
   public string ModPath => Path.Combine(Settings.Default.GamePath, "mods");
   public new static App Current => (App)Application.Current;
 

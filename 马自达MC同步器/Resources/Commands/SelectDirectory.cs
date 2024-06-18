@@ -17,7 +17,7 @@ namespace 马自达MC同步器.Resources.Commands
 
     public bool DialogButtonResult = false;
 
-    public static SelectDirectory Instance = new SelectDirectory();
+    public static SelectDirectory Instance { get; } = new SelectDirectory();
 
     public event EventHandler? CanExecuteChanged;
 

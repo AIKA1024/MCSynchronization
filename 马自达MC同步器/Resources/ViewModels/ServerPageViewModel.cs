@@ -49,7 +49,7 @@ public partial class ServerPageViewModel
       return;
     }
 
-    var jsonStr = await App.Current.webHelper.GetRemoteServerList(Settings.Default.Address + "/GetServerList");
+    var jsonStr = await App.Current.webHelper.GetAsync(Settings.Default.Address + "/GetServerList");
     if (string.IsNullOrEmpty(jsonStr))
     {
       MessageBox.Show("连接服务器失败!");
