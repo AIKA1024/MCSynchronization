@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using fNbt;
@@ -57,18 +58,18 @@ public partial class ServerPageViewModel
     }
 
     //由于serverInfo有额外的操作，因此无法使用该模型类
-    var serverList = JsonSerializer.Deserialize<List<ExpandoObject>>(jsonStr);
+    var serverList = JsonSerializer.Deserialize<List<JsonObject>>(jsonStr);
     if (serverList == null)
     {
       MessageBox.Show("服务器返回了空服务器列表!");
       return;
     }
 
-    foreach (dynamic item in serverList)
+    foreach (JsonObject item in serverList)
     {
-      if (ServerInfos.Any(s => s.ip == Convert.ToString(item.ip)))
+      if (ServerInfos.Any(s => s.ip == item["ip"].ToString()))
         continue;
-      AddServer(Convert.ToString(item.name), Convert.ToString(item.ip), byte.Parse(Convert.ToString(item.hidden)));
+      AddServer(item["name"].ToString(), item["ip"].ToString(), item["hidden"].GetValue<byte>());
     }
   }
 
