@@ -133,8 +133,10 @@ namespace WebSDK
       return null;
     }
 
-    public async Task<JsonArray?> GetProjectListFromID(List<string> idList)
+    public async Task<JsonArray?> GetProjectListFromID(List<string>? idList)
     {
+      if (idList == null || !idList.Any()) return null;
+
       var resultStr = await
         GetAsync($"https://api.modrinth.com/v2/projects?ids={JsonSerializer.Serialize(idList)}");
       if (string.IsNullOrEmpty(resultStr))
