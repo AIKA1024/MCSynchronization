@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using 马自达MC同步器.Resources.Models;
+using 马自达MC同步器.Resources.Views.Controls;
 
 namespace 马自达MC同步器.Resources.Views.Widgets;
 
@@ -47,5 +49,13 @@ public partial class ModListBox : UserControl
 
     if (ModList.SelectedItems.Contains(dataConext))
       e.Handled = true;
+  }
+
+  private void IconButton_Click(object sender, RoutedEventArgs e)
+  {
+    IconButton iconButton = (IconButton)sender;
+    ModInfo modInfo = (ModInfo)iconButton.DataContext;
+    Process.Start(new ProcessStartInfo("explorer.exe", $"https://modrinth.com/mod/{modInfo.ProjectId}"));
+    e.Handled = true;
   }
 }

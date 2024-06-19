@@ -147,10 +147,10 @@ public partial class ModPageViewModel : ObservableObject
       }
     }
 
-    TaskInfoHelper.Instance.TaskInfo = "联网查询mod信息..";
-    await GetModInfoFromModrinth(ModInfos.Where(
-      m => !m.LoadedCacheOrRemote).ToList(),
-      new SemaphoreSlim(10));
+    //TaskInfoHelper.Instance.TaskInfo = "联网查询mod信息..";
+    //await GetModInfoFromModrinth(ModInfos.Where(
+    //  m => !m.LoadedCacheOrRemote).ToList(),
+    //  new SemaphoreSlim(10));
     TaskInfoHelper.Instance.TaskInfo = "遍历完成";
   }
 
@@ -214,15 +214,16 @@ public partial class ModPageViewModel : ObservableObject
             modLogo.EndInit();
             modLogo.Freeze();
             modinfo.Logo = modLogo;
+            modinfo.ProjectId = modProjectId;
             modinfo.LoadedCacheOrRemote = true;
           }
 
           using (var writer = new StreamWriter(cacheFilePath))
           {
-            JsonObject versionAndProjectFrom = new()
+            var versionAndProjectFrom = new
             {
-              { nameof(modVersionJObj), modVersionJObj.DeepClone() },
-              { nameof(projectJObj), projectJObj.DeepClone() }
+              modVersionJObj = modVersionJObj,
+              projectJObj = projectJObj 
             };
             await writer.WriteAsync(JsonSerializer.Serialize(versionAndProjectFrom));
           }
@@ -356,6 +357,7 @@ public partial class ModPageViewModel : ObservableObject
       modInfo.Description = modDescription ?? modInfo.Description;
       modInfo.Version = modVersion ?? modInfo.Version;
       modInfo.Logo = modLogo;
+      modInfo.ProjectId = VersionAndProjectJObj?["projectJObj"]["id"]?.ToString();
       modInfo.LoadedCacheOrRemote = loadedCacheOrRemote;
     });
   }

@@ -12,6 +12,7 @@
         <ResourceDictionary Source="pack://application:,,,/Resources/Styles/TextBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Resources/Styles/ToggleButton.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Resources/Styles/Expander.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Styles/IconButton.xaml" />
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>

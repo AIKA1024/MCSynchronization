@@ -5,11 +5,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:enum="clr-namespace:马自达MC同步器.Resources.Enums"
+             xmlns:control="clr-namespace:马自达MC同步器.Resources.Views.Controls"
              xmlns:convert="clr-namespace:马自达MC同步器.Resources.Converters"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
   <UserControl.Resources>
-    <BitmapImage x:Key="DefaultImage" UriSource="pack://application:,,,/Resources/Images/Icons/NoIcon.png" />
+    <BitmapImage x:Key="DefaultImage" UriSource="pack://application:,,,/Resources/Images/Icons/NoIcon.png" DecodePixelHeight="34" DecodePixelWidth="34"/>
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
   </UserControl.Resources>
   <Border CornerRadius="5" BorderBrush="#ededed">
     <ListBox x:Name="ModList"
@@ -59,7 +61,16 @@
                     </Run>
                     <Run Text="{Binding Version,StringFormat={} | {0},TargetNullValue={x:Null}}" Foreground="#adadad" />
                   </TextBlock>
-                  <!-- <Button Margin="16 0 0 0" Height="10" Content="{x:Static enum:SegoeMDL2.感叹号}" FontFamily="Segoe MDL2 Assets"/> -->
+
+
+                  <control:IconButton Margin="16 0 0 0" 
+                           CornerRadius="10"
+                           Height="14"
+                           Foreground="#adadad"    
+                           Content="{x:Static enum:SegoeMDL2.网络}"
+                           Visibility="{Binding LoadedCacheOrRemote,Converter={StaticResource BooleanToVisibilityConverter}}"
+                           ToolTip="在Modrinth打开mod页"
+                           Click="IconButton_Click"/> 
                 </StackPanel>
                 <TextBlock Margin="0 4" Height="20"
                            HorizontalAlignment="Left"
