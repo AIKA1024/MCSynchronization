@@ -70,8 +70,63 @@ namespace WebSDK
         break;
       }
     }
+    /// <summary>
+    /// 从ModFrom下载mod
+    /// </summary>
+    /// <param name="sha1Hash"></param>
+    /// <returns>下载成功的mod列表</returns>
+    public async Task<List<string>?> DownLoadModFromModrinth(List<string> sha1Hash,string path)
+    {
+      var modInfos = await GetVersionListFromHashasync(sha1Hash);
+      if (modInfos == null || !modInfos.Any())
+        return null;
 
-    public async Task DownloadMod(string url, string sha1, string savePath)
+      List<string> successModList = new List<string>();
+      foreach (var item in modInfos)
+      {
+        var fileDirectLink = item.Value["files"][0]["url"].ToString();
+        var response = await httpClient.GetAsync(fileDirectLink);
+        for (int i = 0; i < 3; i++)//3次重试
+        {
+          if (!response.IsSuccessStatusCode)
+            continue;
+          string fileName = Path.GetFileName(fileDirectLink);
+          var fileFullPath = Path.Combine(path, fileName);
+          if (File.Exists(fileFullPath))
+            Console.Error.WriteLine($"{fileFullPath}已经存在");
+          using (Stream contentStream = await response.Content.ReadAsStreamAsync(),fileStream = new FileStream(fileFullPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true))
+            await contentStream.CopyToAsync(fileStream);
+          successModList.Add(item.Key);
+          break;
+        }
+      }
+      return successModList;
+    }
+
+    public async Task<bool> DownLoadModFromModrinth(string sha1Hash, string path)
+    {
+      var modInfo = await GetVersionFromHashAsnyc(sha1Hash);
+      if (modInfo == null)
+        return false;
+
+      var fileDirectLink = modInfo["files"][0]["url"].ToString();
+      var response = await httpClient.GetAsync(fileDirectLink);
+      for (int i = 0; i < 3; i++)//3次重试
+      {
+        if (!response.IsSuccessStatusCode)
+          continue;
+        string fileName = Path.GetFileName(fileDirectLink);
+        var fileFullPath = Path.Combine(path, fileName);
+        if (File.Exists(fileFullPath))
+          Console.Error.WriteLine($"{fileFullPath}已经存在");
+        using (Stream contentStream = await response.Content.ReadAsStreamAsync(), fileStream = new FileStream(fileFullPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true))
+          await contentStream.CopyToAsync(fileStream);
+        return true;
+      }
+      return false;
+    }
+
+    public async Task DownloadModFromFriends(string url, string sha1, string savePath)
     {
       var formData = new Dictionary<string, string>
       {

@@ -11,9 +11,9 @@ public partial class ModInfo : ObservableObject
   [ObservableProperty] private string? projectId;
   [ObservableProperty] private string fileName = "";
   [ObservableProperty] private string fullFileName = "";
-  
+
   [ObservableProperty] private string sha1Hash = "";
-  
+
   [ObservableProperty] private string displayName = "";
 
   [JsonIgnore]

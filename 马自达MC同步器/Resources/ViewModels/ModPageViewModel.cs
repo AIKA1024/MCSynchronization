@@ -5,8 +5,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Security.Policy;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Windows;
@@ -60,6 +58,7 @@ public partial class ModPageViewModel : ObservableObject
 
   private async void OnCreated(object sender, FileSystemEventArgs e)
   {
+
     FileInfo file = new FileInfo(e.FullPath);
     if (file.Length < 1024)
       return;
@@ -84,6 +83,8 @@ public partial class ModPageViewModel : ObservableObject
     var modinfo = ModInfos.FirstOrDefault(m => m.FileName == e.Name);
     if (modinfo == null) return;
     CopyPropertiesTo(await LoadModZip(e.FullPath), modinfo);
+    if (!modinfo.LoadedCacheOrRemote)
+      await LoadModCache(modinfo);
   }
 
   private void OnDeleted(object sender, FileSystemEventArgs e)
@@ -106,8 +107,7 @@ public partial class ModPageViewModel : ObservableObject
     if (!items.Any())
       return;
     var selectedItems = items.ToList();
-    var paths = items.Where(i => !string.IsNullOrEmpty(((ModInfo)i).DisplayName))
-      .Select(i => Path.GetFileName(((ModInfo)i).FullFileName)).ToList();
+    var paths = items.Select(i => Path.GetFileName(((ModInfo)i).FullFileName)).ToList();
     var process = new Process();
     process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "OpenFolderAndSelect.exe");
     process.StartInfo.Arguments =
@@ -147,10 +147,10 @@ public partial class ModPageViewModel : ObservableObject
       }
     }
 
-    //TaskInfoHelper.Instance.TaskInfo = "联网查询mod信息..";
-    //await GetModInfoFromModrinth(ModInfos.Where(
-    //  m => !m.LoadedCacheOrRemote).ToList(),
-    //  new SemaphoreSlim(10));
+    TaskInfoHelper.Instance.TaskInfo = "联网查询mod信息..";
+    await GetModInfoFromModrinth(ModInfos.Where(
+       m => !m.LoadedCacheOrRemote).ToList(),
+       new SemaphoreSlim(10));
     TaskInfoHelper.Instance.TaskInfo = "遍历完成";
   }
 
@@ -223,7 +223,7 @@ public partial class ModPageViewModel : ObservableObject
             var versionAndProjectFrom = new
             {
               modVersionJObj = modVersionJObj,
-              projectJObj = projectJObj 
+              projectJObj = projectJObj
             };
             await writer.WriteAsync(JsonSerializer.Serialize(versionAndProjectFrom));
           }
@@ -417,10 +417,6 @@ public partial class ModPageViewModel : ObservableObject
       return;
     }
 
-
-    // 设置最大并发下载任务数量
-    SemaphoreSlim semaphore = new(Settings.Default.MaxDownloadCount);
-
     foreach (var remoteModInfo in RemoteModList)
     {
       var found = false;
@@ -446,39 +442,60 @@ public partial class ModPageViewModel : ObservableObject
       }
     }
 
-    // 下载缺失的模组，使用 SemaphoreSlim 限制并发数量
-    await DownloadMissingMods(missList, semaphore);
+    await DownloadMissingMods(missList);
   }
 
-  private async Task DownloadMissingMods(List<ModInfo> missList, SemaphoreSlim semaphore)
+  private async Task DownloadMissingMods(List<ModInfo> missList)
   {
+    // 设置最大并发下载任务数量
+    SemaphoreSlim friendsSemaphore = new(Settings.Default.MaxDownloadCount);
+    SemaphoreSlim ModrinthSemaphore = new(6);
     Tip = "下载所需mod中";
     List<Task> downloadTasks = [];
+    //var missModHashList = missList.Select(m => m.Sha1Hash).ToList();
+    var DownLoadedList = new List<ModInfo>();
+    var leftModList = new List<ModInfo>();
+    foreach (var item in missList)
+    {
+      item.Status = SynchronizationStatus.下载中;
+      downloadTasks.Add(Task.Run(async () =>
+      {
+        await ModrinthSemaphore.WaitAsync();
+        if (await App.Current.webHelper.DownLoadModFromModrinth(item.Sha1Hash, App.Current.ModPath))
+          DownLoadedList.Add(item);
+        else
+          leftModList.Add(item);
+        ModrinthSemaphore.Release();
+      }));
+    }
+    await Task.WhenAll(downloadTasks);
+    downloadTasks.Clear();
+    //await App.Current.webHelper.DownLoadModFromModrinth(missModHashList,App.Current.ModPath);
 
-    for (int i = 0; i < missList.Count; i++)
+    for (int i = 0; i < leftModList.Count; i++)
     {
       int index = i;
-      if (missList[index].Status != SynchronizationStatus.已同步)
+      if (leftModList[index].Status != SynchronizationStatus.已同步)
       {
-        await semaphore.WaitAsync(); // 等待信号量，限制并发数量
+        await friendsSemaphore.WaitAsync(); // 等待信号量，限制并发数量
         downloadTasks.Add(Task.Run(async () =>
         {
           try
           {
-            missList[index].Status = SynchronizationStatus.下载中;
-            await App.Current.webHelper.DownloadMod($"{Settings.Default.Address}/Download", missList[index].Sha1Hash,
+            leftModList[index].Status = SynchronizationStatus.下载中;
+            await App.Current.webHelper.DownloadModFromFriends($"{Settings.Default.Address}/Download",
+              leftModList[index].Sha1Hash,
               App.Current.ModPath);
-            //CopyPropertiesTo(await LoadMod(missList[index].FullFileName), missList[index]);
-            missList[index].Status = SynchronizationStatus.已同步;
+            leftModList[index].Status = SynchronizationStatus.已同步;
           }
           catch (Exception ex)
           {
-            missList[index].Status = SynchronizationStatus.下载失败;
+            leftModList[index].Status = SynchronizationStatus.下载失败;
             Debug.WriteLine($"下载模组失败：{ex.Message}");
           }
           finally
           {
-            semaphore.Release(); // 释放信号量
+            friendsSemaphore.Release(); // 释放信号量
           }
         }));
       }
@@ -486,7 +503,25 @@ public partial class ModPageViewModel : ObservableObject
 
 
     await Task.WhenAll(downloadTasks);
-    //ModInfos.OrderBy(mod => mod.DisplayName);
+    //加载缓存信息或网络信息
+    var cacheHelper = new CacheHelper();
+    var noCacheModList = new List<ModInfo>();
+    var hasCacheModList = new List<ModInfo>();
+    for (int i = 0; i < DownLoadedList.Count; i++)
+    {
+      if (cacheHelper.HasModCache(DownLoadedList[i].Sha1Hash))
+        hasCacheModList.Add(DownLoadedList[i]);
+      else
+        noCacheModList.Add(DownLoadedList[i]);
+    }
+
+    if (noCacheModList.Count > 0)
+      await GetModInfoFromModrinth(noCacheModList, new SemaphoreSlim(10));
+    foreach (var modInfo in hasCacheModList)
+    {
+      await LoadModCache(modInfo);
+    }
+    ModInfos.OrderBy(mod => mod.DisplayName);
     Tip = "完成";
   }
 

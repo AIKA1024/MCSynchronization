@@ -4,8 +4,10 @@ using System.Text.Json.Nodes;
 using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using fNbt;
+using 马自达MC同步器.Resources.Commands;
 using 马自达MC同步器.Resources.Helper;
 using 马自达MC同步器.Resources.Models;
+using 马自达MC同步器.Resources.MyEventArgs;
 
 namespace 马自达MC同步器.Resources.ViewModels;
 
@@ -18,9 +20,21 @@ public partial class ServerPageViewModel
 
     foreach (var item in ((NbtList)NBTHelper.GetNBTFile().RootTag["servers"]).Cast<NbtCompound>())
       ServerInfos.Add(new ServerInfo(item));
+    SelectDirectory.Instance.PathChanged += GamePathChanged;
+  }
+  private void GamePathChanged(object sender, GamePathChangedEventArgs args)
+  {
+    Update();
   }
 
   public ObservableCollection<ServerInfo> ServerInfos { get; set; } = [];
+
+  public void Update()
+  {
+    ServerInfos.Clear();
+    foreach (var item in ((NbtList)NBTHelper.GetNBTFile().RootTag["servers"]).Cast<NbtCompound>())
+      ServerInfos.Add(new ServerInfo(item));
+  }
 
   private void AddServer(string name, string ip, byte hidden)
   {

@@ -23,7 +23,7 @@ namespace 马自达MC同步器.Resources.Commands
 
     public OpenFolderDialog FolderBrowserDialog = new();
 
-    public event Action<object ,GamePathChangedEventArgs> PathChanged;
+    public event Action<object,GamePathChangedEventArgs> PathChanged;
 
     public bool CanExecute(object? parameter)
     {

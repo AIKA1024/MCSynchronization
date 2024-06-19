@@ -15,7 +15,7 @@ namespace 马自达MC同步器.Resources.Converters
   {
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
-      if (values[0] != null && values[0] != DependencyProperty.UnsetValue)
+      if (!string.IsNullOrEmpty(values[0]?.ToString()) && values[0] != DependencyProperty.UnsetValue)
       {
         return values[0];
       }

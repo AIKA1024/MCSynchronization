@@ -10,7 +10,7 @@ public static class NBTHelper
 
   public static NbtFile? GetNBTFile()
   {
-    if (nbtFile != null)
+    if (nbtFile != null && nbtFile.FileName == Path.Combine(Settings.Default.GamePath, "servers.dat"))
       return nbtFile;
 
     if (string.IsNullOrEmpty(Settings.Default.GamePath))
