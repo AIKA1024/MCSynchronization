@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace VPKInstaller.Properties
+namespace CustomInstaller.Properties
 {
 
 
@@ -44,7 +44,7 @@ namespace VPKInstaller.Properties
       {
         if ((resourceMan == null))
         {
-          global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("VPKInstaller.Properties.Resources", typeof(Resources).Assembly);
+          global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CustomInstaller.Properties.Resources", typeof(Resources).Assembly);
           resourceMan = temp;
         }
         return resourceMan;

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace VPKInstaller.Properties
+namespace CustomInstaller.Properties
 {
 
 
