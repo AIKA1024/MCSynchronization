@@ -169,6 +169,7 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -192,6 +193,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Resources\Converters\NullToVisiblityConverter.cs" />
+    <Compile Include="Resources\Models\InstallInfo.cs" />
     <Compile Include="Resources\Views\Controls\Expander.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
