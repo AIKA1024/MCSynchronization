@@ -39,7 +39,14 @@
           </StackPanel.Resources>
 
           <TextBlock Text="安装路径"/>
-          <TextBox VerticalContentAlignment="Center" Height="30"/>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Margin="0 0 8 0" VerticalContentAlignment="Center" Height="32"/>
+            <Button Grid.Column="1" Content="浏览" Height="32" Width="60" DockPanel.Dock="Right"/>
+          </Grid>
 
           <CheckBox IsChecked="True" Content="创建桌面快捷方式" Margin="0 16 0 0"/>
           <CheckBox IsChecked="True" Content="创建菜单快捷方式" Margin="0 16 0 0"/>
