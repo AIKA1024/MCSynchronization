@@ -27,7 +27,7 @@ public partial class StartWindow : Window
   {
     InitializeComponent();
   }
-
+  public MainWindow? MainWindow { get; set; }
   private async Task InitialMainWindow()
   {
     var viewModel = new MainWindowViewModel()
@@ -37,13 +37,11 @@ public partial class StartWindow : Window
       ServerPage = new ServerPage()
     };
     await((ModPageViewModel)viewModel.ModPage.DataContext).LoadAllModInfo();
-    Hide();
-    var mainWindow = new MainWindow(viewModel);
-    mainWindow.Show();
+    MainWindow = new MainWindow(viewModel);
+    Close();
   }
   private async void Window_Initialized(object sender, EventArgs e)
   {
-    //Settings.Default.ModMD5LogoDir ??= new();
     Directory.CreateDirectory(App.Current.LogoPath);
 
     if (string.IsNullOrEmpty(Settings.Default.GamePath))
