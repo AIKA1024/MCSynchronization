@@ -6,7 +6,7 @@
         xmlns:control ="clr-namespace:CustomInstaller.Resources.Views.Controls"
         xmlns:local="clr-namespace:CustomInstaller"
         xmlns:page="clr-namespace:CustomInstaller.Resources.Views.Pages"
-        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize"  WindowStartupLocation="CenterScreen"
         mc:Ignorable="d" Initialized="Window_Initialized"
         Title="安装MAZDA MC Tool" Height="480" Width="700">
   <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
