@@ -1,4 +1,5 @@
 ﻿using Velopack;
+using Velopack.Locators;
 
 namespace 马自达MC同步器;
 

@@ -130,8 +130,8 @@
             <Button Content="软件更新" Margin="57 0 0 0" Command="{Binding UpdateCommand}" />
           </StackPanel>
           <TextBlock>
-            <Run Text="开发者:                         " />
-            <Hyperlink>https://github.com/AIKA1024</Hyperlink>
+            <Run Text="项目地址:                     " />
+            <Hyperlink NavigateUri="https://github.com/AIKA1024/MCSynchronization">https://github.com/AIKA1024/MCSynchronization</Hyperlink>
           </TextBlock>
         </StackPanel>
       </control:Expander>

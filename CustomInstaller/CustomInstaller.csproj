@@ -194,7 +194,14 @@
     </ApplicationDefinition>
     <Compile Include="Resources\Converters\NullToVisiblityConverter.cs" />
     <Compile Include="Resources\Models\InstallInfo.cs" />
+    <Compile Include="Resources\Models\InstallSetting.cs" />
     <Compile Include="Resources\Views\Controls\Expander.cs" />
+    <Compile Include="Resources\Views\Pages\InstallPage.xaml.cs">
+      <DependentUpon>InstallPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Views\Pages\UnInstallPage.xaml.cs">
+      <DependentUpon>UnInstallPage.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -222,6 +229,14 @@
     <Page Include="Resources\Styles\ToggleButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Views\Pages\InstallPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Views\Pages\UnInstallPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

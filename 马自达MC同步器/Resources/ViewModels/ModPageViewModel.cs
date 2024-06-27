@@ -378,8 +378,7 @@ public partial class ModPageViewModel : ObservableObject
       // 读取文件内容
       using (var reader = new StreamReader(manifestEntry.Open()))
       {
-        string line;
-        while ((line = reader.ReadLine()) != null)
+        while (reader.ReadLine() is { } line)
         {
           string[] parts = line.Split(new[] { ':' }, 2, StringSplitOptions.RemoveEmptyEntries);
           if (parts.Length == 2)
@@ -533,7 +532,7 @@ public partial class ModPageViewModel : ObservableObject
 
     foreach (var property in properties)
     {
-      if (property.CanRead && property.CanWrite)
+      if (property is { CanRead: true, CanWrite: true })
       {
         var value = property.GetValue(source);
         property.SetValue(dest, value);

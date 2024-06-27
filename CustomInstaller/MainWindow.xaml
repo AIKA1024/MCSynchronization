@@ -4,77 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:control ="clr-namespace:CustomInstaller.Resources.Views.Controls"
-        xmlns:local="clr-namespace:CustomInstaller" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
-        mc:Ignorable="d"
+        xmlns:local="clr-namespace:CustomInstaller"
+        xmlns:page="clr-namespace:CustomInstaller.Resources.Views.Pages"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d" Initialized="Window_Initialized"
         Title="安装MAZDA MC Tool" Height="480" Width="700">
-  <Canvas>
-    <Canvas.Resources>
-      <Style TargetType="control:Expander" BasedOn="{StaticResource {x:Type control:Expander}}">
-        <Setter Property="Padding" Value="16 10"/>
-      </Style>
-    </Canvas.Resources>
-    <TextBlock FontSize="24" Canvas.Left="36" Canvas.Top="38">
-      <Run FontWeight="Black">安装</Run>
-      <Run >MAZDA MC Tool</Run>
-      <Run FontWeight="Black">?</Run>
-    </TextBlock>
-    <Image Source="Resources/Ico/mzd.jfif"
-           RenderOptions.BitmapScalingMode="HighQuality"
-           Canvas.Left="570" Canvas.Top="38" Width="80"/>
-    <StackPanel Canvas.Left="36" Canvas.Top="100">
-      <control:Expander IsTabStop="False">
-        <control:Expander.HeaderControl>
-          <StackPanel Width="400" Orientation="Horizontal">
-            <TextBlock>
-        <Run FontFamily="Segoe MDL2 Assets"
-             FontSize="16"
-             Text="&#xe90f;"/>
-        <Run Text="  安装设置"/>
-            </TextBlock>
-          </StackPanel>
-        </control:Expander.HeaderControl>
-        <StackPanel Margin="16">
-          <StackPanel.Resources>
-            <Style TargetType="TextBlock">
-              <Setter Property="Margin" Value="0 0 0 8"/>
-            </Style>
-          </StackPanel.Resources>
-
-          <TextBlock Text="安装路径"/>
-          <Grid>
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="*"/>
-              <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0"
-                     Margin="0 0 8 0"
-                     Height="32"
-                     VerticalContentAlignment="Center"
-                     Text="{Binding IntallPath}"/>
-            <Button Grid.Column="1"
-                    Content="浏览" 
-                    Height="32" Width="60"
-                    Click="SelectFolderBT_Click"/>
-          </Grid>
-
-          <CheckBox IsChecked="{Binding CreateDeskTopShortcuts}" Content="创建桌面快捷方式" Margin="0 16 0 0"/>
-          <CheckBox IsChecked="{Binding CreateStartMenuShortcuts}" Content="创建开始菜单快捷方式" Margin="0 16 0 0"/>
-          <CheckBox IsChecked="{Binding AutoLaunch}" Content="安装后立即运行" Margin="0 16 0 0"/>
-        </StackPanel>
-      </control:Expander>
-      <TextBlock Margin="0 16 0 0">
-        <Run Text="功能:&#x0a;"/>
-        <Run Foreground="#adadad" Text="· 文件系统&#x0a;"/>
-        <Run Foreground="#adadad" Text="· 访问 Internet 连接&#x0a;"/>
-      </TextBlock>
-    </StackPanel>
-
-    <Button x:Name="IntallBT"
-            Content="安装"
-            Width="120"
-            Foreground="White"
-            Background="#005fba"
-            Canvas.Left="540" Canvas.Top="381"
-            Click="IntallBT_Click"/>
-  </Canvas>
+  <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
 </Window>
