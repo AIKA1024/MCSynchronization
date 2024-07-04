@@ -17,6 +17,7 @@ namespace 马自达MC同步器.Resources.Commands
 
     public bool DialogButtonResult = false;
 
+    //todo: 应该改用MVVM工具包的信使传递消息，而不是使用单例
     public static SelectDirectory Instance { get; } = new SelectDirectory();
 
     public event EventHandler? CanExecuteChanged;

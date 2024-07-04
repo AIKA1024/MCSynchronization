@@ -11,7 +11,7 @@
         Initialized="Window_Initialized">
   <Border CornerRadius="5" Margin="12" Background="White">
     <Border.Effect>
-      <DropShadowEffect Color="Black" ShadowDepth="7" BlurRadius="10" Opacity="0.3" />
+      <DropShadowEffect Color="Black" ShadowDepth="0" BlurRadius="10" Opacity="0.3" />
     </Border.Effect>
 
     <Grid>
