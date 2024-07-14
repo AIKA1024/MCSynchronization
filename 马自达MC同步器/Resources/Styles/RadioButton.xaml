@@ -19,12 +19,16 @@
                   BorderThickness="{TemplateBinding BorderThickness}"
                   CornerRadius="{TemplateBinding Border.CornerRadius}">
             <StackPanel>
-              <ContentPresenter Name="ContentPresenter"
+              <ContentPresenter Name="Icon"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 TextElement.Foreground="{TemplateBinding Foreground}"
                                 TextElement.FontSize="{TemplateBinding FontSize}"
-                                TextElement.FontFamily="{TemplateBinding FontFamily}" />
+                                TextElement.FontFamily="{TemplateBinding FontFamily}">
+                <ContentPresenter.RenderTransform>
+                  <RotateTransform CenterX="21" CenterY="21"/>
+                </ContentPresenter.RenderTransform>
+              </ContentPresenter>
               <TextBlock Text="{TemplateBinding Tag}" FontSize="12" TextAlignment="Center"
                          FontFamily="微软雅黑" />
             </StackPanel>

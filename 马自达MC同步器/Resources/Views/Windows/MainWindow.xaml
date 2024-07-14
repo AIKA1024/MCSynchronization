@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Title="马自达MC同步器" Height="450" Width="800"
         Closing="Window_Closing">
@@ -18,8 +19,30 @@
                      Focusable="False" Checked="ModPageCheck" />
         <RadioButton Content="&#xe774;" Tag="服务器" Height="42" DockPanel.Dock="Top" Focusable="False"
                      Checked="ServerPageCheck" />
-        <RadioButton Content="&#xe713;" Tag="设置" Height="42" DockPanel.Dock="Bottom" Focusable="False"
-                     Checked="SettingPageCheck" />
+        <RadioButton x:Name="SettingBtn" Tag="设置" Height="42" DockPanel.Dock="Bottom" Focusable="False"
+                     Checked="SettingPageCheck">
+          <TextBlock x:Name="Icon" Text="&#xe713;" RenderTransformOrigin="0.5,0.5">
+            <TextBlock.RenderTransform>
+              <RotateTransform/>
+            </TextBlock.RenderTransform>
+          </TextBlock>
+          <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Checked">
+              <i:ControlStoryboardAction>
+                <i:ControlStoryboardAction.Storyboard>
+                  <Storyboard Storyboard.TargetName="Icon"
+                              Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)">
+                    <DoubleAnimation From="0" To="180" Duration="00:00:0.5">
+                      <DoubleAnimation.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                      </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                  </Storyboard>
+                </i:ControlStoryboardAction.Storyboard>
+              </i:ControlStoryboardAction>
+            </i:EventTrigger>
+          </i:Interaction.Triggers>
+        </RadioButton>
       </DockPanel>
     </Border>
 

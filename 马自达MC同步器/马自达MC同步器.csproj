@@ -29,9 +29,10 @@
 
     <ItemGroup>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122" />
         <PackageReference Include="MiNET.fnbt" Version="1.0.22" />
         <PackageReference Include="Tomlyn" Version="0.17.0" />
-        <PackageReference Include="Velopack" Version="0.0.359" />
+        <PackageReference Include="Velopack" Version="0.0.556" />
     </ItemGroup>
 
     <ItemGroup>
