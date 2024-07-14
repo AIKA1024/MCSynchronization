@@ -6,12 +6,15 @@
       <Setter.Value>
         <ControlTemplate TargetType="ToggleButton">
           <Border CornerRadius="5">
-            <TextBlock x:Name="IconTb"
+            <TextBlock x:Name="IconTb" FontSize="10"
                        Text="{x:Static enum:SegoeMDL2.朝下箭头}"
                        FontFamily="Segoe MDL2 Assets"
                        RenderTransformOrigin="0.5,0.5">
               <TextBlock.RenderTransform>
-                <RotateTransform/>
+                <TransformGroup>
+                  <RotateTransform x:Name="rotateTransform" Angle="0"/>
+                  <TranslateTransform x:Name="tranlateTransform" X="0" Y="0"/>
+                </TransformGroup>
               </TextBlock.RenderTransform>
             </TextBlock>
           </Border>
@@ -19,24 +22,36 @@
           <ControlTemplate.Triggers>
             <EventTrigger RoutedEvent="ToggleButton.Checked">
               <BeginStoryboard>
-                <Storyboard Storyboard.TargetName="IconTb" Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)">
-                  <DoubleAnimation Duration="00:00:0.3" To="180">
+                <Storyboard Storyboard.TargetName="rotateTransform" Storyboard.TargetProperty="Angle">
+                  <DoubleAnimation Duration="0:0:0.3" To="180">
                     <DoubleAnimation.EasingFunction>
                       <CubicEase EasingMode="EaseOut"/>
                     </DoubleAnimation.EasingFunction>
                   </DoubleAnimation>
+
+                  <DoubleAnimationUsingKeyFrames Storyboard.TargetName="tranlateTransform" Storyboard.TargetProperty="Y"
+                                                 Duration="0:0:0.3">
+                    <LinearDoubleKeyFrame KeyTime="0:0:0" Value="3"/>
+                    <LinearDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                  </DoubleAnimationUsingKeyFrames>
                 </Storyboard>
               </BeginStoryboard>
             </EventTrigger>
 
             <EventTrigger RoutedEvent="ToggleButton.Unchecked">
               <BeginStoryboard>
-                <Storyboard Storyboard.TargetName="IconTb" Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)">
-                  <DoubleAnimation Duration="00:00:0.3" To="0">
+                <Storyboard Storyboard.TargetName="rotateTransform" Storyboard.TargetProperty="Angle">
+                  <DoubleAnimation Duration="0:0:0.3" To="0">
                     <DoubleAnimation.EasingFunction>
                       <CubicEase EasingMode="EaseOut"/>
                     </DoubleAnimation.EasingFunction>
                   </DoubleAnimation>
+
+                  <DoubleAnimationUsingKeyFrames Storyboard.TargetName="tranlateTransform" Storyboard.TargetProperty="Y"
+                                                 Duration="0:0:0.4">
+                    <LinearDoubleKeyFrame KeyTime="0:0:0" Value="3"/>
+                    <LinearDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                  </DoubleAnimationUsingKeyFrames>
                 </Storyboard>
               </BeginStoryboard>
             </EventTrigger>

@@ -278,7 +278,7 @@ public partial class ModPageViewModel : ObservableObject
             {
               modDisplayName = GetValue<string>(mod[0], "displayName");
               modVersion = GetValue<string>(mod[0], "version");
-              modDescription =GetValue<string>(mod[0], "description")?.TrimStart(' ', '\n');
+              modDescription = GetValue<string>(mod[0], "description")?.TrimStart(' ', '\n');
               TaskInfoHelper.Instance.TaskInfo = $"读取：{modFileName}";
             }
           }
