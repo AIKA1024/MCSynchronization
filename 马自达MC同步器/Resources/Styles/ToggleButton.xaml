@@ -71,9 +71,8 @@
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="ToggleButton">
-          <Viewbox Height="{TemplateBinding Height}"
-                   Width="{TemplateBinding Width}">
-            <Grid>
+          <Grid Height="{TemplateBinding Height}"
+                Width="{TemplateBinding Width}">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
@@ -81,8 +80,8 @@
 
               <Border x:Name="border"
                       Grid.Column="0"
-                      MinHeight="15"
-                      MinWidth="36"
+                      Height="18"
+                      Width="38"
                       Background="{TemplateBinding Background}"
                       CornerRadius="8"
                       BorderThickness="{TemplateBinding BorderThickness}"
@@ -102,7 +101,7 @@
                   </Ellipse.RenderTransform>
                 </Ellipse>
               </Border>
-              <Border x:Name="buttonHoverBorder" Grid.Column="0" BorderThickness="1.8"
+              <Border x:Name="buttonHoverBorder" Grid.Column="0" BorderThickness="1.6"
                       Width="{Binding Width,ElementName=border}"
                       Height="{Binding Height,ElementName=border}"
                       BorderBrush="Transparent"
@@ -112,7 +111,6 @@
                          Content="{TemplateBinding Content}"
                          VerticalAlignment="Center"/>
             </Grid>
-          </Viewbox>
 
           <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -154,16 +152,16 @@
                     </DoubleAnimation>
                     <ColorAnimation Duration="0:0:0.1" To="White"
                                     Storyboard.TargetName="ellipse"
-                                    Storyboard.TargetProperty="Fill.(SolidColorBrush.Color)"/>
+                                    Storyboard.TargetProperty="Fill.Color"/>
                     <ColorAnimation Duration="0:0:0.1" To="#005a9e"
                                     Storyboard.TargetName="border"
-                                    Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"/>
+                                    Storyboard.TargetProperty="Background.Color"/>
                     <ColorAnimation Duration="0:0:0.1" To="#005a9e"
                                     Storyboard.TargetName="border"
-                                    Storyboard.TargetProperty="BorderBrush.(SolidColorBrush.Color)"/>
+                                    Storyboard.TargetProperty="BorderBrush.Color"/>
                     <ColorAnimation Duration="0:0:0.1" To="#005a9e"
                                     Storyboard.TargetName="buttonHoverBorder"
-                                    Storyboard.TargetProperty="BorderBrush.(SolidColorBrush.Color)"/>
+                                    Storyboard.TargetProperty="BorderBrush.Color"/>
                   </Storyboard>
                 </BeginStoryboard>
               </Trigger.EnterActions>

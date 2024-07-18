@@ -26,4 +26,9 @@ public partial class SettingPage : Page
     Process.Start(new ProcessStartInfo("explorer.exe", e.Uri.AbsoluteUri));
     e.Handled = true;
   }
+
+  private void Expander_Click(object sender, RoutedEventArgs e)
+  {
+
+  }
 }
