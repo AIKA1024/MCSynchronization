@@ -1,20 +1,13 @@
 ﻿using CustomInstaller.Resources.Models;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
+using MessageBox = System.Windows.MessageBox;
 
 namespace CustomInstaller.Resources.Views.Pages
 {
@@ -64,14 +57,17 @@ namespace CustomInstaller.Resources.Views.Pages
     {
       if (!IsPathValid(installInfo.IntallPath))
       {
-        System.Windows.MessageBox.Show("路径不合法", "提示");
+        MessageBox.Show("路径不合法", "提示");
         return;
       }
       string autoLaunchStr = installInfo.AutoLaunch ? "" : " --silent";
+      string installProgramPath = CopyCoreInstanllProgram("MAZDAMCTools-win-Setup.exe");
+      if (string.IsNullOrEmpty(installProgramPath))
+        return;
 
       ProcessStartInfo processStartInfo = new ProcessStartInfo()
       {
-        FileName = "MAZDAMCTools-win-Setup.exe",
+        FileName = installProgramPath,
         WorkingDirectory = Directory.GetCurrentDirectory(),
         Arguments = $"--installto \"{installInfo.IntallPath}\"{autoLaunchStr}"
       };
@@ -81,11 +77,45 @@ namespace CustomInstaller.Resources.Views.Pages
         process.WaitForExit();
       }
       else
-        System.Windows.MessageBox.Show("无法启动安装进程", "Failed to start the process");
+        MessageBox.Show("无法启动安装进程", "Failed to start the process");
 
       if (!installInfo.AutoLaunch)
-        System.Windows.MessageBox.Show("安装完成");
+        MessageBox.Show("安装完成");
+      File.Delete(installProgramPath);
       App.Current.Shutdown();
+    }
+
+    private string CopyCoreInstanllProgram(string embeddedExeName)
+    {
+      // 获取当前程序集
+      var assembly = Assembly.GetExecutingAssembly();
+
+      // 构建嵌入资源的完整名称
+      var resourceName = $"{assembly.GetName().Name}.Resources.CoreProgram.{embeddedExeName}";
+
+      using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+      {
+        if (stream == null)
+        {
+          MessageBox.Show("该安装包已经损坏！", "警告");
+          return "";
+        }
+
+        // 创建临时文件路径
+        string tempFilePath = Path.Combine(Path.GetTempPath(), embeddedExeName);
+
+        // 将嵌入的 EXE 写入临时文件
+        using (FileStream fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write))
+        {
+          stream.CopyTo(fileStream);
+        }
+
+        // 设置临时文件为可执行
+        File.SetAttributes(tempFilePath, FileAttributes.Normal);
+
+        // 运行 EXE 文件目录
+        return tempFilePath;
+      }
     }
   }
 }

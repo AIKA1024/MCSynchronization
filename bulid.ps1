@@ -1,0 +1,16 @@
+Set-Location -Path $PSScriptRoot
+$assemblyPath = "$PSScriptRoot\publish\马自达MC同步器.dll"
+$fileVersionString = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($assemblyPath).FileVersion
+
+# 分割版本号字符串
+$versionParts = $fileVersionString -split '\.'
+
+# 取前三个部分并组合成新的版本号字符串
+$shortVersionString = -join ($versionParts[0..2] -join '.')
+
+dotnet publish ./马自达MC同步器/马自达MC同步器.csproj -c Release -r win-x86 -o ./publish
+vpk pack --framework net8.0-x86-desktop -u MAZDAMCTools -v $shortVersionString  -p ./publish -e "马自达MC同步器.exe"
+Copy-Item -Path ./Releases/MAZDAMCTools-win-Setup.exe -Destination ./CustomInstaller/Resources/CoreProgram -Force
+msbuild ./CustomInstaller/CustomInstaller.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:DeployOnBuild=true /p:OutputPath=bin\Release
+Copy-Item -Path ./CustomInstaller/bin/Release/CustomInstaller.exe -Destination ./Releases -Force
+Write-Output Done
