@@ -64,7 +64,7 @@
         </StackPanel>
       </control:Expander>
 
-      <control:Expander MDL2IconStr="{x:Static enum:SegoeMDL2.网络}" d:IsExpress="True">
+      <control:Expander MDL2IconStr="{x:Static enum:SegoeMDL2.网络}" d:IsExpanded="True">
         <control:Expander.HeaderControl>
           <TextBlock Text="下载源" VerticalAlignment="Center" />
         </control:Expander.HeaderControl>

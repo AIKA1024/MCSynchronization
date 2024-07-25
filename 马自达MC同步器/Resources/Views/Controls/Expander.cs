@@ -22,7 +22,7 @@ public partial class Expander : ButtonBase
     DependencyProperty.Register(nameof(CornerRadius), typeof(CornerRadius), typeof(Expander),
       new PropertyMetadata(new CornerRadius()));
 
-  [ObservableProperty] private bool isExpress;
+  [ObservableProperty] private bool isExpanded;
 
   public FrameworkElement HeaderControl
   {
@@ -48,7 +48,7 @@ public partial class Expander : ButtonBase
   //  Control control = (Control)e.OriginalSource;
   //  if (Content != null && control.Name == "panel")
   //  {
-  //    IsExpress = !IsExpress;
+  //    IsExpanded = !IsExpanded;
   //    e.Handled = true;
   //  }
   //}
@@ -61,7 +61,7 @@ public partial class Expander : ButtonBase
     panelButton.Click += (sender, args) =>
     {
       if (Content != null && ((Button)args.OriginalSource).Name == "panel")
-        IsExpress = !IsExpress;
+        IsExpanded = !IsExpanded;
     };
   }
 }

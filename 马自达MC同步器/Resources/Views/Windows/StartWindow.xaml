@@ -9,10 +9,10 @@
         mc:Ignorable="d" WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         Title="StartWindow" Height="400" Width="600" WindowStartupLocation="CenterScreen"
         Initialized="Window_Initialized">
-  <Border CornerRadius="5" Margin="12" Background="White">
-    <Border.Effect>
-      <DropShadowEffect Color="Black" ShadowDepth="0" BlurRadius="10" Opacity="0.3" />
-    </Border.Effect>
+  <Window.Effect>
+    <DropShadowEffect Color="Black" BlurRadius="18" ShadowDepth="0" Opacity="0.3" />
+  </Window.Effect>
+  <Border CornerRadius="5" Margin="12" Background="White" BorderBrush="#ccc" BorderThickness="1">
 
     <Grid>
       <Grid x:Name="Mask" d:Visibility="Visible" Visibility="Collapsed">
@@ -28,15 +28,14 @@
           </Canvas>
         </Border>
       </Grid>
-      
-      
+
       <Canvas>
         <TextBlock FontSize="24" FontWeight="Black" Text="MAZDA MC同步器"
            Canvas.Left="66" Canvas.Top="60" />
         <TextBlock Text="{Binding TaskInfo,Source={x:Static helper:TaskInfoHelper.Instance}}" Canvas.Left="66"
            Canvas.Top="345" />
       </Canvas>
-      
+
     </Grid>
   </Border>
 </Window>

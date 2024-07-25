@@ -63,7 +63,7 @@
                     <ToggleButton x:Name="ToggleBT" Grid.Column="2" IsHitTestVisible="False"
                                   VerticalAlignment="Center"
                                   Visibility="{Binding Content, Converter={converter:NullToVisiblityConverter},RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                  IsChecked="{Binding IsExpress,RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                  IsChecked="{Binding IsExpanded,RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                   Style="{StaticResource ExpressToggleButton}" />
                   </Grid>
                 </Button>
@@ -72,7 +72,7 @@
 
                 <!--#region 内容-->
                 <StackPanel Grid.Row="1"
-                            Visibility="{Binding IsExpress,RelativeSource={RelativeSource Mode=TemplatedParent},Converter={StaticResource bvConverter}}">
+                            Visibility="{Binding IsExpanded,RelativeSource={RelativeSource Mode=TemplatedParent},Converter={StaticResource bvConverter}}">
                   <Rectangle Fill="#eaeaea" Height="1" />
                   <ContentPresenter />
                 </StackPanel>
