@@ -1,4 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using 马自达MC同步器.Resources.ViewModels;
 
 namespace 马自达MC同步器.Resources.Pages;
@@ -14,24 +17,7 @@ public partial class ModPage : Page
   {
     modViewModel = new ModPageViewModel();
     DataContext = modViewModel;
+
     InitializeComponent();
   }
-
-  // private async void Button_Click(object sender, RoutedEventArgs e)
-  // {
-  //   if (mainPageViewModel.FolderBrowserDialog.ShowDialog() != true)
-  //     return;
-  //   if (!CheckPath(mainPageViewModel.FolderBrowserDialog.FolderName))
-  //   {
-  //     SyButton.IsEnabled = false;
-  //     MessageBox.Show("路径不正确");
-  //     return;
-  //   }
-  //
-  //   SFButton.IsEnabled = false;
-  //   SetGamePath(mainPageViewModel.FolderBrowserDialog.FolderName);
-  //   await TraverseMod();
-  //   SyButton.IsEnabled = true;
-  //   SFButton.IsEnabled = true;
-  // }
 }

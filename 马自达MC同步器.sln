@@ -10,15 +10,20 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		OfflineDebug|Any CPU = OfflineDebug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{8B792037-1782-4446-80A3-670AA9448E52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8B792037-1782-4446-80A3-670AA9448E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B792037-1782-4446-80A3-670AA9448E52}.OfflineDebug|Any CPU.ActiveCfg = OfflineDebug|Any CPU
+		{8B792037-1782-4446-80A3-670AA9448E52}.OfflineDebug|Any CPU.Build.0 = OfflineDebug|Any CPU
 		{8B792037-1782-4446-80A3-670AA9448E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B792037-1782-4446-80A3-670AA9448E52}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F80ACA7F-D198-416D-88EC-BE48F26A271B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F80ACA7F-D198-416D-88EC-BE48F26A271B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F80ACA7F-D198-416D-88EC-BE48F26A271B}.OfflineDebug|Any CPU.ActiveCfg = OfflineDebug|Any CPU
+		{F80ACA7F-D198-416D-88EC-BE48F26A271B}.OfflineDebug|Any CPU.Build.0 = OfflineDebug|Any CPU
 		{F80ACA7F-D198-416D-88EC-BE48F26A271B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F80ACA7F-D198-416D-88EC-BE48F26A271B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

@@ -63,6 +63,7 @@ public partial class ModPageViewModel : ObservableObject
     if (file.Length < 1024)
       return;
     var modInfo = await LoadModZip(e.FullPath);
+
     if (modInfo == null)
       return;
     int index = 0;
@@ -75,7 +76,13 @@ public partial class ModPageViewModel : ObservableObject
       }
     }
 
-    App.Current.Dispatcher.Invoke(() => { ModInfos.Insert(index, modInfo); });
+    App.Current.Dispatcher.Invoke(() =>
+    {
+      string logoPath = $"{Path.Combine(App.Current.LogoPath, modInfo.Sha1Hash)}.png";
+      if (File.Exists(logoPath))
+        modInfo.Logo = new BitmapImage(new Uri(logoPath));
+      ModInfos.Insert(index, modInfo);
+    });
   }
 
   private async void OnChanged(object sender, FileSystemEventArgs e)
@@ -128,7 +135,7 @@ public partial class ModPageViewModel : ObservableObject
     {
       var modInfo = (ModInfo)selectedItems[i];
       //ModInfos.Remove(modInfo); //统一用fileSystemWatcher的删除事件
-      Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(modInfo.FullFileName, UIOption.OnlyErrorDialogs,
+      FileSystem.DeleteFile(modInfo.FullFileName, UIOption.OnlyErrorDialogs,
         RecycleOption.SendToRecycleBin);
     }
   }
@@ -149,11 +156,13 @@ public partial class ModPageViewModel : ObservableObject
       }
     }
 
+#if !OFFLINEDEBUG
     TaskInfoHelper.Instance.TaskInfo = "联网查询mod信息..";
     await GetModInfoFromModrinth(ModInfos.Where(
        m => !m.LoadedCacheOrRemote).ToList(),
        new SemaphoreSlim(10));
     TaskInfoHelper.Instance.TaskInfo = "遍历完成";
+#endif
   }
 
   private async Task GetModInfoFromModrinth(List<ModInfo> modList, SemaphoreSlim semaphore)
@@ -244,7 +253,7 @@ public partial class ModPageViewModel : ObservableObject
     await Task.WhenAll(loadTasks);
   }
 
-  private async Task<ModInfo?> LoadModZip(string modFullFileName)
+  private async Task<ModInfo> LoadModZip(string modFullFileName)
   {
     try
     {
