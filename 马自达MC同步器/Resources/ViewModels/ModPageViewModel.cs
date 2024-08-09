@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.VisualBasic.FileIO;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -14,6 +15,7 @@ using Tomlyn.Model;
 using 马自达MC同步器.Resources.Commands;
 using 马自达MC同步器.Resources.Enums;
 using 马自达MC同步器.Resources.Helper;
+using 马自达MC同步器.Resources.Messages;
 using 马自达MC同步器.Resources.Models;
 using 马自达MC同步器.Resources.MyEventArgs;
 
@@ -21,7 +23,7 @@ namespace 马自达MC同步器.Resources.ViewModels;
 
 public partial class ModPageViewModel : ObservableObject
 {
-  private static FileSystemWatcher fileSystemWatcher;
+  private FileSystemWatcher fileSystemWatcher;
   [ObservableProperty] private string tip = "";
 
   public ObservableCollection<ModInfo> ModInfos { get; set; } = [];
@@ -82,6 +84,7 @@ public partial class ModPageViewModel : ObservableObject
       if (File.Exists(logoPath))
         modInfo.Logo = new BitmapImage(new Uri(logoPath));
       ModInfos.Insert(index, modInfo);
+      WeakReferenceMessenger.Default.Send(new ModInfoMessage(modInfo));
     });
   }
 
@@ -449,6 +452,7 @@ public partial class ModPageViewModel : ObservableObject
         };
         missList.Add(modInfo);
         ModInfos.Insert(0, modInfo);
+        WeakReferenceMessenger.Default.Send(new ModInfoMessage(modInfo));
       }
     }
 

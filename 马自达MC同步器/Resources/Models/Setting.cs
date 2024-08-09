@@ -2,5 +2,5 @@
 
 public class Setting
 {
-  public string Address { get; set; } = "https://117.68.45.42:28996";
+  public string Address { get; set; } = "https://frp-bar.top:28996";
 }

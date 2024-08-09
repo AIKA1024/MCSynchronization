@@ -25,7 +25,7 @@ namespace WebSDK
       };
       httpClient = new HttpClient(handler)
       {
-        Timeout = TimeSpan.FromSeconds(200)
+        //Timeout = TimeSpan.FromSeconds(200)
       };
     }
 

@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CommunityToolkit.Mvvm.Messaging;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using 马自达MC同步器.Resources.AttachedProperties;
+using 马自达MC同步器.Resources.Messages;
 using 马自达MC同步器.Resources.Models;
 using 马自达MC同步器.Resources.Views.Controls;
 
@@ -21,23 +13,29 @@ namespace 马自达MC同步器.Resources.Views.Widgets;
 /// <summary>
 /// ModListBox.xaml 的交互逻辑
 /// </summary>
-public partial class ModListBox : UserControl
+public partial class ModListBox : ListBox
 {
   public ModListBox()
   {
     InitializeComponent();
+    WeakReferenceMessenger.Default.Register<ModInfoMessage>(this, Receive);
   }
 
-
-  public IEnumerable<ModInfo> ItemsSource
+  private async void Receive(object recipient, ModInfoMessage message)
   {
-    get => (IEnumerable<ModInfo>)GetValue(ItemsSourceProperty);
-    set => SetValue(ItemsSourceProperty, value);
+    ListBoxItem item;
+    while (true)
+    {
+      item = (ListBoxItem)ItemContainerGenerator.ContainerFromItem(message.modInfo);
+      if (item == null)
+        await Task.Delay(5);
+      else
+        break;
+    }
+    App.Current.Dispatcher.Invoke(() =>
+      item.RaiseEvent(new RoutedEventArgs(ItemHelper.CreatedEvent, item))
+    );
   }
-
-  public static readonly DependencyProperty ItemsSourceProperty =
-    DependencyProperty.Register("ItemsSource", typeof(IEnumerable<ModInfo>), typeof(ModListBox),
-      new PropertyMetadata(null));
 
   private void ModList_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
   {
@@ -47,7 +45,7 @@ public partial class ModListBox : UserControl
     else
       dataConext = ((FrameworkContentElement)e.OriginalSource).DataContext;
 
-    if (ModList.SelectedItems.Contains(dataConext))
+    if (SelectedItems.Contains(dataConext))
       e.Handled = true;
   }
 
