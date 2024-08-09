@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web;
+﻿using System.Diagnostics;
+using System.Net.Security;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Security.Cryptography;
-using System.Text;
+using System.Web;
 
 namespace WebSDK
 {
@@ -19,14 +13,19 @@ namespace WebSDK
 
     public WebHelper()
     {
-      var handler = new HttpClientHandler
+      //var handler = new HttpClientHandler
+      //{
+      //  ServerCertificateCustomValidationCallback = (sender, cert, chain, SslPolicyErrors) => true,
+      //};
+      var handler = new SocketsHttpHandler()
       {
-        ServerCertificateCustomValidationCallback = (sender, cert, chain, SslPolicyErrors) => true
+        ConnectTimeout = TimeSpan.FromSeconds(8), // 设置连接超时为10秒
+        SslOptions = new SslClientAuthenticationOptions
+        {
+          RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+        }
       };
-      httpClient = new HttpClient(handler)
-      {
-        //Timeout = TimeSpan.FromSeconds(200)
-      };
+      httpClient = new HttpClient(handler);
     }
 
 
@@ -46,14 +45,14 @@ namespace WebSDK
         }
         return "";
       }
-      catch (HttpRequestException ex)
+      catch (Exception ex)
       {
         Debug.WriteLine(ex.Message);
         return "";
       }
     }
 
-    public async Task DownloadImageAsync(string url, string localPath,int numberOfRetries = 1)
+    public async Task DownloadImageAsync(string url, string localPath, int numberOfRetries = 1)
     {
       for (int i = 0; i < numberOfRetries; i++)
       {
@@ -75,7 +74,7 @@ namespace WebSDK
     /// </summary>
     /// <param name="sha1Hash"></param>
     /// <returns>下载成功的mod列表</returns>
-    public async Task<List<string>?> DownLoadModFromModrinth(List<string> sha1Hash,string path)
+    public async Task<List<string>?> DownLoadModFromModrinth(List<string> sha1Hash, string path)
     {
       var modInfos = await GetVersionListFromHashasync(sha1Hash);
       if (modInfos == null || !modInfos.Any())
@@ -94,7 +93,7 @@ namespace WebSDK
           var fileFullPath = Path.Combine(path, fileName);
           if (File.Exists(fileFullPath))
             Console.Error.WriteLine($"{fileFullPath}已经存在");
-          using (Stream contentStream = await response.Content.ReadAsStreamAsync(),fileStream = new FileStream(fileFullPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true))
+          using (Stream contentStream = await response.Content.ReadAsStreamAsync(), fileStream = new FileStream(fileFullPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true))
             await contentStream.CopyToAsync(fileStream);
           successModList.Add(item.Key);
           break;

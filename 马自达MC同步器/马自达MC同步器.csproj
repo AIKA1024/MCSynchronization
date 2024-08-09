@@ -21,12 +21,6 @@
       <XamlDebuggingInformation>true</XamlDebuggingInformation>
     </PropertyGroup>
 
-    <ItemGroup>
-        <Compile Remove="Properties\新文件夹\**" />
-        <EmbeddedResource Remove="Properties\新文件夹\**" />
-        <None Remove="Properties\新文件夹\**" />
-        <Page Remove="Properties\新文件夹\**" />
-    </ItemGroup>
 
     <ItemGroup>
         <None Remove="Resources\Images\Icons\NoIcon.png" />
@@ -41,7 +35,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\WebSDK\WebSDK.csproj" />
+      <ProjectReference Include="..\WebSDK\WebSDK.csproj" />
     </ItemGroup>
 
     <ItemGroup>
