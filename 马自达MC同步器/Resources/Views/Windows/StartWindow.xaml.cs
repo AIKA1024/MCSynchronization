@@ -36,7 +36,7 @@ public partial class StartWindow : Window
       SettingPage = new SettingPage(),
       ServerPage = new ServerPage()
     };
-    await((ModPageViewModel)viewModel.ModPage.DataContext).LoadAllModInfo();
+    await ((ModPageViewModel)viewModel.ModPage.DataContext).LoadAllModInfo();
     Hide();
     var mainWindow = new MainWindow(viewModel);
     mainWindow.Show();
@@ -46,7 +46,7 @@ public partial class StartWindow : Window
     //Settings.Default.ModMD5LogoDir ??= new();
     Directory.CreateDirectory(App.Current.LogoPath);
 
-    if (string.IsNullOrEmpty(Settings.Default.GamePath))
+    if (string.IsNullOrEmpty(Settings.Default.GamePath) || !Directory.Exists(Settings.Default.GamePath))
     {
       Mask.Visibility = Visibility.Visible;
       return;
@@ -68,6 +68,6 @@ public partial class StartWindow : Window
 
   private void ExitBT_Click(object sender, RoutedEventArgs e)
   {
-      App.Current.Shutdown();
+    App.Current.Shutdown();
   }
 }
