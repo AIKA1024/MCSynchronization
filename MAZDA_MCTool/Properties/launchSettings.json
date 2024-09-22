@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "MAZDA_MCTool": {
-      "commandName": "Project",
-      "nativeDebugging": false
-    }
-  }
-}

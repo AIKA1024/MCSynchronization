@@ -1,4 +1,4 @@
-namespace WebSDK.Models
+﻿namespace WebSDK.Models
 {
   public class ModInfo
   {

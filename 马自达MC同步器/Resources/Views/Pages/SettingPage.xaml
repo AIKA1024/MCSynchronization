@@ -1,0 +1,167 @@
+﻿<Page
+  x:Class="马自达MC同步器.Resources.Pages.SettingPage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:c="clr-namespace:马自达MC同步器.Resources.Views.Controls"
+  xmlns:command="clr-namespace:马自达MC同步器.Resources.Commands"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:enum="clr-namespace:马自达MC同步器.Resources.Enums"
+  xmlns:local="clr-namespace:马自达MC同步器"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  Title="SettingPage"
+  Margin="12"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  mc:Ignorable="d">
+  <ScrollViewer VerticalScrollBarVisibility="Hidden">
+    <StackPanel Hyperlink.RequestNavigate="Hyperlink_RequestNavigate">
+      <StackPanel.Resources>
+        <Style BasedOn="{StaticResource {x:Type c:Expander}}" TargetType="c:Expander">
+          <Setter Property="CornerRadius" Value="5" />
+          <Setter Property="Margin" Value="0,0,0,8" />
+          <Setter Property="Padding" Value="16,10" />
+        </Style>
+      </StackPanel.Resources>
+
+      <!--<TextBlock Text="最大下载线程数:" Margin="0 0 0 6"/>
+  <TextBox x:Name="MaxDounloadTextBox" Text="{Binding MaxDownloadCount,FallbackValue=1}" IsEnabled="False" Height="30" Margin="0 0 0 6" FontSize="16"/>-->
+
+      <!--#region 卡片-->
+
+
+
+      <!--#region 库-->
+      <TextBlock Margin="0,8" Text="库" />
+      <c:Expander
+        Padding="16,10"
+        CornerRadius="5"
+        MDL2IconStr="{x:Static enum:SegoeMDL2.文件夹}">
+        <c:Expander.HeaderControl>
+          <DockPanel LastChildFill="False">
+            <TextBlock
+              VerticalAlignment="Center"
+              DockPanel.Dock="Left"
+              Text="游戏路径" />
+            <Button
+              Margin="0,0,16,0"
+              Command="{x:Static command:SelectDirectory.Instance}"
+              Content="选择文件夹"
+              DockPanel.Dock="Right" />
+          </DockPanel>
+        </c:Expander.HeaderControl>
+
+        <TextBlock Margin="46,16,0,16" Text="{Binding GamePath, Source={x:Static local:Settings.Default}}" />
+      </c:Expander>
+
+      <!--#endregion-->
+
+
+      <!--#region 网络-->
+      <TextBlock Margin="0,8" Text="网络" />
+      <c:Expander MDL2IconStr="{x:Static enum:SegoeMDL2.服务器}">
+        <c:Expander.HeaderControl>
+          <TextBlock VerticalAlignment="Center" Text="同步服务器地址" />
+        </c:Expander.HeaderControl>
+
+        <StackPanel Margin="46,16" HorizontalAlignment="Stretch">
+          <TextBox
+            x:Name="AddressTextBox"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            FontSize="16"
+            Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" />
+          <TextBlock
+            Margin="0,8,0,0"
+            Foreground="Red"
+            Text="修改将在重启后生效"
+            Visibility="{Binding AddressWarningVisblity}" />
+        </StackPanel>
+      </c:Expander>
+
+      <c:Expander d:IsExpanded="True" MDL2IconStr="{x:Static enum:SegoeMDL2.网络}">
+        <c:Expander.HeaderControl>
+          <TextBlock VerticalAlignment="Center" Text="下载源" />
+        </c:Expander.HeaderControl>
+
+        <c:DropableListbox>
+          <StackPanel Margin="46,8" Orientation="Horizontal">
+            <ToggleButton IsChecked="True" Style="{StaticResource ToggleSwitch}" />
+            <TextBlock Canvas.Left="100" Text="modrinth" />
+          </StackPanel>
+          <StackPanel Margin="46,8" Orientation="Horizontal">
+            <ToggleButton
+              IsChecked="False"
+              IsEnabled="False"
+              Style="{StaticResource ToggleSwitch}" />
+            <TextBlock Canvas.Left="100" Text="curseforge (我没申请到api key" />
+          </StackPanel>
+        </c:DropableListbox>
+
+      </c:Expander>
+      <!--#endregion-->
+
+      <!--#region 关于-->
+      <TextBlock Margin="0,8" Text="关于" />
+      <c:Expander MDL2IconStr="{x:Static enum:SegoeMDL2.猫}">
+        <c:Expander.HeaderControl>
+          <TextBlock VerticalAlignment="Center" Text="开源项目引用" />
+        </c:Expander.HeaderControl>
+
+        <StackPanel Margin="46,0,0,16">
+          <StackPanel.Resources>
+            <Style TargetType="TextBlock">
+              <Setter Property="FontSize" Value="13" />
+              <Setter Property="Margin" Value="0,16,0,0" />
+            </Style>
+          </StackPanel.Resources>
+          <TextBlock>
+            <Hyperlink NavigateUri="https://github.com/windows-toolkit/WindowsCommunityToolkit">
+              https://github.com/windows-toolkit/WindowsCommunityToolkit
+            </Hyperlink>
+          </TextBlock>
+
+          <TextBlock>
+            <Hyperlink NavigateUri="https://github.com/velopack/velopack">https://github.com/velopack/velopack</Hyperlink>
+          </TextBlock>
+
+          <TextBlock>
+            <Hyperlink NavigateUri="https://github.com/NiclasOlofsson/fNbt">https://github.com/NiclasOlofsson/fNbt</Hyperlink>
+          </TextBlock>
+
+          <TextBlock>
+            <Hyperlink NavigateUri="https://github.com/Raymai97/OpenFolderAndSelectItem">https://github.com/Raymai97/OpenFolderAndSelectItem</Hyperlink>
+          </TextBlock>
+
+          <TextBlock>
+            <Hyperlink NavigateUri="https://github.com/xoofx/Tomlyn">https://github.com/xoofx/Tomlyn</Hyperlink>
+          </TextBlock>
+        </StackPanel>
+      </c:Expander>
+
+      <c:Expander MDL2IconStr="{x:Static enum:SegoeMDL2.感叹号}">
+        <c:Expander.HeaderControl>
+          <TextBlock VerticalAlignment="Center" Text="详细信息" />
+        </c:Expander.HeaderControl>
+
+        <!--  呃 不知道用什么布局好  -->
+        <StackPanel Margin="46,16">
+          <TextBlock Text="MAZDA MC同步器       Dedicated to group friends." />
+          <StackPanel Margin="0,10" Orientation="Horizontal">
+            <TextBlock VerticalAlignment="Center" Text="{Binding Version, StringFormat=版本：{0}}" />
+            <Button
+              Margin="57,0,0,0"
+              Command="{Binding UpdateCommand}"
+              Content="软件更新" />
+          </StackPanel>
+          <TextBlock>
+            <Run Text="项目地址:                     " />
+            <Hyperlink NavigateUri="https://github.com/AIKA1024/MCSynchronization">https://github.com/AIKA1024/MCSynchronization</Hyperlink>
+          </TextBlock>
+        </StackPanel>
+      </c:Expander>
+      <!--#endregion-->
+
+      <!--#endregion-->
+    </StackPanel>
+  </ScrollViewer>
+</Page>

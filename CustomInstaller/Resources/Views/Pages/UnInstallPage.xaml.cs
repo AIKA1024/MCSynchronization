@@ -1,4 +1,4 @@
-using CustomInstaller.Resources.Models;
+﻿using CustomInstaller.Resources.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -50,7 +50,7 @@ namespace CustomInstaller.Resources.Views.Pages
     private void LauncherBT_Click(object sender, RoutedEventArgs e)
     {
       InstallInfo installInfo = (InstallInfo)DataContext;
-      Process.Start(Path.Combine(installInfo.InstallLocation, "current", "MAZDA_MCTool.exe"));
+      Process.Start(Path.Combine(installInfo.InstallLocation, "current", "马自达MC同步器.exe"));
       App.Current.Shutdown();
     }
   }

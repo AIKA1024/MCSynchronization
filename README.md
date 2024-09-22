@@ -1,1 +1,1 @@
-# MAZDA_MCTool
+# 马自达MC同步器
