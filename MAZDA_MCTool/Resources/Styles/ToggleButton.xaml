@@ -1,0 +1,70 @@
+﻿<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:enum="clr-namespace:MAZDA_MCTool.Resources.Enums">
+  <Style x:Key="ExpressToggleButton" TargetType="ToggleButton">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="ToggleButton">
+          <Border CornerRadius="5">
+            <TextBlock
+              x:Name="IconTb"
+              FontFamily="Segoe MDL2 Assets"
+              FontSize="10"
+              RenderTransformOrigin="0.5,0.5"
+              Text="{x:Static enum:SegoeMDL2.朝下箭头}">
+              <TextBlock.RenderTransform>
+                <TransformGroup>
+                  <RotateTransform x:Name="rotateTransform" Angle="0" />
+                  <TranslateTransform x:Name="tranlateTransform" X="0" Y="0" />
+                </TransformGroup>
+              </TextBlock.RenderTransform>
+            </TextBlock>
+          </Border>
+
+          <ControlTemplate.Triggers>
+            <EventTrigger RoutedEvent="ToggleButton.Checked">
+              <BeginStoryboard>
+                <Storyboard Storyboard.TargetName="rotateTransform" Storyboard.TargetProperty="Angle">
+                  <DoubleAnimation To="180" Duration="0:0:0.3">
+                    <DoubleAnimation.EasingFunction>
+                      <CubicEase EasingMode="EaseOut" />
+                    </DoubleAnimation.EasingFunction>
+                  </DoubleAnimation>
+
+                  <DoubleAnimationUsingKeyFrames
+                    Storyboard.TargetName="tranlateTransform"
+                    Storyboard.TargetProperty="Y"
+                    Duration="0:0:0.3">
+                    <LinearDoubleKeyFrame KeyTime="0:0:0" Value="3" />
+                    <LinearDoubleKeyFrame KeyTime="0:0:0.3" Value="0" />
+                  </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+              </BeginStoryboard>
+            </EventTrigger>
+
+            <EventTrigger RoutedEvent="ToggleButton.Unchecked">
+              <BeginStoryboard>
+                <Storyboard Storyboard.TargetName="rotateTransform" Storyboard.TargetProperty="Angle">
+                  <DoubleAnimation To="0" Duration="0:0:0.3">
+                    <DoubleAnimation.EasingFunction>
+                      <CubicEase EasingMode="EaseOut" />
+                    </DoubleAnimation.EasingFunction>
+                  </DoubleAnimation>
+
+                  <DoubleAnimationUsingKeyFrames
+                    Storyboard.TargetName="tranlateTransform"
+                    Storyboard.TargetProperty="Y"
+                    Duration="0:0:0.4">
+                    <LinearDoubleKeyFrame KeyTime="0:0:0" Value="3" />
+                    <LinearDoubleKeyFrame KeyTime="0:0:0.3" Value="0" />
+                  </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+              </BeginStoryboard>
+            </EventTrigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</ResourceDictionary>

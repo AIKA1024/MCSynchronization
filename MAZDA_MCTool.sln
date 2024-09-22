@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34902.65
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSDK", "WebSDK\WebSDK.csproj", "{0FA315DE-72C1-4A68-A141-62C2C6602F44}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MAZDA_MCTool", "MAZDA_MCTool\MAZDA_MCTool.csproj", "{E5A36CEE-3E7A-4A21-AB7A-257551CDE37D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomInstaller", "CustomInstaller\CustomInstaller.csproj", "{C6E663BB-DA1A-42F6-B77C-ED065B0D263D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		OfflineDebug|Any CPU = OfflineDebug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0FA315DE-72C1-4A68-A141-62C2C6602F44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FA315DE-72C1-4A68-A141-62C2C6602F44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FA315DE-72C1-4A68-A141-62C2C6602F44}.OfflineDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FA315DE-72C1-4A68-A141-62C2C6602F44}.OfflineDebug|Any CPU.Build.0 = Debug|Any CPU
+		{0FA315DE-72C1-4A68-A141-62C2C6602F44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FA315DE-72C1-4A68-A141-62C2C6602F44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5A36CEE-3E7A-4A21-AB7A-257551CDE37D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5A36CEE-3E7A-4A21-AB7A-257551CDE37D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5A36CEE-3E7A-4A21-AB7A-257551CDE37D}.OfflineDebug|Any CPU.ActiveCfg = OfflineDebug|Any CPU
+		{E5A36CEE-3E7A-4A21-AB7A-257551CDE37D}.OfflineDebug|Any CPU.Build.0 = OfflineDebug|Any CPU
+		{E5A36CEE-3E7A-4A21-AB7A-257551CDE37D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5A36CEE-3E7A-4A21-AB7A-257551CDE37D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6E663BB-DA1A-42F6-B77C-ED065B0D263D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6E663BB-DA1A-42F6-B77C-ED065B0D263D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6E663BB-DA1A-42F6-B77C-ED065B0D263D}.OfflineDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6E663BB-DA1A-42F6-B77C-ED065B0D263D}.OfflineDebug|Any CPU.Build.0 = Debug|Any CPU
+		{C6E663BB-DA1A-42F6-B77C-ED065B0D263D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6E663BB-DA1A-42F6-B77C-ED065B0D263D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {436E06FC-10E4-467A-ABB3-85D1A50F04E5}
+	EndGlobalSection
+EndGlobal

@@ -60,6 +60,20 @@ namespace CustomInstaller.Resources.Views.Pages
         MessageBox.Show("路径不合法", "提示");
         return;
       }
+
+      string shortcutStr = "";
+      if (installInfo.CreateDeskTopShortcuts && installInfo.CreateStartMenuShortcuts)
+      {
+        shortcutStr = " --shortcuts Desktop,StartMenuRoot";
+      }
+      else if (installInfo.CreateDeskTopShortcuts)
+      {
+        shortcutStr = " --shortcuts Desktop";
+      }
+      else if (installInfo.CreateStartMenuShortcuts)
+      {
+        shortcutStr = " --shortcuts StartMenuRoot";
+      }
       string autoLaunchStr = installInfo.AutoLaunch ? "" : " --silent";
       string installProgramPath = CopyCoreInstanllProgram("MAZDAMCTools-win-Setup.exe");
       if (string.IsNullOrEmpty(installProgramPath))
@@ -69,7 +83,7 @@ namespace CustomInstaller.Resources.Views.Pages
       {
         FileName = installProgramPath,
         WorkingDirectory = Directory.GetCurrentDirectory(),
-        Arguments = $"--installto \"{installInfo.IntallPath}\"{autoLaunchStr}"
+        Arguments = $"--installto \"{installInfo.IntallPath}\"{autoLaunchStr}{shortcutStr}"
       };
       Process process = Process.Start(processStartInfo);
       if (process != null)
