@@ -69,9 +69,7 @@ public class DropableListbox : ListBox, INotifyPropertyChanged
     var remoteItem = (DroppableListBoxItem)sender;
     if (firstSelected == null || (firstSelected.Content == remoteItem.Content))
       return;
-    var temp = remoteItem.Content;
-    remoteItem.Content = firstSelected.Content;
-    firstSelected.Content = temp;
+    (remoteItem.Content, firstSelected.Content) = (firstSelected.Content, remoteItem.Content);
     //_firstSelected.Opacity = _defalutOpacity;
   }
   //private void OnPreViewMouseMoveInItem(object sender, MouseEventArgs e)
