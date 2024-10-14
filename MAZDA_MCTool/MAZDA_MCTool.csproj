@@ -15,6 +15,7 @@
         <!-- This overrides the default Program.Main that WPF creates for you, and allows you to add VelopackApp -->
         <StartupObject>MAZDA_MCTool.Program</StartupObject>
         <FileVersion>0.0.5.0</FileVersion>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='OfflineDebug|AnyCPU'">
