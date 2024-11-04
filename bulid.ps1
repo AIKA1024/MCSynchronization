@@ -1,3 +1,9 @@
+# 获取脚本的目录
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+# 设置工作目录
+Set-Location $scriptDir
+
 Remove-Item -Path "./publish/*" -Force
 dotnet publish ./MAZDA_MCTool/MAZDA_MCTool.csproj -c Release -r win-x86 -o ./publish
 

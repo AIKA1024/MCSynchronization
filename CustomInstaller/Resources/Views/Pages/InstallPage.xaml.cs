@@ -65,17 +65,17 @@ namespace CustomInstaller.Resources.Views.Pages
       
       if (installInfo.CreateDeskTopShortcuts && installInfo.CreateStartMenuShortcuts)
       {
-        shortcutStr = " --shortcuts Desktop,StartMenuRoot";
+        shortcutStr = " -- --shortcuts Desktop,StartMenuRoot";
       }
       else if (installInfo.CreateDeskTopShortcuts)
       {
-        shortcutStr = " --shortcuts Desktop";
+        shortcutStr = " -- --shortcuts Desktop";
       }
       else if (installInfo.CreateStartMenuShortcuts)
       {
-        shortcutStr = " --shortcuts StartMenuRoot";
+        shortcutStr = " -- --shortcuts StartMenuRoot";
       }
-      string installStr = string.IsNullOrWhiteSpace(installInfo.IntallPath) ?"": $" --installto \"{installInfo.IntallPath}\"";
+      string installStr = string.IsNullOrWhiteSpace(installInfo.IntallPath) ?"": $" -t \"{installInfo.IntallPath}\"";
       string autoLaunchStr = installInfo.AutoLaunch ? "" : " --silent";
       string installProgramPath = CopyCoreInstanllProgram("MAZDAMCTools-win-Setup.exe");
       if (string.IsNullOrEmpty(installProgramPath))
