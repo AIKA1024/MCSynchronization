@@ -65,18 +65,18 @@ namespace CustomInstaller.Resources.Views.Pages
       
       if (installInfo.CreateDeskTopShortcuts && installInfo.CreateStartMenuShortcuts)
       {
-        shortcutStr = " -- --shortcuts Desktop,StartMenuRoot";
+        shortcutStr = " --shortcuts Desktop,StartMenuRoot";
       }
       else if (installInfo.CreateDeskTopShortcuts)
       {
-        shortcutStr = " -- --shortcuts Desktop";
+        shortcutStr = " --shortcuts Desktop";
       }
       else if (installInfo.CreateStartMenuShortcuts)
       {
-        shortcutStr = " -- --shortcuts StartMenuRoot";
+        shortcutStr = " --shortcuts StartMenuRoot";
       }
       string installStr = string.IsNullOrWhiteSpace(installInfo.IntallPath) ?"": $" -t \"{installInfo.IntallPath}\"";
-      string autoLaunchStr = installInfo.AutoLaunch ? "" : " --silent";
+      string autoLaunchStr = installInfo.AutoLaunch ? "" : " -s";
       string installProgramPath = CopyCoreInstanllProgram("MAZDAMCTools-win-Setup.exe");
       if (string.IsNullOrEmpty(installProgramPath))
         return;
@@ -85,7 +85,7 @@ namespace CustomInstaller.Resources.Views.Pages
       {
         FileName = installProgramPath,
         WorkingDirectory = Directory.GetCurrentDirectory(),
-        Arguments = $"{installStr}{autoLaunchStr}{shortcutStr}",
+        Arguments = $"{installStr}{autoLaunchStr} --{shortcutStr}",
         UseShellExecute = false
       };
       Process process = Process.Start(processStartInfo);
@@ -122,10 +122,19 @@ namespace CustomInstaller.Resources.Views.Pages
         string tempFilePath = Path.Combine(Path.GetTempPath(), embeddedExeName);
 
         // 将嵌入的 EXE 写入临时文件
-        using (FileStream fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write))
+        try
         {
-          stream.CopyTo(fileStream);
+          using (FileStream fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write))
+          {
+            stream.CopyTo(fileStream);
+          }
         }
+        catch (IOException ex)
+        {
+          MessageBox.Show(ex.Message);
+          return "";
+        }
+        
 
         // 设置临时文件为可执行
         File.SetAttributes(tempFilePath, FileAttributes.Normal);
